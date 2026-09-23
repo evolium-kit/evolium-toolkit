@@ -1,0 +1,44 @@
+import { ChangeDetectionStrategy, Component<% if (temResource) { %>, inject<% } %>, signal } from '@angular/core';
+import { EvoButton, EvoCard } from '<%= toolkit %>/components';
+import { <%= shellClass %> } from '<%= toolkit %>/layouts';
+<% if (temResource) { %>import { EvoError, EvoResourceRegistry } from '<%= toolkit %>/services';
+<% } %>
+@Component({
+  selector: 'app-<%= dasherize(name) %>',
+  imports: [<%= shellClass %>, EvoCard, EvoButton],
+  templateUrl: './<%= dasherize(name) %>.page.html',
+  styleUrl: './<%= dasherize(name) %>.page.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class <%= classify(name) %>Page {
+<% if (temResource) { %>  private readonly registry = inject(EvoResourceRegistry);
+  protected readonly <%= camelize(resource) %> = this.registry.get('<%= camelize(resource) %>');
+
+<% } %>  /** Os quatro estados obrigatórios. Uma página sem erro visível não está pronta. */
+  protected readonly estado = signal<'loading' | 'empty' | 'error' | 'ready'>('loading');
+  protected readonly erro = signal<string | null>(null);
+
+<% if (temResource) { %>  constructor() {
+    void this.carregar();
+  }
+
+  protected async carregar(): Promise<void> {
+    this.estado.set('loading');
+    this.erro.set(null);
+    try {
+      await this.<%= camelize(resource) %>.carregar();
+      this.estado.set(this.<%= camelize(resource) %>.lista().length === 0 ? 'empty' : 'ready');
+    } catch (e) {
+      this.erro.set((e as EvoError).message);
+      this.estado.set('error');
+    }
+  }
+<% } else { %>  constructor() {
+    // TODO: carregar os dados e actualizar `estado`.
+    this.estado.set('ready');
+  }
+
+  protected carregar(): void {
+    // TODO: repetir o carregamento.
+  }
+<% } %>}

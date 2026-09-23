@@ -1,0 +1,68 @@
+<h1 class="pn__titulo">Facturação</h1>
+<p class="pn__sub">Olá, {{ auth.currentUser()?.name }}.</p>
+
+@switch (estado()) {
+  @case ('loading') {
+    <evo-card>
+      <p class="pn__estado" role="status">A carregar facturas…</p>
+    </evo-card>
+  }
+
+  @case ('empty') {
+    <evo-card>
+      <p class="pn__estado">Ainda não há facturas.</p>
+      <button evoButton size="sm" (click)="carregar()">Actualizar</button>
+    </evo-card>
+  }
+
+  @case ('error') {
+    <evo-card>
+      <p class="pn__erro" role="alert">{{ erro() }}</p>
+      <button evoButton variant="outline" size="sm" (click)="carregar()">Tentar de novo</button>
+    </evo-card>
+  }
+
+  @default {
+    <div class="pn__cartoes">
+      <evo-card variant="sunken">
+        <p class="pn__rotulo">Total facturado</p>
+        <p class="pn__numero">{{ facturas.total() | number }} Kz</p>
+      </evo-card>
+      <evo-card variant="sunken">
+        <p class="pn__rotulo">Documentos</p>
+        <p class="pn__numero">{{ facturas.lista().length }}</p>
+      </evo-card>
+    </div>
+
+    <evo-card>
+      <h2 slot="title">Facturas</h2>
+      <table class="pn__tabela">
+        <caption class="pn__sr">
+          Lista de facturas
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Nº</th>
+            <th scope="col">Cliente</th>
+            <th scope="col" class="pn__num">Total</th>
+            <th scope="col">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (f of facturas.lista(); track f.id) {
+            <tr>
+              <td>
+                <code>{{ f.id }}</code>
+              </td>
+              <td>{{ f.cliente }}</td>
+              <td class="pn__num">{{ f.total | number }} Kz</td>
+              <td>
+                <evo-badge [tone]="tom(f.estado)">{{ f.estado }}</evo-badge>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </evo-card>
+  }
+}

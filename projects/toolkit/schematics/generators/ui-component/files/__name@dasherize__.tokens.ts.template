@@ -1,0 +1,41 @@
+import { EvoComponentMeta } from '<%= toolkit %>/core';
+
+/**
+ * Metadados para o Theme Studio.
+ *
+ * Cada token aqui tem de existir no CSS, e vice-versa: o painel de
+ * propriedades e gerado a partir desta lista, portanto um token em falta e um
+ * token que ninguem consegue editar pela interface.
+ *
+ * Registar com: provideEvoComponentMeta(evo<%= classify(name) %>Meta)
+ */
+export const evo<%= classify(name) %>Meta: EvoComponentMeta = {
+  id: '<%= dasherize(name) %>',
+  label: '<%= classify(name) %>',
+  category: '<%= category %>',
+  tags: ['<%= dasherize(name) %>'],
+<% if (temVariantes) { %>  variants: [<%= variants.map(v => "'" + v + "'").join(', ') %>],
+<% } %>  tokens: [
+    {
+      name: '<%= dasherize(name) %>-bg',
+      label: 'Cor de fundo',
+      type: 'color',
+      fallback: '--evo-color-surface',
+    },
+    {
+      name: '<%= dasherize(name) %>-fg',
+      label: 'Cor do texto',
+      type: 'color',
+      fallback: '--evo-color-on-surface',
+    },
+    {
+      name: '<%= dasherize(name) %>-radius',
+      label: 'Raio',
+      type: 'length',
+      min: 0,
+      max: 24,
+      unit: 'px',
+      fallback: '--evo-radius-md',
+    },
+  ],
+};

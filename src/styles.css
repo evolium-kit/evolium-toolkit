@@ -1,3 +1,34 @@
-/* You can add global styles to this file, and also import other style files */
+/*
+ * Estilos globais do playground da toolkit.
+ *
+ * A declaração de camadas TEM de ser a primeira regra do ficheiro, antes de
+ * qualquer @import. Sem ela, o Tailwind declara a sua própria ordem e as camadas
+ * evo.* acabam depois de `utilities` — `class="evo-button p-6"` deixaria de
+ * respeitar o p-6. Ver projects/toolkit/theme/README.md.
+ */
+@layer theme, base, evo.tokens, evo.base, evo.components, evo.variants, evo.overrides, components,
+  utilities;
 
 @import 'tailwindcss';
+@import '../dist/toolkit/styles/evolium-theme.css';
+@import '../dist/toolkit/styles/evolium-components.css';
+@import '../dist/toolkit/styles/evolium-layouts.css';
+
+/* Ponte opcional: o Tailwind passa a falar --evo-*.
+   `inline` é obrigatório — sem ele o Tailwind resolve o var() em build
+   e as utilities deixariam de reagir ao Theme Studio. */
+@theme inline {
+  --color-primary: var(--evo-color-primary);
+  --color-surface: var(--evo-color-surface);
+  --color-on-surface: var(--evo-color-on-surface);
+  --radius-md: var(--evo-radius-md);
+}
+
+html,
+body {
+  margin: 0;
+  min-block-size: 100%;
+  background-color: var(--evo-color-surface-sunken);
+  color: var(--evo-color-on-surface);
+  font-family: var(--evo-font-sans);
+}

@@ -1,0 +1,17 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+/**
+ * Shell <%= classify(name) %>.
+ *
+ * Os slots sao ng-content com selector de atributo. Inputs so para
+ * configuracao (largura, estado de colapso), nunca para dados de negocio:
+ * um shell nao deve saber o que o preenche.
+ */
+@Component({
+  selector: 'evo-<%= dasherize(name) %>-shell',
+  templateUrl: './<%= dasherize(name) %>-shell.html',
+  styleUrl: './<%= dasherize(name) %>-shell.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'evo-<%= dasherize(name) %>-shell' },
+})
+export class Evo<%= classify(name) %>Shell {}

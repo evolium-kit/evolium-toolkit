@@ -1,0 +1,103 @@
+/*
+ * Evolium Toolkit — tokens de tema (camadas 1 e 2).
+ *
+ * Importar em src/styles.css DEPOIS de declarar a ordem das camadas.
+ * Ver theme/README.md.
+ */
+
+@layer evo.tokens, evo.base, evo.components, evo.variants, evo.overrides;
+
+@layer evo.tokens {
+  :root {
+    color-scheme: light dark;
+
+    /* ---------- Camada 1: primitivos ---------- */
+    --evo-palette-slate-0: #ffffff;
+    --evo-palette-slate-50: #f8fafc;
+    --evo-palette-slate-100: #f1f5f9;
+    --evo-palette-slate-200: #e2e8f0;
+    --evo-palette-slate-300: #cbd5e1;
+    --evo-palette-slate-400: #94a3b8;
+    --evo-palette-slate-500: #64748b;
+    --evo-palette-slate-600: #475569;
+    --evo-palette-slate-700: #334155;
+    --evo-palette-slate-800: #1e293b;
+    --evo-palette-slate-900: #0f172a;
+    --evo-palette-slate-950: #020617;
+
+    --evo-scale-space-1: 0.25rem;
+    --evo-scale-space-2: 0.5rem;
+    --evo-scale-space-3: 0.75rem;
+    --evo-scale-space-4: 1rem;
+    --evo-scale-space-6: 1.5rem;
+    --evo-scale-space-8: 2rem;
+
+    --evo-scale-radius-1: 4px;
+    --evo-scale-radius-2: 6px;
+    --evo-scale-radius-3: 10px;
+
+    /* ---------- Camada 2: semânticos ---------- */
+    /* As cores vivem em default-theme.ts e são escritas pelo ThemeStore em
+       evo.overrides. Aqui ficam só os fallbacks, para o CSS funcionar mesmo
+       sem o store (por exemplo numa página estática de erro). */
+    --evo-color-surface: var(--evo-palette-slate-0);
+    --evo-color-surface-sunken: var(--evo-palette-slate-50);
+    --evo-color-surface-raised: var(--evo-palette-slate-0);
+    --evo-color-on-surface: var(--evo-palette-slate-900);
+    --evo-color-on-surface-muted: var(--evo-palette-slate-500);
+    --evo-color-border: var(--evo-palette-slate-200);
+    --evo-color-border-strong: var(--evo-palette-slate-500);
+    --evo-color-primary: #2563eb;
+    --evo-color-primary-hover: #1d4ed8;
+    --evo-color-primary-soft: #eff6ff;
+    --evo-color-on-primary: #ffffff;
+    --evo-color-success: #15803d;
+    --evo-color-success-soft: #dcfce7;
+    --evo-color-on-success: #ffffff;
+    --evo-color-warning: #b45309;
+    --evo-color-warning-soft: #fef3c7;
+    --evo-color-on-warning: #ffffff;
+    --evo-color-danger: #dc2626;
+    --evo-color-danger-soft: #fee2e2;
+    --evo-color-on-danger: #ffffff;
+
+    --evo-space-xs: var(--evo-scale-space-1);
+    --evo-space-sm: var(--evo-scale-space-2);
+    --evo-space-md: var(--evo-scale-space-4);
+    --evo-space-lg: var(--evo-scale-space-6);
+    --evo-space-xl: var(--evo-scale-space-8);
+
+    --evo-radius-sm: var(--evo-scale-radius-1);
+    --evo-radius-md: var(--evo-scale-radius-2);
+    --evo-radius-lg: var(--evo-scale-radius-3);
+    --evo-radius-full: 9999px;
+
+    --evo-border-width: 1px;
+    --evo-focus-ring-color: var(--evo-color-primary);
+    --evo-focus-ring-width: 2px;
+    --evo-focus-ring-offset: 2px;
+
+    /* Flat design: "elevação" é borda, não sombra difusa. */
+    --evo-elevation-1: none;
+    --evo-elevation-2: 0 1px 2px color-mix(in srgb, var(--evo-palette-slate-900) 8%, transparent);
+
+    --evo-font-sans:
+      system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --evo-font-size-sm: 0.8125rem;
+    --evo-font-size-md: 0.875rem;
+    --evo-font-size-lg: 1rem;
+
+    --evo-duration-fast: 120ms;
+    --evo-easing: cubic-bezier(0.2, 0, 0, 1);
+
+    accent-color: var(--evo-color-primary);
+  }
+}
+
+@layer evo.base {
+  .evo-surface {
+    background-color: var(--evo-color-surface);
+    color: var(--evo-color-on-surface);
+    font-family: var(--evo-font-sans);
+  }
+}

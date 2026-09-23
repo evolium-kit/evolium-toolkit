@@ -1,0 +1,39 @@
+@layer evo.components {
+  :host {
+    display: block;
+  }
+
+  .pv__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--evo-space-md);
+  }
+
+  .pv__stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--evo-space-md);
+    max-inline-size: 22rem;
+  }
+
+  .pv__vazio {
+    color: var(--evo-color-on-surface-muted);
+    font-size: var(--evo-font-size-md);
+    max-inline-size: 32rem;
+  }
+
+  /*
+   * Estados forçados. Não há forma de simular :hover e :focus-visible por
+   * script de maneira fiável, por isso o preview reproduz-lhes a aparência
+   * a partir dos mesmos tokens que o componente usa.
+   */
+  .pv--hover {
+    background-color: var(--evo-button-bg-hover, var(--evo-color-primary-hover));
+  }
+
+  .pv--focus {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: var(--evo-focus-ring-offset);
+  }
+}

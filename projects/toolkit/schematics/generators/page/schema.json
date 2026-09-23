@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "EvoPage",
+  "title": "Página Evolium",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "$default": { "$source": "argv", "index": 0 },
+      "x-prompt": "Nome da página?"
+    },
+    "project": { "type": "string", "$default": { "$source": "projectName" } },
+    "path": { "type": "string", "description": "Omissão: <sourceRoot>/app/pages." },
+    "layout": {
+      "type": "string",
+      "enum": ["blank", "dashboard", "auth"],
+      "default": "blank",
+      "x-prompt": {
+        "message": "Que shell usar?",
+        "type": "list",
+        "items": [
+          { "value": "blank", "label": "blank — conteúdo centrado" },
+          { "value": "dashboard", "label": "dashboard — navegação lateral" },
+          { "value": "auth", "label": "auth — cartão centrado" }
+        ]
+      }
+    },
+    "resource": {
+      "type": "string",
+      "description": "Resource do kernel a consumir. Por exemplo: facturas."
+    },
+    "skipTests": { "type": "boolean", "default": false }
+  },
+  "required": ["name"]
+}

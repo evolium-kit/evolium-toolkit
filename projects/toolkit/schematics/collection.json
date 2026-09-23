@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "ng-add": {
+      "description": "Instala e configura a @evolium-kit/toolkit na aplicação.",
+      "factory": "./ng-add/index#ngAdd",
+      "schema": "./ng-add/schema.json",
+      "aliases": ["install"]
+    },
+    "page": {
+      "description": "Gera uma página standalone com os quatro estados obrigatórios.",
+      "factory": "./generators/page/index#page",
+      "schema": "./generators/page/schema.json",
+      "aliases": ["p"]
+    },
+    "layout": {
+      "description": "Gera um shell de aplicação.",
+      "factory": "./generators/layout/index#layout",
+      "schema": "./generators/layout/schema.json",
+      "aliases": ["l"]
+    },
+    "ui-component": {
+      "description": "Gera um componente temável, com metadados para o Theme Studio.",
+      "factory": "./generators/ui-component/index#uiComponent",
+      "schema": "./generators/ui-component/schema.json",
+      "aliases": ["uc"]
+    },
+    "resource-plugin": {
+      "description": "Gera um plugin de serviço para o kernel Evo.",
+      "factory": "./generators/resource-plugin/index#resourcePlugin",
+      "schema": "./generators/resource-plugin/schema.json",
+      "aliases": ["rp", "resource"]
+    }
+  }
+}

@@ -1,0 +1,95 @@
+import { InjectionToken, Signal, computed, signal } from '@angular/core';
+import { EvoPlugin, EvoPluginContext } from '<%= toolkit %>/services';
+import { <%= camelize(name) %>Endpoints } from './<%= dasherize(name) %>.endpoints';
+import { toDto } from './<%= dasherize(name) %>.mappers';
+import { Nov<%= singular %>, <%= singular %> } from './<%= dasherize(name) %>.models';
+
+export interface <%= classify(name) %>Api {
+  readonly lista: Signal<readonly <%= singular %>[]>;
+<% if (op('list')) { %>  carregar(): Promise<void>;
+<% } %><% if (op('get')) { %>  obter(id: string): Promise<<%= singular %>>;
+<% } %><% if (op('create')) { %>  criar(dados: Nov<%= singular %>): Promise<<%= singular %>>;
+<% } %><% if (op('update')) { %>  actualizar(id: string, dados: Nov<%= singular %>): Promise<<%= singular %>>;
+<% } %><% if (op('remove')) { %>  remover(id: string): Promise<void>;
+<% } %>}
+
+/** Token dedicado, alternativa ao registry genérico. */
+export const <%= classify(name) %> = new InjectionToken<<%= classify(name) %>Api>('<%= classify(name) %>');
+
+/**
+ * Interface de extensão deste plugin. Nasce vazia de propósito.
+ *
+ * Um plugin que queira acrescentar métodos a este aumenta **esta** interface,
+ * e não o `EvoResourceMap`: o declaration merging não permite redeclarar uma
+ * propriedade que já existe.
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface <%= classify(name) %>Extensions {}
+
+declare module '<%= toolkit %>/services' {
+  interface EvoResourceMap {
+    <%= camelize(name) %>: <%= classify(name) %>Api & <%= classify(name) %>Extensions;
+  }
+}
+
+export function <%= camelize(name) %>Plugin(): EvoPlugin<<%= classify(name) %>Api> {
+  let api: <%= classify(name) %>Api;
+
+  return {
+    name: '<%= camelize(name) %>',
+<% if (temDependencias) { %>    dependsOn: [<%= dependsOn.map(d => "'" + d + "'").join(', ') %>],
+<% } %>    providers: [{ provide: <%= classify(name) %>, useFactory: () => api }],
+
+    setup(ctx: EvoPluginContext): <%= classify(name) %>Api {
+      const client = ctx.http.client(<%= camelize(name) %>Endpoints);
+      const interna = signal<readonly <%= singular %>[]>([]);
+
+      api = {
+        // Só leitura para fora: nunca expor o WritableSignal.
+        lista: computed(() => interna()),
+
+<% if (op('list')) { %>        async carregar() {
+          const itens = await client.list().catch((erro: unknown) => {
+            throw ctx.toError(erro);
+          });
+          interna.set(itens);
+        },
+
+<% } %><% if (op('get')) { %>        obter(id) {
+          return client.get({ id }).catch((erro: unknown) => {
+            throw ctx.toError(erro);
+          });
+        },
+
+<% } %><% if (op('create')) { %>        async criar(dados) {
+          const novo = await client.create(dados).catch((erro: unknown) => {
+            throw ctx.toError(erro);
+          });
+          interna.update((actual) => [...actual, novo]);
+          return novo;
+        },
+
+<% } %><% if (op('update')) { %>        async actualizar(id, dados) {
+          const actualizado = await client.update(dados, { id }).catch((erro: unknown) => {
+            throw ctx.toError(erro);
+          });
+          interna.update((actual) => actual.map((i) => (i.id === id ? actualizado : i)));
+          return actualizado;
+        },
+
+<% } %><% if (op('remove')) { %>        async remover(id) {
+          await client.remove({ id }).catch((erro: unknown) => {
+            throw ctx.toError(erro);
+          });
+          interna.update((actual) => actual.filter((i) => i.id !== id));
+        },
+<% } %>      };
+
+      return api;
+    },
+  };
+}
+
+// `toDto` é usado pelos mappers de escrita; mantido no import para o gerador
+// não deixar um ficheiro órfão quando só se geram operações de leitura.
+void toDto;

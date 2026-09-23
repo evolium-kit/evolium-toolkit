@@ -1,0 +1,39 @@
+{
+  "name": "@evolium-kit/toolkit",
+  "version": "0.1.0",
+  "description": "Toolkit Angular da Evolium: componentes temáveis, layouts, páginas prontas e um kernel de serviços baseado em plugins.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evolium-kit/evolium-app-overview.git",
+    "directory": "projects/toolkit"
+  },
+  "license": "UNLICENSED",
+  "sideEffects": false,
+  "schematics": "./schematics/collection.json",
+  "ng-update": {
+    "migrations": "./schematics/migrations.json"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "peerDependencies": {
+    "@angular/cdk": "^21.2.0",
+    "@angular/common": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@angular/router": "^21.2.0",
+    "rxjs": "^7.8.0"
+  },
+  "peerDependenciesMeta": {
+    "@angular/router": {
+      "optional": true
+    },
+    "@angular/forms": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}

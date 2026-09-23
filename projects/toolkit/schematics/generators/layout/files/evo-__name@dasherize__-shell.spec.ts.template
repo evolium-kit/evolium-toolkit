@@ -1,0 +1,27 @@
+import { Component } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { describe, expect, it } from 'vitest';
+import { Evo<%= classify(name) %>Shell } from './evo-<%= dasherize(name) %>-shell';
+
+@Component({
+  imports: [Evo<%= classify(name) %>Shell],
+  template: `
+    <evo-<%= dasherize(name) %>-shell>
+<% for (const s of slots) { %>      <span slot="<%= s %>">slot-<%= s %></span>
+<% } %>      <p>conteudo</p>
+    </evo-<%= dasherize(name) %>-shell>
+  `,
+})
+class Anfitriao {}
+
+describe('Evo<%= classify(name) %>Shell', () => {
+  it('projecta cada slot e o conteudo por omissao', async () => {
+    await TestBed.configureTestingModule({ imports: [Anfitriao] }).compileComponents();
+    const fixture = TestBed.createComponent(Anfitriao);
+    fixture.detectChanges();
+
+    const texto = fixture.nativeElement.textContent;
+<% for (const s of slots) { %>    expect(texto).toContain('slot-<%= s %>');
+<% } %>    expect(texto).toContain('conteudo');
+  });
+});

@@ -1,0 +1,191 @@
+@layer evo.components {
+  :host {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-block-size: 100dvh;
+    background-color: var(--evo-color-surface-sunken);
+    color: var(--evo-color-on-surface);
+    font-family: var(--evo-font-sans);
+  }
+
+  /* Link de salto: invisível até receber foco pelo teclado. */
+  .evo-shell__saltar {
+    position: absolute;
+    inset-block-start: -100%;
+    inset-inline-start: var(--evo-space-sm);
+    z-index: 20;
+    padding: var(--evo-space-sm) var(--evo-space-md);
+    border-radius: var(--evo-radius-md);
+    background-color: var(--evo-color-primary);
+    color: var(--evo-color-on-primary);
+  }
+
+  .evo-shell__saltar:focus-visible {
+    inset-block-start: var(--evo-space-sm);
+  }
+
+  .evo-shell__topo {
+    display: flex;
+    align-items: center;
+    gap: var(--evo-space-sm);
+    min-block-size: var(--evo-shell-topbar-height, 3.25rem);
+    padding-inline: var(--evo-space-md);
+    border-block-end: var(--evo-border-width) solid var(--evo-color-border);
+    background-color: var(--evo-shell-topbar-bg, var(--evo-color-surface));
+  }
+
+  .evo-shell__topo-fim {
+    margin-inline-start: auto;
+    display: flex;
+    align-items: center;
+    gap: var(--evo-space-sm);
+  }
+
+  .evo-shell__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    border: 0;
+    border-radius: var(--evo-radius-md);
+    background: transparent;
+    color: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .evo-shell__toggle:hover {
+    background-color: var(--evo-color-surface-sunken);
+  }
+
+  .evo-shell__toggle:focus-visible {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: var(--evo-focus-ring-offset);
+  }
+
+  .evo-shell__corpo {
+    display: flex;
+    min-block-size: 0;
+  }
+
+  .evo-shell__nav {
+    flex: 0 0 var(--evo-shell-sidebar-width, 15rem);
+    padding: var(--evo-space-md) var(--evo-space-sm);
+    border-inline-end: var(--evo-border-width) solid var(--evo-color-border);
+    background-color: var(--evo-shell-sidebar-bg, var(--evo-color-surface));
+    overflow-y: auto;
+    transition: flex-basis var(--evo-duration-fast) var(--evo-easing);
+  }
+
+  .evo-shell__conteudo {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    padding: var(--evo-shell-content-padding, var(--evo-space-lg));
+    overflow-y: auto;
+  }
+
+  /* O <main> recebe foco via link de salto, mas não deve mostrar anel por isso. */
+  .evo-shell__conteudo:focus {
+    outline: none;
+  }
+
+  .evo-shell__lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .evo-shell__lista--filhos {
+    margin-inline-start: var(--evo-space-md);
+  }
+
+  .evo-shell__grupo {
+    display: block;
+    padding: var(--evo-space-sm) var(--evo-space-sm) var(--evo-space-xs);
+    color: var(--evo-color-on-surface-muted);
+    font-size: var(--evo-font-size-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .evo-shell__link {
+    display: flex;
+    align-items: center;
+    gap: var(--evo-space-sm);
+    padding: var(--evo-space-xs) var(--evo-space-sm);
+    border-radius: var(--evo-radius-md);
+    color: inherit;
+    font-size: var(--evo-font-size-md);
+    text-decoration: none;
+  }
+
+  .evo-shell__link:hover {
+    background-color: var(--evo-color-surface-sunken);
+  }
+
+  .evo-shell__link:focus-visible {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: -2px;
+  }
+
+  .evo-shell__link--activo {
+    background-color: var(--evo-color-primary-soft);
+    color: var(--evo-color-primary);
+    font-weight: 600;
+  }
+
+  .evo-shell__badge {
+    margin-inline-start: auto;
+    padding-inline: var(--evo-space-xs);
+    border-radius: var(--evo-radius-full);
+    background-color: var(--evo-color-danger);
+    color: var(--evo-color-on-danger);
+    font-size: 0.6875rem;
+    font-weight: 600;
+  }
+
+  /* --------------------------------------------------------- colapsada */
+  :host([data-evo-sidebar='collapsed']) .evo-shell__nav {
+    flex-basis: 3.5rem;
+  }
+
+  :host([data-evo-sidebar='collapsed']) .evo-shell__texto,
+  :host([data-evo-sidebar='collapsed']) .evo-shell__grupo,
+  :host([data-evo-sidebar='collapsed']) .evo-shell__badge {
+    display: none;
+  }
+
+  :host([data-evo-sidebar='collapsed']) .evo-shell__link {
+    justify-content: center;
+  }
+
+  :host([data-evo-sidebar='hidden']) .evo-shell__nav {
+    display: none;
+  }
+
+  /* -------------------------------------------------------- responsivo */
+  @media (width < 1024px) {
+    .evo-shell__nav {
+      position: fixed;
+      inset-block: var(--evo-shell-topbar-height, 3.25rem) 0;
+      inset-inline-start: 0;
+      z-index: 10;
+      inline-size: var(--evo-shell-sidebar-width, 15rem);
+    }
+
+    :host([data-evo-sidebar='collapsed']) .evo-shell__nav {
+      display: none;
+    }
+
+    /* Em ecrã estreito, colapsada significa escondida: ícones sozinhos numa
+       barra fixa roubariam largura ao conteúdo sem compensação. */
+    :host([data-evo-sidebar='expanded']) .evo-shell__nav {
+      box-shadow: 0 0 0 100vmax rgb(0 0 0 / 0.3);
+    }
+  }
+}

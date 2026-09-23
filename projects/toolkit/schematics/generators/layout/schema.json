@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "EvoLayout",
+  "title": "Layout Evolium",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "$default": { "$source": "argv", "index": 0 },
+      "x-prompt": "Nome do layout?"
+    },
+    "project": { "type": "string", "$default": { "$source": "projectName" } },
+    "path": { "type": "string", "description": "Omissao: <sourceRoot>/app/layouts." },
+    "slots": {
+      "type": "string",
+      "default": "brand,topbar-end,footer",
+      "description": "Slots de ng-content, separados por virgula."
+    },
+    "skipTests": { "type": "boolean", "default": false }
+  },
+  "required": ["name"]
+}

@@ -1,0 +1,88 @@
+<evo-auth-shell align="top">
+  <span slot="brand">{{ texto('brand') }}</span>
+  <h1 slot="title">{{ texto('title') }}</h1>
+  <p slot="subtitle">{{ texto('subtitle') }}</p>
+
+  <form [formGroup]="form" (ngSubmit)="submeter()" novalidate>
+    @if (erro(); as mensagem) {
+      <p class="evo-page__erro" role="alert">{{ mensagem }}</p>
+    }
+
+    <evo-field>
+      <label for="evo-register-name">{{ texto('name') }}</label>
+      <input
+        evoInput
+        id="evo-register-name"
+        autocomplete="name"
+        formControlName="name"
+        [invalid]="invalido('name')"
+        aria-describedby="evo-register-name-erro"
+      />
+      @if (invalido('name')) {
+        <span slot="error" id="evo-register-name-erro">
+          {{ erroServidor('name') ?? 'Indica o teu nome.' }}
+        </span>
+      }
+    </evo-field>
+
+    <evo-field>
+      <label for="evo-register-email">{{ texto('email') }}</label>
+      <input
+        evoInput
+        id="evo-register-email"
+        type="email"
+        autocomplete="email"
+        formControlName="email"
+        [invalid]="invalido('email')"
+        aria-describedby="evo-register-email-erro"
+      />
+      @if (invalido('email')) {
+        <span slot="error" id="evo-register-email-erro">
+          {{ erroServidor('email') ?? 'Email com formato inválido.' }}
+        </span>
+      }
+    </evo-field>
+
+    <evo-field>
+      <label for="evo-register-password">{{ texto('password') }}</label>
+      <input
+        evoInput
+        id="evo-register-password"
+        type="password"
+        autocomplete="new-password"
+        formControlName="password"
+        [invalid]="invalido('password')"
+        aria-describedby="evo-register-password-erro"
+      />
+      <span slot="hint">Pelo menos {{ minPasswordLength() }} caracteres.</span>
+      @if (invalido('password')) {
+        <span slot="error" id="evo-register-password-erro">
+          {{ erroServidor('password') ?? 'Senha demasiado curta.' }}
+        </span>
+      }
+    </evo-field>
+
+    <evo-field>
+      <label for="evo-register-confirm">{{ texto('confirm') }}</label>
+      <input
+        evoInput
+        id="evo-register-confirm"
+        type="password"
+        autocomplete="new-password"
+        formControlName="confirm"
+        [invalid]="invalido('confirm') || senhasDiferentes"
+        aria-describedby="evo-register-confirm-erro"
+      />
+      @if (senhasDiferentes) {
+        <span slot="error" id="evo-register-confirm-erro">As senhas não coincidem.</span>
+      }
+    </evo-field>
+
+    <button evoButton type="submit" block [loading]="aCriar()">{{ texto('submit') }}</button>
+  </form>
+
+  <p slot="footer">
+    {{ texto('hasAccount') }}
+    <a class="evo-page__ligacao" [routerLink]="loginLink()">{{ texto('login') }}</a>
+  </p>
+</evo-auth-shell>

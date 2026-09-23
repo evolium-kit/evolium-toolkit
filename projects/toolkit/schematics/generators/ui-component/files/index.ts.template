@@ -1,0 +1,2 @@
+export * from './evo-<%= dasherize(name) %>';
+export * from './<%= dasherize(name) %>.tokens';

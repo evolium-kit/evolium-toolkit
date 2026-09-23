@@ -1,0 +1,28 @@
+/*
+ * Os schematics correm no Node, dentro do Angular CLI, e são CommonJS — ao
+ * contrário do resto da library, que é ESM compilado pelo ng-packagr.
+ *
+ * Por isso têm um tsconfig próprio e um passo de build separado. Tentar
+ * compilá-los com o ng-packagr falha: ele só sabe compilar código Angular.
+ */
+{
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "ES2022",
+    "strict": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "declaration": false,
+    "sourceMap": true,
+    "types": ["node"],
+    "rootDir": ".",
+    "outDir": "../../../dist/toolkit/schematics"
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["**/files/**", "**/*.spec.ts", "vitest.config.ts"]
+}

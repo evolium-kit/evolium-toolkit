@@ -1,0 +1,39 @@
+/*
+ * Só o host e o contentor. Os slots são conteúdo projectado e por isso os seus
+ * estilos vivem em styles/evolium-layouts.css — a encapsulação emulada não
+ * alcança conteúdo vindo de fora. Ver components/README.md.
+ */
+
+@layer evo.components {
+  :host {
+    display: flex;
+    justify-content: center;
+    min-block-size: 100dvh;
+    padding: var(--evo-space-lg) var(--evo-space-md);
+    background-color: var(--evo-auth-shell-bg, var(--evo-color-surface-sunken));
+    color: var(--evo-color-on-surface);
+    font-family: var(--evo-font-sans);
+  }
+
+  :host([data-evo-align='center']) {
+    align-items: center;
+  }
+
+  :host([data-evo-align='top']) {
+    align-items: flex-start;
+    padding-block-start: var(--evo-space-xl);
+  }
+
+  .evo-auth-shell__caixa {
+    inline-size: 100%;
+    max-inline-size: var(--evo-auth-shell-width, 24rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--evo-space-sm);
+    padding: var(--evo-auth-shell-padding, var(--evo-space-lg));
+    border: var(--evo-border-width) solid
+      var(--evo-auth-shell-border-color, var(--evo-color-border));
+    border-radius: var(--evo-auth-shell-radius, var(--evo-radius-lg));
+    background-color: var(--evo-auth-shell-card-bg, var(--evo-color-surface));
+  }
+}

@@ -1,0 +1,36 @@
+import { TestBed } from '@angular/core/testing';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { Evo<%= classify(name) %> } from './evo-<%= dasherize(name) %>';
+
+describe('Evo<%= classify(name) %>', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({ imports: [Evo<%= classify(name) %>] }).compileComponents();
+  });
+
+  it('aplica a classe base', () => {
+    const fixture = TestBed.createComponent(Evo<%= classify(name) %>);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList.contains('evo-<%= dasherize(name) %>')).toBe(true);
+  });
+
+  /**
+   * Regra 1. O teste e feito sobre o TEXTO do CSS e nao por getComputedStyle,
+   * porque o jsdom nao resolve var() nem interpreta @layer: uma verificacao por
+   * estilo computado passaria sempre, sem medir nada.
+   */
+  it('nao declara os proprios tokens fora das variantes', () => {
+    const fixture = TestBed.createComponent(Evo<%= classify(name) %>);
+    fixture.detectChanges();
+
+    const css = [...document.querySelectorAll('style')]
+      .map((s) => s.textContent ?? '')
+      .filter((c) => c.includes('evo-<%= dasherize(name) %>'))
+      .join('\n');
+
+    const base = css.slice(0, css.indexOf('@layer evo.variants'));
+    const declaracoes = [...base.matchAll(/(^|[;{\s])(--evo-<%= dasherize(name) %>-[a-z-]+)\s*:/g)];
+
+    expect(declaracoes.map((m) => m[2])).toEqual([]);
+    expect(css).toContain('var(--evo-<%= dasherize(name) %>-bg,');
+  });
+});

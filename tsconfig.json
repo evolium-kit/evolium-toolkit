@@ -13,7 +13,11 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "preserve",
+    "paths": {
+      "@evolium-kit/toolkit": ["./dist/toolkit"],
+      "@evolium-kit/toolkit/*": ["./dist/toolkit/*"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -28,6 +32,12 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/toolkit/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/toolkit/tsconfig.spec.json"
     }
   ]
 }

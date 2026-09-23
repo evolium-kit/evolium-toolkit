@@ -1,0 +1,22 @@
+/* ------------------------------------------------------------------ domínio */
+
+export interface <%= singular %> {
+  readonly id: string;
+  // TODO: os campos do teu domínio, em camelCase.
+  readonly nome: string;
+}
+
+export interface Nov<%= singular %> {
+  readonly nome: string;
+}
+
+/* ---------------------------------------------------------------- wire (DTO) */
+
+/**
+ * Formato da API. Mantém aqui a convenção do backend (snake_case, nomes
+ * abreviados, o que for) — é esta a fronteira, e ela não passa daqui.
+ */
+export interface <%= singular %>Dto {
+  readonly id: string;
+  readonly nome: string;
+}

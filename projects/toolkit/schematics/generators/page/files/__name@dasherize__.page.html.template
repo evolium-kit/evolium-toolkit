@@ -1,0 +1,32 @@
+<<%= shellSelector %>>
+  <h1><%= classify(name) %></h1>
+
+  @switch (estado()) {
+    @case ('loading') {
+      <evo-card>
+        <p role="status">A carregar…</p>
+      </evo-card>
+    }
+
+    @case ('empty') {
+      <evo-card>
+        <p>Ainda não há nada para mostrar.</p>
+        <button evoButton size="sm" (click)="carregar()">Actualizar</button>
+      </evo-card>
+    }
+
+    @case ('error') {
+      <evo-card>
+        <p role="alert">{{ erro() }}</p>
+        <button evoButton variant="outline" size="sm" (click)="carregar()">Tentar de novo</button>
+      </evo-card>
+    }
+
+    @default {
+      <evo-card>
+        <!-- TODO: o conteúdo da página. -->
+        <p>Conteúdo de <%= classify(name) %>.</p>
+      </evo-card>
+    }
+  }
+</<%= shellSelector %>>

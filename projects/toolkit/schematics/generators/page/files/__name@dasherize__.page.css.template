@@ -1,0 +1,7 @@
+/* Só layout. A aparência vem dos componentes e dos tokens --evo-*. */
+
+h1 {
+  margin: 0 0 var(--evo-space-md);
+  font-size: 1.5rem;
+  font-weight: 600;
+}

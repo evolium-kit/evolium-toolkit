@@ -1,0 +1,35 @@
+/*
+ * So o host e os elementos do proprio template.
+ *
+ * O conteudo projectado recebe o atributo de encapsulacao do componente PAI,
+ * nao deste: estilos para os slots tem de viver numa folha global.
+ */
+
+@layer evo.components {
+  :host {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-block-size: 100dvh;
+    background-color: var(--evo-color-surface-sunken);
+    color: var(--evo-color-on-surface);
+    font-family: var(--evo-font-sans);
+  }
+
+  .evo-<%= dasherize(name) %>-shell__topo {
+    display: flex;
+    align-items: center;
+    gap: var(--evo-space-sm);
+    padding: var(--evo-space-sm) var(--evo-space-md);
+    border-block-end: var(--evo-border-width) solid var(--evo-color-border);
+    background-color: var(--evo-color-surface);
+  }
+
+  .evo-<%= dasherize(name) %>-shell__conteudo {
+    padding: var(--evo-space-lg);
+    overflow-y: auto;
+  }
+
+  .evo-<%= dasherize(name) %>-shell__conteudo:focus {
+    outline: none;
+  }
+}

@@ -1,0 +1,107 @@
+/*
+ * Estilos de componentes que são directivas sobre elementos nativos e por isso
+ * não têm template onde encapsular CSS.
+ *
+ * Importar em src/styles.css a seguir a evolium-theme.css.
+ */
+
+@layer evo.components {
+  /*
+   * O evo-field estiliza conteúdo PROJECTADO (label, hint, erro). Com
+   * ViewEncapsulation.Emulated o conteúdo projectado leva o atributo do
+   * componente PAI, não o do evo-field, por isso um styleUrl encapsulado nunca
+   * lhe chegaria. Tem de ser global.
+   */
+  .evo-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--evo-field-gap, var(--evo-space-xs));
+  }
+
+  .evo-field > label {
+    color: var(--evo-field-label-fg, var(--evo-color-on-surface));
+    font-size: var(--evo-field-label-font-size, var(--evo-font-size-md));
+    font-weight: var(--evo-field-label-font-weight, 500);
+  }
+
+  .evo-field > [slot='hint'] {
+    color: var(--evo-field-hint-fg, var(--evo-color-on-surface-muted));
+    font-size: var(--evo-font-size-sm);
+  }
+
+  .evo-field > [slot='error'] {
+    color: var(--evo-field-error-fg, var(--evo-color-danger));
+    font-size: var(--evo-font-size-sm);
+  }
+
+  /* Pela mesma razão: o título é conteúdo projectado no evo-card. */
+  .evo-card > [slot='title'] {
+    margin-block: 0 var(--evo-space-sm);
+    font-size: var(--evo-font-size-lg);
+    font-weight: 600;
+  }
+
+  .evo-card > [slot='footer'] {
+    margin-block-start: var(--evo-space-md);
+  }
+
+  .evo-input {
+    inline-size: 100%;
+    min-block-size: var(--evo-input-height, 2.25rem);
+    padding-inline: var(--evo-input-padding-inline, var(--evo-space-sm));
+    padding-block: var(--evo-input-padding-block, var(--evo-space-xs));
+
+    border: var(--evo-input-border-width, var(--evo-border-width)) solid
+      var(--evo-input-border-color, var(--evo-color-border-strong));
+    border-radius: var(--evo-input-radius, var(--evo-radius-md));
+
+    background-color: var(--evo-input-bg, var(--evo-color-surface));
+    color: var(--evo-input-fg, var(--evo-color-on-surface));
+
+    font-family: var(--evo-font-sans);
+    font-size: var(--evo-input-font-size, var(--evo-font-size-md));
+    transition: border-color var(--evo-duration-fast) var(--evo-easing);
+  }
+
+  .evo-input::placeholder {
+    color: var(--evo-color-on-surface-muted);
+  }
+
+  .evo-input:hover:not(:disabled) {
+    border-color: var(--evo-input-border-color-hover, var(--evo-color-on-surface-muted));
+  }
+
+  .evo-input:focus-visible {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: var(--evo-focus-ring-offset);
+    border-color: var(--evo-color-primary);
+  }
+
+  .evo-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--evo-color-surface-sunken);
+  }
+
+  textarea.evo-input {
+    min-block-size: 5rem;
+    resize: vertical;
+  }
+}
+
+@layer evo.variants {
+  .evo-input[data-evo-invalid] {
+    --evo-input-border-color: var(--evo-color-danger);
+    --evo-input-border-color-hover: var(--evo-color-danger);
+  }
+
+  .evo-input[data-evo-size~='sm'] {
+    --evo-input-height: 1.75rem;
+    --evo-input-font-size: var(--evo-font-size-sm);
+  }
+
+  .evo-input[data-evo-size~='lg'] {
+    --evo-input-height: 2.75rem;
+    --evo-input-font-size: var(--evo-font-size-lg);
+  }
+}

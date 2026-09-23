@@ -1,0 +1,114 @@
+/*
+ * REGRA 1: nenhuma declaração `--evo-button-*` aqui dentro.
+ * O valor por omissão vive no argumento de fallback do var(). Declará-lo no
+ * host ganharia por proximidade a qualquer :root do projecto e tornaria o
+ * override global impossível. Ver components/README.md.
+ */
+
+@layer evo.components {
+  :host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--evo-button-gap, var(--evo-space-sm));
+
+    block-size: var(--evo-button-height, 2.25rem);
+    padding-inline: var(--evo-button-padding-inline, var(--evo-space-md));
+    border: var(--evo-button-border-width, var(--evo-border-width)) solid
+      var(--evo-button-border-color, transparent);
+    border-radius: var(--evo-button-radius, var(--evo-radius-md));
+
+    background-color: var(--evo-button-bg, var(--evo-color-primary));
+    color: var(--evo-button-fg, var(--evo-color-on-primary));
+
+    font: inherit;
+    font-family: var(--evo-font-sans);
+    font-size: var(--evo-button-font-size, var(--evo-font-size-md));
+    font-weight: var(--evo-button-font-weight, 500);
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color var(--evo-duration-fast) var(--evo-easing),
+      border-color var(--evo-duration-fast) var(--evo-easing);
+  }
+
+  :host(:hover:not(:disabled):not([aria-disabled='true'])) {
+    background-color: var(--evo-button-bg-hover, var(--evo-color-primary-hover));
+  }
+
+  :host(:focus-visible) {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: var(--evo-focus-ring-offset);
+  }
+
+  :host(:disabled),
+  :host([aria-disabled='true']) {
+    opacity: var(--evo-button-disabled-opacity, 0.5);
+    cursor: not-allowed;
+  }
+
+  :host([data-evo-block]) {
+    display: flex;
+    inline-size: 100%;
+  }
+
+  .evo-button__spinner {
+    inline-size: 0.875em;
+    block-size: 0.875em;
+    border: 2px solid currentColor;
+    border-block-start-color: transparent;
+    border-radius: var(--evo-radius-full);
+    animation: evo-button-spin 600ms linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .evo-button__spinner {
+      animation-duration: 2s;
+    }
+  }
+}
+
+/*
+ * Variantes e tamanhos. Declaram tokens no próprio elemento, pelo que ganham ao
+ * valor herdado de :root mas perdem para um [evoTokens] de instância.
+ */
+@layer evo.variants {
+  :host([data-evo-variant~='ghost']) {
+    --evo-button-bg: transparent;
+    --evo-button-fg: var(--evo-color-primary);
+    --evo-button-bg-hover: var(--evo-color-primary-soft);
+  }
+
+  :host([data-evo-variant~='outline']) {
+    --evo-button-bg: transparent;
+    --evo-button-fg: var(--evo-color-primary);
+    --evo-button-border-color: var(--evo-color-border-strong);
+    --evo-button-bg-hover: var(--evo-color-primary-soft);
+  }
+
+  :host([data-evo-variant~='danger']) {
+    --evo-button-bg: var(--evo-color-danger);
+    --evo-button-fg: var(--evo-color-on-danger);
+    --evo-button-bg-hover: var(--evo-color-danger);
+  }
+
+  :host([data-evo-size~='sm']) {
+    --evo-button-height: 1.75rem;
+    --evo-button-padding-inline: var(--evo-space-sm);
+    --evo-button-font-size: var(--evo-font-size-sm);
+  }
+
+  :host([data-evo-size~='lg']) {
+    --evo-button-height: 2.75rem;
+    --evo-button-padding-inline: var(--evo-space-lg);
+    --evo-button-font-size: var(--evo-font-size-lg);
+  }
+}
+
+@keyframes evo-button-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}

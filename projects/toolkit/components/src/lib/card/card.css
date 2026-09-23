@@ -1,0 +1,41 @@
+/* Regra 1: nenhum --evo-card-* declarado aqui. Ver components/README.md. */
+
+@layer evo.components {
+  :host {
+    display: block;
+    padding: var(--evo-card-padding, var(--evo-space-md));
+    border: var(--evo-card-border-width, var(--evo-border-width)) solid
+      var(--evo-card-border-color, var(--evo-color-border));
+    border-radius: var(--evo-card-radius, var(--evo-radius-lg));
+    background-color: var(--evo-card-bg, var(--evo-color-surface));
+    color: var(--evo-card-fg, var(--evo-color-on-surface));
+    box-shadow: var(--evo-card-shadow, var(--evo-elevation-1));
+    transition: border-color var(--evo-duration-fast) var(--evo-easing);
+  }
+  /* O espaçamento do [slot=title] é conteúdo projectado: vive na folha global
+     evolium-components.css, porque a encapsulação emulada não lhe chega. */
+}
+
+@layer evo.variants {
+  :host([data-evo-variant~='sunken']) {
+    --evo-card-bg: var(--evo-color-surface-sunken);
+  }
+
+  :host([data-evo-variant~='outlined']) {
+    --evo-card-bg: transparent;
+    --evo-card-border-color: var(--evo-color-border-strong);
+  }
+
+  :host([data-evo-interactive]) {
+    cursor: pointer;
+  }
+
+  :host([data-evo-interactive]:hover) {
+    border-color: var(--evo-color-border-strong);
+  }
+
+  :host([data-evo-interactive]:focus-visible) {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: var(--evo-focus-ring-offset);
+  }
+}

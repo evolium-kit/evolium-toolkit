@@ -1,0 +1,94 @@
+/*
+ * Estilos do playground. Só layout: tudo o que é aparência de componente vem
+ * agora de @evolium-kit/toolkit/components.
+ */
+
+.pg {
+  max-inline-size: 60rem;
+  margin-inline: auto;
+  padding: var(--evo-space-lg) var(--evo-space-md) var(--evo-space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--evo-space-lg);
+}
+
+.pg__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--evo-space-md);
+  align-items: center;
+  justify-content: space-between;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.muted {
+  margin: var(--evo-space-sm) 0 0;
+  color: var(--evo-color-on-surface-muted);
+  font-size: var(--evo-font-size-md);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--evo-space-sm);
+  margin-block-start: var(--evo-space-xs);
+}
+
+.row--fields {
+  align-items: start;
+  gap: var(--evo-space-md);
+}
+
+.row--fields evo-field {
+  flex: 1 1 14rem;
+}
+
+.swatch {
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border-radius: var(--evo-radius-md);
+  border: var(--evo-border-width) solid var(--evo-color-border-strong);
+  cursor: pointer;
+}
+
+.swatch[aria-pressed='true'] {
+  outline: var(--evo-focus-ring-width) solid var(--evo-color-on-surface);
+  outline-offset: var(--evo-focus-ring-offset);
+}
+
+code {
+  font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-size: var(--evo-font-size-sm);
+  color: var(--evo-color-on-surface-muted);
+}
+
+label[for='raio'] {
+  font-size: var(--evo-font-size-md);
+}
+
+.erro {
+  margin: var(--evo-space-sm) 0 0;
+  color: var(--evo-color-danger);
+  font-size: var(--evo-font-size-md);
+}
+
+.sep {
+  margin-block: var(--evo-space-md);
+  border: 0;
+  border-block-start: var(--evo-border-width) solid var(--evo-color-border);
+}
+
+.factura {
+  padding-block: var(--evo-space-xs);
+  border-block-start: var(--evo-border-width) solid var(--evo-color-border);
+}
+
+.factura > span:nth-of-type(1) {
+  flex: 1 1 8rem;
+}

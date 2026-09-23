@@ -1,0 +1,16 @@
+import { Nov<%= singular %>, <%= singular %>, <%= singular %>Dto } from './<%= dasherize(name) %>.models';
+
+/** DTO da wire para modelo de domínio. */
+export function to<%= singular %>(dto: <%= singular %>Dto): <%= singular %> {
+  return {
+    id: dto.id,
+    nome: dto.nome,
+  };
+}
+
+/** Modelo de domínio para DTO da wire. */
+export function toDto(modelo: Nov<%= singular %>): unknown {
+  return {
+    nome: modelo.nome,
+  };
+}

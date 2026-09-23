@@ -1,0 +1,239 @@
+<main class="pg">
+  <header class="pg__head">
+    <div>
+      <h1>Evolium Toolkit — Fases 1 e 2</h1>
+      <p class="muted">
+        Tokens de tema e componentes temáveis. Esquema activo: <strong>{{ scheme() }}</strong>
+      </p>
+    </div>
+    <div class="row">
+      <a evoButton variant="outline" routerLink="/_evo/theme">Abrir Theme Studio</a>
+      <button evoButton variant="ghost" (click)="theme.toggleScheme()">
+        Alternar claro/escuro
+      </button>
+    </div>
+  </header>
+
+  <evo-card>
+    <h2 slot="title">1. Um token, toda a aplicação</h2>
+    <p class="muted">
+      Mudar <code>--evo-color-primary</code> altera tudo o que o consome, em qualquer sítio.
+    </p>
+
+    <div class="row">
+      @for (cor of amostras; track cor) {
+        <button
+          class="swatch"
+          type="button"
+          [style.background-color]="cor"
+          [attr.aria-label]="'Definir primário ' + cor"
+          [attr.aria-pressed]="primary() === cor"
+          (click)="definirPrimary(cor)"
+        ></button>
+      }
+      <code>{{ primary() }}</code>
+    </div>
+
+    <div class="row">
+      <label for="raio">Raio</label>
+      <input
+        id="raio"
+        type="range"
+        min="0"
+        max="24"
+        [value]="radiusValue()"
+        (input)="definirRadius($event)"
+      />
+      <code>{{ radius() }}</code>
+    </div>
+  </evo-card>
+
+  <evo-card>
+    <h2 slot="title">2. Componentes</h2>
+
+    <p class="muted">Variantes do botão:</p>
+    <div class="row">
+      <button evoButton>Solid</button>
+      <button evoButton variant="ghost">Ghost</button>
+      <button evoButton variant="outline">Outline</button>
+      <button evoButton variant="danger">Danger</button>
+      <button evoButton disabled>Desactivado</button>
+      <button evoButton [loading]="aGravar()" (click)="simularEnvio()">Submeter</button>
+    </div>
+
+    <p class="muted">Tamanhos:</p>
+    <div class="row">
+      <button evoButton size="sm">Pequeno</button>
+      <button evoButton size="md">Médio</button>
+      <button evoButton size="lg">Grande</button>
+    </div>
+
+    <p class="muted">Badges:</p>
+    <div class="row">
+      <evo-badge>Rascunho</evo-badge>
+      <evo-badge tone="primary">Em curso</evo-badge>
+      <evo-badge tone="success">Pago</evo-badge>
+      <evo-badge tone="warning">Pendente</evo-badge>
+      <evo-badge tone="danger" label="3 facturas vencidas">3</evo-badge>
+    </div>
+
+    <p class="muted">Campos:</p>
+    <div class="row row--fields">
+      <evo-field>
+        <label for="nome">Nome</label>
+        <input evoInput id="nome" placeholder="Nome completo" />
+        <span slot="hint">Como aparece nos documentos.</span>
+      </evo-field>
+
+      <evo-field>
+        <label for="email">Email</label>
+        <input
+          evoInput
+          id="email"
+          type="email"
+          placeholder="nome@evolium.ao"
+          [invalid]="emailInvalido()"
+          aria-describedby="email-erro"
+          (blur)="emailInvalido.set(true)"
+        />
+        @if (emailInvalido()) {
+          <span slot="error" id="email-erro">Email inválido.</span>
+        }
+      </evo-field>
+    </div>
+  </evo-card>
+
+  <evo-card>
+    <h2 slot="title">3. Override de instância</h2>
+    <p class="muted">
+      O da direita tem <code>[evoTokens]</code> próprio: as amostras acima não lhe tocam.
+    </p>
+    <div class="row">
+      <button evoButton>Segue o global</button>
+      <button evoButton [evoTokens]="{ 'button-bg': '#0d9488', 'button-radius': '2px' }">
+        Fixo em verde
+      </button>
+    </div>
+  </evo-card>
+
+  <evo-card [evoTokens]="{ 'color-primary': '#7c3aed' }">
+    <h2 slot="title">4. Override de subárvore</h2>
+    <p class="muted">
+      Este cartão tem <code>[evoTokens]</code>. Tudo lá dentro herda, sem que nenhum componente
+      saiba disso.
+    </p>
+    <div class="row">
+      <button evoButton>Herda roxo</button>
+      <button evoButton variant="ghost">Ghost roxo</button>
+      <evo-badge tone="primary">Badge roxo</evo-badge>
+    </div>
+  </evo-card>
+
+  <evo-card>
+    <h2 slot="title">5. Kernel de serviços</h2>
+    <p class="muted">
+      Plugins activos, por ordem topológica: <code>{{ plugins().join(' → ') }}</code
+      >. O <code>facturas</code> está definido em <code>src/app/facturas.plugin.ts</code> — fora da
+      toolkit, sem uma linha alterada no kernel.
+    </p>
+
+    @if (auth.isAuthenticated()) {
+      <div class="row">
+        <evo-badge tone="success">Sessão activa</evo-badge>
+        <span>{{ auth.currentUser()?.name }}</span>
+        @for (papel of auth.roles(); track papel) {
+          <evo-badge>{{ papel }}</evo-badge>
+        }
+        <button evoButton variant="ghost" size="sm" (click)="sair()">Sair</button>
+      </div>
+    } @else {
+      <p class="muted">
+        Credenciais da API de demonstração: <code>ana@evolium.ao</code> / <code>1234</code>
+      </p>
+      <div class="row row--fields">
+        <evo-field>
+          <label for="login-email">Email</label>
+          <input
+            evoInput
+            id="login-email"
+            type="email"
+            [value]="email()"
+            (input)="actualizarEmail($event)"
+          />
+        </evo-field>
+        <evo-field>
+          <label for="login-senha">Senha</label>
+          <input
+            evoInput
+            id="login-senha"
+            type="password"
+            [value]="senha()"
+            (input)="actualizarSenha($event)"
+          />
+        </evo-field>
+      </div>
+      <div class="row">
+        <button evoButton [loading]="aEntrar()" (click)="entrar()">Entrar</button>
+      </div>
+    }
+
+    @if (erroAuth(); as erro) {
+      <p class="erro" role="alert">{{ erro }}</p>
+    }
+
+    <hr class="sep" />
+
+    <p class="muted">
+      O plugin <code>facturas</code> declara <code>dependsOn: ['auth']</code> e o seu pedido leva o
+      Bearer através do interceptor do plugin de auth. Sem sessão, a API responde 401.
+    </p>
+    <div class="row">
+      <button
+        evoButton
+        variant="outline"
+        [loading]="aCarregarFacturas()"
+        (click)="carregarFacturas()"
+      >
+        Carregar facturas
+      </button>
+      @if (facturas.lista().length) {
+        <evo-badge tone="primary">{{ facturas.total() | number }} Kz no total</evo-badge>
+      }
+    </div>
+
+    @if (erroFacturas(); as erro) {
+      <p class="erro" role="alert">{{ erro }}</p>
+    }
+
+    @for (factura of facturas.lista(); track factura.id) {
+      <div class="row factura">
+        <code>{{ factura.id }}</code>
+        <span>{{ factura.cliente }}</span>
+        <span>{{ factura.total | number }} Kz</span>
+        <evo-badge
+          [tone]="
+            factura.estado === 'paga'
+              ? 'success'
+              : factura.estado === 'vencida'
+                ? 'danger'
+                : 'warning'
+          "
+        >
+          {{ factura.estado }}
+        </evo-badge>
+      </div>
+    }
+  </evo-card>
+
+  <evo-card variant="sunken">
+    <h2 slot="title">6. Persistência do tema</h2>
+    <p class="muted">
+      Guardar escreve em <code>localStorage</code>. Exportar gera os ficheiros para committar.
+    </p>
+    <div class="row">
+      <button evoButton (click)="guardar()">Guardar{{ theme.dirty() ? ' •' : '' }}</button>
+      <button evoButton variant="ghost" (click)="exportar()">Exportar CSS + JSON</button>
+      <button evoButton variant="ghost" (click)="reporTudo()">Repor</button>
+    </div>
+  </evo-card>
+</main>

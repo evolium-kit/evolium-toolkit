@@ -1,0 +1,77 @@
+<a class="evo-shell__saltar" href="#evo-conteudo">Saltar para o conteúdo</a>
+
+<header class="evo-shell__topo">
+  @if (collapsible()) {
+    <button
+      class="evo-shell__toggle"
+      type="button"
+      aria-controls="evo-nav"
+      [attr.aria-expanded]="sidebar() === 'expanded'"
+      aria-label="Mostrar ou esconder a navegação"
+      (click)="alternarSidebar()"
+    >
+      ☰
+    </button>
+  }
+
+  <ng-content select="[slot=brand]" />
+
+  <div class="evo-shell__topo-fim">
+    <ng-content select="[slot=topbar-end]" />
+  </div>
+</header>
+
+<div class="evo-shell__corpo">
+  <nav id="evo-nav" class="evo-shell__nav" aria-label="Navegação principal">
+    <ul class="evo-shell__lista">
+      @for (item of navVisivel(); track item.label) {
+        <li>
+          @if (temFilhos(item)) {
+            <span class="evo-shell__grupo">{{ item.label }}</span>
+            <ul class="evo-shell__lista evo-shell__lista--filhos">
+              @for (filho of item.children; track filho.label) {
+                <li>
+                  <a
+                    class="evo-shell__link"
+                    [routerLink]="filho.route"
+                    routerLinkActive="evo-shell__link--activo"
+                    #rla="routerLinkActive"
+                    [attr.aria-current]="rla.isActive ? 'page' : null"
+                  >
+                    <span class="evo-shell__texto">{{ filho.label }}</span>
+                    @if (filho.badge) {
+                      <span class="evo-shell__badge">{{ filho.badge }}</span>
+                    }
+                  </a>
+                </li>
+              }
+            </ul>
+          } @else {
+            <a
+              class="evo-shell__link"
+              [routerLink]="item.route"
+              routerLinkActive="evo-shell__link--activo"
+              #rla="routerLinkActive"
+              [attr.aria-current]="rla.isActive ? 'page' : null"
+              [attr.title]="item.label"
+            >
+              @if (item.icon) {
+                <span class="evo-shell__icone" aria-hidden="true">{{ item.icon }}</span>
+              }
+              <span class="evo-shell__texto">{{ item.label }}</span>
+              @if (item.badge) {
+                <span class="evo-shell__badge">{{ item.badge }}</span>
+              }
+            </a>
+          }
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <main id="evo-conteudo" class="evo-shell__conteudo" tabindex="-1">
+    <ng-content />
+  </main>
+</div>
+
+<ng-content select="[slot=footer]" />

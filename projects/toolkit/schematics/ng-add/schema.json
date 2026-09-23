@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "EvoliumToolkitNgAdd",
+  "title": "Evolium Toolkit — ng add",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "Projecto onde instalar.",
+      "$default": { "$source": "projectName" }
+    },
+    "baseUrl": {
+      "type": "string",
+      "description": "URL base da API.",
+      "default": "/api",
+      "x-prompt": "Qual é o baseUrl da tua API?"
+    },
+    "auth": {
+      "type": "boolean",
+      "default": true,
+      "x-prompt": "Registar o plugin de autenticação (login, registo, recuperar senha)?"
+    },
+    "authRoutes": {
+      "type": "boolean",
+      "default": true,
+      "x-prompt": "Acrescentar as rotas /auth/* com as páginas prontas?"
+    },
+    "themeStudio": {
+      "type": "boolean",
+      "default": true,
+      "x-prompt": "Registar o Theme Studio em /_evo/theme (só em desenvolvimento)?"
+    },
+    "skipInstall": {
+      "type": "boolean",
+      "default": false,
+      "description": "Não correr o gestor de pacotes no fim."
+    }
+  },
+  "required": []
+}

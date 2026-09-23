@@ -1,0 +1,261 @@
+<header class="st__topo">
+  <button
+    class="st__toggle"
+    type="button"
+    [attr.aria-expanded]="esquerdaAberta()"
+    aria-controls="st-componentes"
+    aria-label="Mostrar ou esconder a lista de componentes"
+    (click)="alternarEsquerda()"
+  >
+    ☰
+  </button>
+
+  <span class="st__marca">Evolium Theme Studio</span>
+
+  <div class="st__pesquisa">
+    <label class="st__sr" for="st-pesquisa">Pesquisar componente</label>
+    <input
+      id="st-pesquisa"
+      class="st__campo"
+      type="search"
+      placeholder="Pesquisar componente…"
+      [value]="pesquisa()"
+      (input)="actualizarPesquisa($event)"
+    />
+  </div>
+
+  <div class="st__accoes">
+    <!-- Botões próprios, não EvoButton: a interface da ferramenta não pode
+         ficar ilegível por causa do tema que está a ser editado. -->
+    <button class="st__botao st__botao--discreto" type="button" (click)="theme.toggleScheme()">
+      {{ theme.resolvedScheme() === 'dark' ? '☀ Claro' : '🌙 Escuro' }}
+    </button>
+    <button class="st__botao" type="button" (click)="guardar()">
+      Guardar{{ theme.dirty() ? ' •' : '' }}
+    </button>
+    <button class="st__botao st__botao--discreto" type="button" (click)="exportar()">
+      ⇩ Exportar
+    </button>
+    <button
+      class="st__toggle"
+      type="button"
+      [attr.aria-expanded]="direitaAberta()"
+      aria-controls="st-propriedades"
+      aria-label="Mostrar ou esconder as propriedades"
+      (click)="alternarDireita()"
+    >
+      ⚙
+    </button>
+  </div>
+</header>
+
+<div class="st__corpo">
+  <!-- ------------------------------------------------ painel esquerdo -->
+  <nav
+    id="st-componentes"
+    class="st__lateral st__lateral--esq"
+    [hidden]="!esquerdaAberta()"
+    aria-label="Componentes"
+  >
+    @if (semResultados()) {
+      <p class="st__vazio">Nenhum componente corresponde a «{{ pesquisa() }}».</p>
+    }
+
+    @for (categoria of categorias(); track categoria.nome) {
+      <h2 class="st__categoria">{{ categoria.nome }}</h2>
+      <ul class="st__lista">
+        @for (componente of categoria.componentes; track componente.id) {
+          <li>
+            <button
+              class="st__item"
+              type="button"
+              [class.st__item--activo]="estaSeleccionado(componente)"
+              [attr.aria-current]="estaSeleccionado(componente) ? 'true' : null"
+              (click)="seleccionar(componente)"
+            >
+              {{ componente.label }}
+              @if (temAlteracoes(componente)) {
+                <span class="st__ponto" aria-label="com alterações">•</span>
+              }
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </nav>
+
+  <!-- --------------------------------------------------- área central -->
+  <main class="st__centro">
+    @if (seleccionado(); as componente) {
+      <h1 class="st__titulo">{{ componente.label }}</h1>
+
+      <div class="st__controlos">
+        @if (componente.variants?.length) {
+          <label class="st__inline">
+            Variante
+            <select
+              class="st__campo"
+              [value]="variante() ?? ''"
+              (change)="escolherVariante($event)"
+            >
+              <option value="">(por omissão)</option>
+              @for (v of componente.variants; track v) {
+                <option [value]="v">{{ v }}</option>
+              }
+            </select>
+          </label>
+        }
+
+        @if (componente.sizes?.length) {
+          <label class="st__inline">
+            Tamanho
+            <select class="st__campo" [value]="tamanho() ?? ''" (change)="escolherTamanho($event)">
+              <option value="">(por omissão)</option>
+              @for (s of componente.sizes; track s) {
+                <option [value]="s">{{ s }}</option>
+              }
+            </select>
+          </label>
+        }
+      </div>
+
+      <div class="st__palco">
+        <evo-component-preview
+          [componentId]="componente.id"
+          [variant]="variante()"
+          [size]="tamanho()"
+        />
+      </div>
+
+      <fieldset class="st__escopo">
+        <legend class="st__sr">Alcance da edição</legend>
+        <button
+          type="button"
+          class="st__opcao"
+          [class.st__opcao--activa]="escopoEfectivo() === 'global'"
+          [attr.aria-pressed]="escopoEfectivo() === 'global'"
+          (click)="definirEscopo('global')"
+        >
+          Global
+        </button>
+        <button
+          type="button"
+          class="st__opcao"
+          [class.st__opcao--activa]="escopoEfectivo() === 'variant'"
+          [attr.aria-pressed]="escopoEfectivo() === 'variant'"
+          [disabled]="!podeEditarVariante()"
+          (click)="definirEscopo('variant')"
+        >
+          Variante
+        </button>
+        <p class="st__ajuda">
+          @if (escopoEfectivo() === 'global') {
+            As alterações aplicam-se a <strong>todas</strong> as instâncias em toda a aplicação.
+          } @else {
+            As alterações aplicam-se apenas a
+            <code>{{ chaveVariante() }}</code>
+            .
+          }
+        </p>
+      </fieldset>
+    } @else {
+      <p class="st__vazio">
+        Nenhum componente registado. Acrescenta
+        <code>provideEvoComponents()</code>
+        aos providers da aplicação.
+      </p>
+    }
+  </main>
+
+  <!-- ------------------------------------------------- painel direito -->
+  <aside
+    id="st-propriedades"
+    class="st__lateral st__lateral--dir"
+    [hidden]="!direitaAberta()"
+    aria-label="Propriedades"
+  >
+    @if (seleccionado(); as componente) {
+      <h2 class="st__categoria">Propriedades</h2>
+
+      @for (token of componente.tokens; track token.name) {
+        <div class="st__token">
+          <label class="st__rotulo" [attr.for]="'tk-' + token.name">
+            {{ token.label }}
+            @if (estaHerdado(token)) {
+              <span class="st__herdado" title="Não definido: mostra o valor herdado">herdado</span>
+            }
+          </label>
+
+          @switch (token.type) {
+            @case ('color') {
+              <div class="st__cor">
+                <input
+                  type="color"
+                  [id]="'tk-' + token.name"
+                  [value]="valorCor(token)"
+                  (input)="aoEditar(token, $event)"
+                />
+                <input
+                  class="st__campo st__campo--mono"
+                  type="text"
+                  [value]="valorDe(token)"
+                  [attr.aria-label]="token.label + ' em texto'"
+                  (change)="aoEditar(token, $event)"
+                />
+              </div>
+            }
+
+            @case ('length') {
+              <div class="st__intervalo">
+                <input
+                  type="range"
+                  [id]="'tk-' + token.name"
+                  [min]="token.min ?? 0"
+                  [max]="token.max ?? 100"
+                  [step]="token.step ?? 1"
+                  [value]="numeroDe(token)"
+                  (input)="aoEditar(token, $event)"
+                />
+                <output class="st__valor">{{ valorDe(token) || '—' }}</output>
+              </div>
+            }
+
+            @case ('select') {
+              <select
+                class="st__campo"
+                [id]="'tk-' + token.name"
+                [value]="valorDe(token)"
+                (change)="aoEditar(token, $event)"
+              >
+                <option value="">(por omissão)</option>
+                @for (opcao of token.options; track opcao) {
+                  <option [value]="opcao">{{ opcao }}</option>
+                }
+              </select>
+            }
+
+            @default {
+              <input
+                class="st__campo"
+                type="text"
+                [id]="'tk-' + token.name"
+                [value]="valorDe(token)"
+                (change)="aoEditar(token, $event)"
+              />
+            }
+          }
+
+          @if (token.hint) {
+            <p class="st__dica">{{ token.hint }}</p>
+          }
+        </div>
+      }
+
+      <div class="st__rodape">
+        <button class="st__botao st__botao--discreto" type="button" (click)="repor()">
+          Repor tudo
+        </button>
+      </div>
+    }
+  </aside>
+</div>

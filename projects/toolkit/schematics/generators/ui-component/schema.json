@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "EvoUiComponent",
+  "title": "Componente temavel Evolium",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "$default": { "$source": "argv", "index": 0 },
+      "x-prompt": "Nome do componente?"
+    },
+    "project": { "type": "string", "$default": { "$source": "projectName" } },
+    "path": { "type": "string", "description": "Omissao: <sourceRoot>/app/ui." },
+    "category": {
+      "type": "string",
+      "default": "Basicos",
+      "description": "Agrupamento na lista do Theme Studio."
+    },
+    "variants": {
+      "type": "string",
+      "default": "",
+      "description": "Variantes a gerar, separadas por virgula."
+    },
+    "skipTests": { "type": "boolean", "default": false }
+  },
+  "required": ["name"]
+}

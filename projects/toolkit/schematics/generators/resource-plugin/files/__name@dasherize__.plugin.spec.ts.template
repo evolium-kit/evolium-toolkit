@@ -1,0 +1,60 @@
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import {
+<% if (dependeDeAuth) { %>  authPlugin,
+<% } %>  EvoResourceRegistry,
+  evoDispatchInterceptor,
+  provideEvoServices,
+  withBaseUrl,
+  withPlugin,
+} from '<%= toolkit %>/services';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { <%= classify(name) %>Api, <%= camelize(name) %>Plugin } from './<%= dasherize(name) %>.plugin';
+
+const BASE = 'https://api.teste';
+
+describe('<%= camelize(name) %>Plugin', () => {
+  let http: HttpTestingController;
+  let api: <%= classify(name) %>Api;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(withInterceptors([evoDispatchInterceptor])),
+        provideHttpClientTesting(),
+        provideEvoServices(
+          withBaseUrl(BASE),
+<% if (dependeDeAuth) { %>          // Declarado em `dependsOn`: sem ele, o kernel recusa arrancar.
+          withPlugin(authPlugin()),
+<% } %><% for (const d of outrasDependencias) { %>          // TODO: registar o plugin "<%= d %>", declarado em dependsOn.
+          // withPlugin(<%= d %>Plugin()),
+<% } %>          withPlugin(<%= camelize(name) %>Plugin()),
+        ),
+      ],
+    });
+    api = TestBed.inject(EvoResourceRegistry).get('<%= camelize(name) %>');
+    http = TestBed.inject(HttpTestingController);
+  });
+
+  it('regista o resource', () => {
+    expect(TestBed.inject(EvoResourceRegistry).has('<%= camelize(name) %>')).toBe(true);
+  });
+
+<% if (op('list')) { %>  it('carrega a lista e mapeia o DTO', async () => {
+    const promessa = api.carregar();
+    http.expectOne(`${BASE}/<%= dasherize(name) %>`).flush([{ id: '1', nome: 'Exemplo' }]);
+    await promessa;
+
+    expect(api.lista()).toEqual([{ id: '1', nome: 'Exemplo' }]);
+  });
+
+  it('converte a falha num EvoError com categoria', async () => {
+    const promessa = api.carregar();
+    http
+      .expectOne(`${BASE}/<%= dasherize(name) %>`)
+      .flush({ message: 'Falhou.' }, { status: 500, statusText: 'Server Error' });
+
+    await expect(promessa).rejects.toMatchObject({ kind: 'server' });
+  });
+<% } %>});

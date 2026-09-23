@@ -1,0 +1,40 @@
+import { endpoint } from '<%= toolkit %>/services';
+import { to<%= singular %> } from './<%= dasherize(name) %>.mappers';
+import { Nov<%= singular %>, <%= singular %>, <%= singular %>Dto } from './<%= dasherize(name) %>.models';
+
+/**
+ * Endpoints de <%= name %>.
+ *
+ * Marca `anonymous: true` em tudo o que deva funcionar sem sessão — esses
+ * pedidos não passam pelos interceptors partilhados e não levam o Bearer.
+ */
+export const <%= camelize(name) %>Endpoints = {
+<% if (op('list')) { %>  list: endpoint<void, readonly <%= singular %>[]>({
+    method: 'GET',
+    path: '/<%= dasherize(name) %>',
+    mapResponse: (dto) => (dto as readonly <%= singular %>Dto[]).map(to<%= singular %>),
+  }),
+
+<% } %><% if (op('get')) { %>  get: endpoint<void, <%= singular %>, { id: string }>({
+    method: 'GET',
+    path: '/<%= dasherize(name) %>/:id',
+    mapResponse: (dto) => to<%= singular %>(dto as <%= singular %>Dto),
+  }),
+
+<% } %><% if (op('create')) { %>  create: endpoint<Nov<%= singular %>, <%= singular %>>({
+    method: 'POST',
+    path: '/<%= dasherize(name) %>',
+    mapResponse: (dto) => to<%= singular %>(dto as <%= singular %>Dto),
+  }),
+
+<% } %><% if (op('update')) { %>  update: endpoint<Nov<%= singular %>, <%= singular %>, { id: string }>({
+    method: 'PUT',
+    path: '/<%= dasherize(name) %>/:id',
+    mapResponse: (dto) => to<%= singular %>(dto as <%= singular %>Dto),
+  }),
+
+<% } %><% if (op('remove')) { %>  remove: endpoint<void, void, { id: string }>({
+    method: 'DELETE',
+    path: '/<%= dasherize(name) %>/:id',
+  }),
+<% } %>} as const;

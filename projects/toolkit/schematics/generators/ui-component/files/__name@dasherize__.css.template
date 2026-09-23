@@ -1,0 +1,41 @@
+/*
+ * REGRA 1: nenhuma declaração `--evo-<%= dasherize(name) %>-*` no bloco abaixo.
+ * O valor por omissão vive no fallback do var(). Declará-lo aqui ganharia por
+ * proximidade a qualquer :root do projecto e tornaria o override global
+ * impossível — sem erro nenhum a avisar.
+ *
+ * REGRA 2: nunca registar estes tokens com @property { initial-value }.
+ * Isso desliga a cascata de fallback, também em silêncio.
+ */
+
+@layer evo.components {
+  :host {
+    display: block;
+    padding: var(--evo-<%= dasherize(name) %>-padding, var(--evo-space-md));
+    border-radius: var(--evo-<%= dasherize(name) %>-radius, var(--evo-radius-md));
+    background-color: var(--evo-<%= dasherize(name) %>-bg, var(--evo-color-surface));
+    color: var(--evo-<%= dasherize(name) %>-fg, var(--evo-color-on-surface));
+    font-family: var(--evo-font-sans);
+  }
+
+  :host(:focus-visible) {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: var(--evo-focus-ring-offset);
+  }
+
+  :host([data-evo-disabled]) {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+<% if (temVariantes) { %>
+/* As variantes declaram tokens no próprio elemento: ganham ao valor herdado
+   de :root, mas perdem para um [evoTokens] de instância. */
+@layer evo.variants {
+<% for (const v of variants) { %>  :host([data-evo-variant~='<%= v %>']) {
+    /* TODO: tokens da variante <%= v %>. */
+    --evo-<%= dasherize(name) %>-bg: var(--evo-color-surface-sunken);
+  }
+
+<% } %>}
+<% } %>

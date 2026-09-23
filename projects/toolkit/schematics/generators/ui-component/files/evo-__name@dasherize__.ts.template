@@ -1,0 +1,21 @@
+import { ChangeDetectionStrategy, Component, booleanAttribute, input } from '@angular/core';
+
+<% if (temVariantes) { %>/* eslint-disable @typescript-eslint/ban-types */
+/** O `(string & {})` mantém o autocomplete mas aceita variantes do projecto. */
+export type <%= classify(name) %>Variant = <%= variants.map(v => "'" + v + "'").join(' | ') %> | (string & {});
+
+<% } %>@Component({
+  selector: 'evo-<%= dasherize(name) %>',
+  template: `<ng-content />`,
+  styleUrl: './<%= dasherize(name) %>.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'evo-<%= dasherize(name) %>',
+<% if (temVariantes) { %>    '[attr.data-evo-variant]': 'variant()',
+<% } %>    '[attr.data-evo-disabled]': 'disabled() ? "" : null',
+  },
+})
+export class Evo<%= classify(name) %> {
+<% if (temVariantes) { %>  readonly variant = input<<%= classify(name) %>Variant>('<%= variants[0] %>');
+<% } %>  readonly disabled = input(false, { transform: booleanAttribute });
+}

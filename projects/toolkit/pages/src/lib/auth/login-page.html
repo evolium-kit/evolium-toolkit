@@ -1,0 +1,58 @@
+<evo-auth-shell>
+  <span slot="brand">{{ texto('brand') }}</span>
+  <h1 slot="title">{{ texto('title') }}</h1>
+  <p slot="subtitle">{{ texto('subtitle') }}</p>
+
+  <form [formGroup]="form" (ngSubmit)="submeter()" novalidate>
+    @if (erro(); as mensagem) {
+      <p class="evo-page__erro" role="alert">{{ mensagem }}</p>
+    }
+
+    <evo-field>
+      <label for="evo-login-email">{{ texto('email') }}</label>
+      <input
+        evoInput
+        id="evo-login-email"
+        type="email"
+        autocomplete="email"
+        formControlName="email"
+        [invalid]="invalido('email')"
+        aria-describedby="evo-login-email-erro"
+      />
+      @if (invalido('email')) {
+        <span slot="error" id="evo-login-email-erro">
+          @if (form.controls.email.hasError('required')) {
+            O email é obrigatório.
+          } @else {
+            Email com formato inválido.
+          }
+        </span>
+      }
+    </evo-field>
+
+    <evo-field>
+      <label for="evo-login-password">{{ texto('password') }}</label>
+      <input
+        evoInput
+        id="evo-login-password"
+        type="password"
+        autocomplete="current-password"
+        formControlName="password"
+        [invalid]="invalido('password')"
+        aria-describedby="evo-login-password-erro"
+      />
+      @if (invalido('password')) {
+        <span slot="error" id="evo-login-password-erro">A senha é obrigatória.</span>
+      }
+    </evo-field>
+
+    <a class="evo-page__ligacao" [routerLink]="forgotLink()">{{ texto('forgot') }}</a>
+
+    <button evoButton type="submit" block [loading]="aEntrar()">{{ texto('submit') }}</button>
+  </form>
+
+  <p slot="footer">
+    {{ texto('noAccount') }}
+    <a class="evo-page__ligacao" [routerLink]="registerLink()">{{ texto('register') }}</a>
+  </p>
+</evo-auth-shell>

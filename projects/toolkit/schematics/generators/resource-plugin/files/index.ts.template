@@ -1,0 +1,4 @@
+export * from './<%= dasherize(name) %>.models';
+export * from './<%= dasherize(name) %>.mappers';
+export * from './<%= dasherize(name) %>.endpoints';
+export * from './<%= dasherize(name) %>.plugin';

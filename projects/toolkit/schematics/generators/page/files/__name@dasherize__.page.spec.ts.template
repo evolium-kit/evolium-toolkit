@@ -1,0 +1,18 @@
+import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { describe, expect, it } from 'vitest';
+import { <%= classify(name) %>Page } from './<%= dasherize(name) %>.page';
+
+describe('<%= classify(name) %>Page', () => {
+  it('monta e mostra um dos quatro estados', async () => {
+    await TestBed.configureTestingModule({
+      imports: [<%= classify(name) %>Page],
+      providers: [provideRouter([])],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(<%= classify(name) %>Page);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('h1')?.textContent).toContain('<%= classify(name) %>');
+  });
+});

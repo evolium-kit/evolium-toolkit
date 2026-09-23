@@ -1,0 +1,55 @@
+/*
+ * Estilos de conteúdo PROJECTADO nos shells.
+ *
+ * Com ViewEncapsulation.Emulated, o conteúdo passado por ng-content recebe o
+ * atributo do componente pai, não o do shell — um styleUrl encapsulado nunca
+ * lhe chegaria. Ver layouts/README.md.
+ *
+ * Importar em src/styles.css a seguir a evolium-components.css.
+ */
+
+@layer evo.components {
+  /* ------------------------------------------------------------ auth shell */
+  .evo-auth-shell [slot='brand'] {
+    margin-block-end: var(--evo-space-md);
+    color: var(--evo-color-primary);
+    font-size: var(--evo-font-size-lg);
+    font-weight: 700;
+  }
+
+  .evo-auth-shell [slot='title'] {
+    margin: 0;
+    font-size: 1.375rem;
+    font-weight: 600;
+  }
+
+  .evo-auth-shell [slot='subtitle'] {
+    margin: 0 0 var(--evo-space-md);
+    color: var(--evo-color-on-surface-muted);
+    font-size: var(--evo-font-size-md);
+  }
+
+  .evo-auth-shell [slot='footer'] {
+    margin-block-start: var(--evo-space-md);
+    padding-block-start: var(--evo-space-md);
+    border-block-start: var(--evo-border-width) solid var(--evo-color-border);
+    color: var(--evo-color-on-surface-muted);
+    font-size: var(--evo-font-size-md);
+    text-align: center;
+  }
+
+  /* ------------------------------------------------------- dashboard shell */
+  .evo-dashboard-shell [slot='brand'] {
+    color: var(--evo-color-primary);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .evo-dashboard-shell [slot='footer'] {
+    padding: var(--evo-space-md);
+    border-block-start: var(--evo-border-width) solid var(--evo-color-border);
+    color: var(--evo-color-on-surface-muted);
+    font-size: var(--evo-font-size-sm);
+    text-align: center;
+  }
+}

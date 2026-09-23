@@ -1,0 +1,7 @@
+<header class="evo-<%= dasherize(name) %>-shell__topo">
+<% for (const s of slots) { %>  <ng-content select="[slot=<%= s %>]" />
+<% } %></header>
+
+<main class="evo-<%= dasherize(name) %>-shell__conteudo" id="evo-conteudo" tabindex="-1">
+  <ng-content />
+</main>

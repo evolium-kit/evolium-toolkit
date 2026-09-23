@@ -1,0 +1,42 @@
+/* Partilhado pelas páginas de autenticação. */
+
+@layer evo.components {
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--evo-space-md);
+  }
+
+  .evo-page__erro {
+    margin: 0;
+    padding: var(--evo-space-sm) var(--evo-space-md);
+    border-radius: var(--evo-radius-md);
+    background-color: var(--evo-color-danger-soft);
+    color: var(--evo-color-danger);
+    font-size: var(--evo-font-size-md);
+  }
+
+  .evo-page__sucesso {
+    margin: 0;
+    padding: var(--evo-space-sm) var(--evo-space-md);
+    border-radius: var(--evo-radius-md);
+    background-color: var(--evo-color-success-soft);
+    color: var(--evo-color-success);
+    font-size: var(--evo-font-size-md);
+  }
+
+  .evo-page__ligacao {
+    color: var(--evo-color-primary);
+    font-size: var(--evo-font-size-md);
+    text-decoration: none;
+  }
+
+  .evo-page__ligacao:hover {
+    text-decoration: underline;
+  }
+
+  .evo-page__ligacao:focus-visible {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: var(--evo-focus-ring-offset);
+  }
+}

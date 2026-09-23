@@ -1,0 +1,41 @@
+/* Regra 1: nenhum --evo-badge-* declarado aqui. Ver components/README.md. */
+
+@layer evo.components {
+  :host {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--evo-space-xs);
+    padding-inline: var(--evo-badge-padding-inline, var(--evo-space-sm));
+    padding-block: var(--evo-badge-padding-block, var(--evo-space-xs));
+    border-radius: var(--evo-badge-radius, var(--evo-radius-full));
+    background-color: var(--evo-badge-bg, var(--evo-color-surface-sunken));
+    color: var(--evo-badge-fg, var(--evo-color-on-surface-muted));
+    font-family: var(--evo-font-sans);
+    font-size: var(--evo-badge-font-size, var(--evo-font-size-sm));
+    font-weight: var(--evo-badge-font-weight, 500);
+    line-height: 1;
+    white-space: nowrap;
+  }
+}
+
+@layer evo.variants {
+  :host([data-evo-tone~='primary']) {
+    --evo-badge-bg: var(--evo-color-primary-soft);
+    --evo-badge-fg: var(--evo-color-primary);
+  }
+
+  :host([data-evo-tone~='success']) {
+    --evo-badge-bg: var(--evo-color-success-soft);
+    --evo-badge-fg: var(--evo-color-success);
+  }
+
+  :host([data-evo-tone~='warning']) {
+    --evo-badge-bg: var(--evo-color-warning-soft);
+    --evo-badge-fg: var(--evo-color-warning);
+  }
+
+  :host([data-evo-tone~='danger']) {
+    --evo-badge-bg: var(--evo-color-danger-soft);
+    --evo-badge-fg: var(--evo-color-danger);
+  }
+}

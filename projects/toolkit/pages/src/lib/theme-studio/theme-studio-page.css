@@ -1,0 +1,466 @@
+﻿@layer evo.components {
+  /*
+   * A interface do Studio tem tokens PRÃ“PRIOS (--st-*), com valores fixos e
+   * deliberadamente desligados dos --evo-*.
+   *
+   * A razÃ£o Ã© dura de descobrir tarde: o Studio Ã© construÃ­do com os mesmos
+   * componentes que edita. Se usasse --evo-color-primary, quem pusesse o
+   * primÃ¡rio igual ao fundo deixaria a prÃ³pria ferramenta invisÃ­vel â€” sem
+   * forma de reverter a nÃ£o ser limpar o localStorage Ã  mÃ£o.
+   *
+   * SÃ³ o palco de prÃ©-visualizaÃ§Ã£o mostra o tema a sÃ©rio.
+   */
+  :host {
+    --st-surface: #ffffff;
+    --st-surface-2: #f8fafc;
+    --st-text: #0f172a;
+    --st-text-muted: #64748b;
+    --st-border: #e2e8f0;
+    --st-border-strong: #94a3b8;
+    --st-accent: #2563eb;
+    --st-accent-soft: #eff6ff;
+    --st-on-accent: #ffffff;
+
+    --st-space-xs: 0.25rem;
+    --st-space-sm: 0.5rem;
+    --st-space-md: 1rem;
+    --st-space-lg: 1.5rem;
+    --st-space-xl: 2rem;
+    --st-radius: 6px;
+    --st-radius-lg: 10px;
+    --st-font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --st-font-sm: 0.8125rem;
+    --st-font-md: 0.875rem;
+
+    display: grid;
+    grid-template-rows: auto 1fr;
+    block-size: 100dvh;
+    background-color: var(--st-surface-2);
+    color: var(--st-text);
+    font-family: var(--st-font);
+    font-size: var(--st-font-md);
+  }
+
+  /* Modo escuro forÃ§ado pelo utilizador. */
+  :host-context([data-evo-scheme='dark']) {
+    --st-surface: #0f172a;
+    --st-surface-2: #020617;
+    --st-text: #e2e8f0;
+    --st-text-muted: #94a3b8;
+    --st-border: #1e293b;
+    --st-border-strong: #475569;
+    --st-accent: #60a5fa;
+    --st-accent-soft: #1e3a8a;
+    --st-on-accent: #0f172a;
+  }
+
+  /* Esquema `system` com o sistema operativo em escuro. */
+  @media (prefers-color-scheme: dark) {
+    :host-context(:root:not([data-evo-scheme='light'])) {
+      --st-surface: #0f172a;
+      --st-surface-2: #020617;
+      --st-text: #e2e8f0;
+      --st-text-muted: #94a3b8;
+      --st-border: #1e293b;
+      --st-border-strong: #475569;
+      --st-accent: #60a5fa;
+      --st-accent-soft: #1e3a8a;
+      --st-on-accent: #0f172a;
+    }
+  }
+
+  /* BotÃµes da prÃ³pria ferramenta. NÃ£o usam EvoButton, pela razÃ£o acima. */
+  .st__botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--st-space-xs);
+    min-block-size: 1.75rem;
+    padding-inline: var(--st-space-sm);
+    border: 1px solid transparent;
+    border-radius: var(--st-radius);
+    background-color: var(--st-accent);
+    color: var(--st-on-accent);
+    font: inherit;
+    font-size: var(--st-font-sm);
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .st__botao:hover {
+    filter: brightness(0.92);
+  }
+
+  .st__botao:focus-visible {
+    outline: 2px solid var(--st-accent);
+    outline-offset: 2px;
+  }
+
+  .st__botao--discreto {
+    background-color: transparent;
+    color: var(--st-accent);
+    border-color: var(--st-border-strong);
+  }
+
+  .st__botao--discreto:hover {
+    background-color: var(--st-accent-soft);
+    filter: none;
+  }
+
+  /* ---------------------------------------------------------------- topo */
+  .st__topo {
+    display: flex;
+    align-items: center;
+    gap: var(--st-space-sm);
+    padding: var(--st-space-sm) var(--st-space-md);
+    border-block-end: 1px solid var(--st-border);
+    background-color: var(--st-surface);
+  }
+
+  .st__marca {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .st__pesquisa {
+    flex: 1 1 12rem;
+    max-inline-size: 28rem;
+  }
+
+  .st__accoes {
+    display: flex;
+    align-items: center;
+    gap: var(--st-space-xs);
+  }
+
+  .st__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    border: 1px solid transparent;
+    border-radius: var(--st-radius);
+    background: transparent;
+    color: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .st__toggle:hover {
+    background-color: var(--st-surface-2);
+  }
+
+  .st__toggle:focus-visible {
+    outline: 2px solid var(--st-accent);
+    outline-offset: 2px;
+  }
+
+  /* --------------------------------------------------------------- corpo */
+  .st__corpo {
+    display: flex;
+    min-block-size: 0;
+  }
+
+  .st__lateral {
+    flex: 0 0 15rem;
+    overflow-y: auto;
+    padding: var(--st-space-md);
+    background-color: var(--st-surface);
+  }
+
+  .st__lateral--esq {
+    border-inline-end: 1px solid var(--st-border);
+  }
+
+  .st__lateral--dir {
+    flex-basis: 17rem;
+    border-inline-start: 1px solid var(--st-border);
+  }
+
+  .st__lateral[hidden] {
+    display: none;
+  }
+
+  .st__centro {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow-y: auto;
+    padding: var(--st-space-lg) var(--st-space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--st-space-md);
+  }
+
+  /* ------------------------------------------------------ lista lateral */
+  .st__categoria {
+    margin: var(--st-space-md) 0 var(--st-space-xs);
+    color: var(--st-text-muted);
+    font-size: var(--st-font-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .st__categoria:first-child {
+    margin-block-start: 0;
+  }
+
+  .st__lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .st__item {
+    inline-size: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--st-space-xs);
+    padding: var(--st-space-xs) var(--st-space-sm);
+    border: 0;
+    border-radius: var(--st-radius);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .st__item:hover {
+    background-color: var(--st-surface-2);
+  }
+
+  .st__item:focus-visible {
+    outline: 2px solid var(--st-accent);
+    outline-offset: -2px;
+  }
+
+  .st__item--activo {
+    background-color: var(--st-accent-soft);
+    color: var(--st-accent);
+    font-weight: 600;
+  }
+
+  .st__ponto {
+    color: var(--st-accent);
+    font-size: 1.25rem;
+    line-height: 0.5;
+  }
+
+  /* ------------------------------------------------------------- centro */
+  .st__titulo {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .st__controlos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--st-space-md);
+  }
+
+  .st__inline {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--st-space-xs);
+    font-size: var(--st-font-sm);
+    color: var(--st-text-muted);
+  }
+
+  .st__palco {
+    display: flex;
+    align-items: center;
+    min-block-size: 12rem;
+    padding: var(--st-space-xl) var(--st-space-lg);
+    border: 1px solid var(--st-border);
+    border-radius: var(--st-radius-lg);
+    background-color: var(--st-surface);
+  }
+
+  /* -------------------------------------------------------------- escopo */
+  .st__escopo {
+    margin: 0;
+    padding: var(--st-space-sm) var(--st-space-md);
+    border: 1px solid var(--st-border);
+    border-radius: var(--st-radius-lg);
+    background-color: var(--st-surface);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--st-space-sm);
+  }
+
+  .st__opcao {
+    padding: var(--st-space-xs) var(--st-space-md);
+    border: 1px solid var(--st-border-strong);
+    border-radius: 9999px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: var(--st-font-sm);
+    cursor: pointer;
+  }
+
+  .st__opcao:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .st__opcao:focus-visible {
+    outline: 2px solid var(--st-accent);
+    outline-offset: 2px;
+  }
+
+  .st__opcao--activa {
+    background-color: var(--st-accent);
+    border-color: var(--st-accent);
+    color: var(--st-on-accent);
+  }
+
+  .st__ajuda {
+    flex: 1 1 14rem;
+    margin: 0;
+    color: var(--st-text-muted);
+    font-size: var(--st-font-sm);
+  }
+
+  /* --------------------------------------------------------- propriedades */
+  .st__token {
+    margin-block-end: var(--st-space-md);
+  }
+
+  .st__rotulo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--st-space-xs);
+    margin-block-end: var(--st-space-xs);
+    font-size: var(--st-font-sm);
+    font-weight: 500;
+  }
+
+  .st__herdado {
+    padding: 1px var(--st-space-xs);
+    border-radius: var(--st-radius);
+    background-color: var(--st-surface-2);
+    color: var(--st-text-muted);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  .st__cor {
+    display: flex;
+    gap: var(--st-space-xs);
+  }
+
+  .st__cor input[type='color'] {
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    padding: 0;
+    border: 1px solid var(--st-border-strong);
+    border-radius: var(--st-radius);
+    background: none;
+    cursor: pointer;
+  }
+
+  .st__intervalo {
+    display: flex;
+    align-items: center;
+    gap: var(--st-space-sm);
+  }
+
+  .st__intervalo input[type='range'] {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
+  .st__valor {
+    min-inline-size: 3.5rem;
+    color: var(--st-text-muted);
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: var(--st-font-sm);
+    text-align: end;
+  }
+
+  .st__dica {
+    margin: var(--st-space-xs) 0 0;
+    color: var(--st-text-muted);
+    font-size: 0.75rem;
+  }
+
+  .st__rodape {
+    margin-block-start: var(--st-space-lg);
+    padding-block-start: var(--st-space-md);
+    border-block-start: 1px solid var(--st-border);
+  }
+
+  /* -------------------------------------------------------------- comuns */
+  .st__campo {
+    inline-size: 100%;
+    min-block-size: 2.25rem;
+    padding-inline: var(--st-space-sm);
+    border: 1px solid var(--st-border-strong);
+    border-radius: var(--st-radius);
+    background-color: var(--st-surface);
+    color: var(--st-text);
+    font-family: inherit;
+    font-size: var(--st-font-md);
+  }
+
+  .st__campo:focus-visible {
+    outline: 2px solid var(--st-accent);
+    outline-offset: 2px;
+  }
+
+  .st__campo--mono {
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: var(--st-font-sm);
+  }
+
+  .st__vazio {
+    color: var(--st-text-muted);
+    max-inline-size: 32rem;
+  }
+
+  .st__sr {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* --------------------------------------------------------- responsivo */
+  @media (width < 1024px) {
+    .st__lateral {
+      position: fixed;
+      inset-block: 3.5rem 0;
+      z-index: 10;
+      inline-size: 15rem;
+      box-shadow: 0 0 0 100vmax rgb(0 0 0 / 0.3);
+    }
+
+    .st__lateral--esq {
+      inset-inline-start: 0;
+    }
+
+    .st__lateral--dir {
+      inset-inline-end: 0;
+    }
+  }
+
+  @media (width < 640px) {
+    .st__marca {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,22 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../out-tsc/lib",
+    "declaration": true,
+    "declarationMap": true,
+    "types": [],
+    "paths": {
+      "@evolium-kit/toolkit": ["./src/public-api.ts"],
+      "@evolium-kit/toolkit/core": ["./core/src/public-api.ts"],
+      "@evolium-kit/toolkit/theme": ["./theme/src/public-api.ts"],
+      "@evolium-kit/toolkit/components": ["./components/src/public-api.ts"],
+      "@evolium-kit/toolkit/layouts": ["./layouts/src/public-api.ts"],
+      "@evolium-kit/toolkit/pages": ["./pages/src/public-api.ts"],
+      "@evolium-kit/toolkit/services": ["./services/src/public-api.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "*/src/**/*.ts"],
+  "exclude": ["**/*.spec.ts", "schematics/**/*.ts"]
+}
