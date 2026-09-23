@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build e testes
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.20.2
+          cache: npm
+
+      - name: Instalar
+        run: npm ci
+
+      - name: Formatação
+        run: npx prettier --check .
+
+      - name: Build da library
+        run: npm run build:lib
+
+      # A verificação mais valiosa do CI: o artefacto publicável está completo?
+      # Um entry point em falta só daria erro no projecto do consumidor.
+      - name: Verificar o artefacto
+        run: node tools/verify-dist.mjs
+
+      - name: Testes da library
+        run: npm run test:lib
+
+      - name: Testes dos schematics
+        run: npm run test:schematics
+
+      - name: Build da aplicação de demonstração
+        run: npx ng build
+
+      # Prova que o pacote instala e que o `ng add` arranca num projecto
+      # virgem — é o que nenhum teste unitário consegue garantir.
+      - name: Instalação limpa
+        run: node tools/verify-install.mjs
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toolkit-dist
+          path: dist/toolkit
+          retention-days: 7

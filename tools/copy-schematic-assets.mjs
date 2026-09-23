@@ -1,5 +1,5 @@
 // @ts-check
-import { cp, mkdir, readdir, stat, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, readdir, stat, writeFile } from 'node:fs/promises';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -68,6 +68,21 @@ await writeFile(
   `${JSON.stringify({ type: 'commonjs' }, null, 2)}\n`,
   'utf-8',
 );
+
+/*
+ * …e o ng-packagr gera um `.npmignore` com `**​/package.json`, partindo do
+ * princípio de que os package.json aninhados só servem em desenvolvimento.
+ * Para os entry points é verdade — o que os publica é o campo `exports`. Para
+ * os schematics não é: sem o ficheiro, o pacote instalado volta a tratá-los
+ * como ESM e o `ng add` morre. A negação tem de vir depois da regra.
+ */
+const npmignore = join(raiz, 'dist', 'toolkit', '.npmignore');
+const excepcao = '!schematics/package.json';
+const actual = await readFile(npmignore, 'utf-8').catch(() => '');
+
+if (!actual.includes(excepcao)) {
+  await writeFile(npmignore, `${actual.trimEnd()}\n${excepcao}\n`, 'utf-8');
+}
 
 // Falhar aqui é melhor do que publicar um pacote cujo `ng add` não arranca.
 await stat(join(destino, 'collection.json'));

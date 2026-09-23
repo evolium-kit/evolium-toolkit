@@ -42,3 +42,12 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Segredos. O .npmrc de um projecto costuma acabar com um token lá dentro;
+# o que é seguro committar está em .npmrc.example.
+.npmrc
+.env
+.env.*
+!.env.example
+.mcp.local.json
+.claude/settings.local.json

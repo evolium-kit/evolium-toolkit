@@ -1,0 +1,90 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: 'Correr tudo sem publicar'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Publicar no GitHub Packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment: release
+
+    permissions:
+      contents: write # criar a GitHub Release
+      packages: write # publicar em npm.pkg.github.com
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # registry-url + scope fazem o setup-node escrever o .npmrc do runner,
+      # já com //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}.
+      # Criar o .npmrc à mão aqui é desnecessário e propenso a erro.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.20.2
+          cache: npm
+          registry-url: https://npm.pkg.github.com
+          scope: '@evolium-kit'
+
+      - name: Instalar
+        run: npm ci
+
+      - name: Build
+        run: npm run build:lib
+
+      - name: Verificar o artefacto
+        run: node tools/verify-dist.mjs
+
+      - name: Testes
+        run: |
+          npm run test:lib
+          npm run test:schematics
+
+      - name: Instalação limpa
+        run: node tools/verify-install.mjs
+
+      # Uma tag que não corresponda à versão publicada é uma armadilha para
+      # quem depois tentar reconstruir a partir do histórico.
+      - name: A tag corresponde à versão?
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG=$(node -p "require('./dist/toolkit/package.json').version")
+          if [ "$TAG" != "$PKG" ]; then
+            echo "::error::a tag v$TAG não corresponde à versão do pacote ($PKG)"
+            exit 1
+          fi
+          echo "tag e versão coincidem: $PKG"
+
+      - name: Publicar (simulação)
+        if: github.event_name == 'workflow_dispatch' && inputs.dryRun
+        working-directory: dist/toolkit
+        run: npm publish --dry-run
+        env:
+          # Tem de estar no step do publish, não ao nível do job: é o erro
+          # mais comum deste setup e dá um 401 difícil de diagnosticar.
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publicar
+        if: startsWith(github.ref, 'refs/tags/')
+        working-directory: dist/toolkit
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Criar a GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true

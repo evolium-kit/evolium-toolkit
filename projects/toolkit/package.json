@@ -4,7 +4,7 @@
   "description": "Toolkit Angular da Evolium: componentes temáveis, layouts, páginas prontas e um kernel de serviços baseado em plugins.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/evolium-kit/evolium-app-overview.git",
+    "url": "git+https://github.com/evolium-kit/evolium-toolkit.git",
     "directory": "projects/toolkit"
   },
   "license": "UNLICENSED",
@@ -16,6 +16,10 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",
     "access": "restricted"
+  },
+  "exports": {
+    "./styles/*": "./styles/*",
+    "./schematics/*": "./schematics/*"
   },
   "peerDependencies": {
     "@angular/cdk": "^21.2.0",

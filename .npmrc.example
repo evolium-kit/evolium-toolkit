@@ -1,0 +1,32 @@
+# Copiar para `.npmrc` no projecto que consome a @evolium-kit/toolkit.
+#
+# Este ficheiro diz apenas ONDE procurar o pacote. Nunca escrever aqui um
+# token: o `.npmrc` do projecto é committado, e um token committado é um
+# incidente de segurança, mesmo que o repositório seja privado.
+
+@evolium-kit:registry=https://npm.pkg.github.com
+always-auth=true
+
+# O token vive no ~/.npmrc da máquina, nunca no repositório:
+#
+#   //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+#
+# e a variável no ambiente do utilizador:
+#
+#   PowerShell:  [Environment]::SetEnvironmentVariable('GITHUB_TOKEN','ghp_…','User')
+#   bash:        export GITHUB_TOKEN=ghp_…
+#
+# O npm expande ${GITHUB_TOKEN} na leitura, pelo que o segredo nunca chega a
+# existir em texto num ficheiro.
+#
+# O PAT precisa apenas de `read:packages` (e `repo` se o repositório for privado).
+#
+# Em CI, não criar .npmrc à mão — usar:
+#
+#   - uses: actions/setup-node@v4
+#     with:
+#       registry-url: https://npm.pkg.github.com
+#       scope: '@evolium-kit'
+#   - run: npm ci
+#     env:
+#       NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
