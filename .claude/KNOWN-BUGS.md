@@ -85,6 +85,48 @@ este precisa de **modificar os argumentos de uma chamada existente**.
 
 ---
 
+## 🔴 `temSimbolo()` dá falso positivo por correspondência de substring
+
+**Onde:** `projects/toolkit/schematics/ng-add/index.ts` (função `temSimbolo`),
+`projects/toolkit/schematics/utils/theme-studio.ts`.
+
+**Descoberto** em 2026-09-24, ao corrigir manualmente um projecto real que
+tinha ficado num estado intermédio (import órfão de
+`provideEvoThemeStudio`, sem a chamada correspondente — situação criada por
+edição manual do consumidor, não pelo `ng-add`).
+
+Todas as verificações de idempotência usam `conteudo.includes(simbolo)`. O
+problema: **`"provideEvoTheme"` é uma substring literal de
+`"provideEvoThemeStudio"`**. Um ficheiro que contenha `provideEvoThemeStudio`
+em qualquer forma — mesmo só como import nunca usado — faz
+`temSimbolo(tree, sourceRoot, 'provideEvoTheme')` devolver `true`, e o passo
+4 (registo do tema) salta-se a si próprio por pensar que já está feito.
+
+Pela mesma razão, `addThemeStudioProvider()` (o novo utilitário da 0.1.1) usa
+`conteudo.includes('provideEvoThemeStudio')` como verificação de
+idempotência — que também dá falso positivo perante um import órfão sem a
+chamada, e por isso **não corrige** um projecto nesse estado específico ao
+correr `ng add` outra vez.
+
+**Sintoma:** correr `ng add`/`ng generate :ng-add` uma segunda vez num
+projecto com um destes símbolos presentes apenas parcialmente (ex.: só o
+import, sem a chamada) não repara nada — assume, incorrectamente, que já
+está tudo configurado.
+
+**Não afecta uma instalação nova** (`ng add` numa aplicação Angular virgem):
+nesse caso nenhum destes símbolos existe antes de o schematic correr, e a
+ordem de execução evita a colisão. Confirmado com 28 testes automáticos e
+instalação real ponta a ponta.
+
+**Correcção pendente:** trocar `includes()` por uma verificação que exija
+que o símbolo seja seguido de `(` (uma chamada, não uma import), ou usar
+`/\bprovideEvoTheme\s*\(/` em vez de `/\bprovideEvoTheme\b/` — o `\b` sozinho
+não chega, porque `provideEvoThemeStudio` também bate certo com `\bprovideEvoTheme`
+seguido de mais letras sem fronteira de palavra a meio (é preciso ancorar ao
+parêntese de abertura, não à fronteira de palavra).
+
+---
+
 ## 🔴 `assertRouteReachable()` nunca foi exercitado contra um wildcard real
 
 **Onde:** `projects/toolkit/pages/src/lib/theme-studio/provide-evo-theme-studio.ts`
