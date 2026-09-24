@@ -91,6 +91,55 @@ describe('ng-add', () => {
     });
   });
 
+  /**
+   * Regressão. Até à 0.1.0, responder "sim" a esta pergunta não acrescentava
+   * `provideEvoThemeStudio()` a lado nenhum — só a mensagem final da consola,
+   * que dava a entender (por engano) que já estava configurado. `/_evo/theme`
+   * dava sempre 404. Ver `.claude/KNOWN-BUGS.md`.
+   */
+  describe('Theme Studio', () => {
+    it('regista o provider quando pedido', async () => {
+      const tree = await runner.runSchematic('ng-add', OPCOES, app);
+      const config = configDe(tree);
+
+      expect(config).toContain('provideEvoThemeStudio()');
+      expect(config).toContain("from '@evolium-kit/toolkit/pages'");
+    });
+
+    it('só regista em isDevMode(), nunca em produção', async () => {
+      const tree = await runner.runSchematic('ng-add', OPCOES, app);
+      const config = configDe(tree);
+
+      expect(config).toContain('isDevMode()');
+      expect(config).toMatch(/isDevMode\(\)\s*\?\s*\[provideEvoThemeStudio\(\)\]\s*:\s*\[\]/);
+    });
+
+    it('vem antes do provideRouter — senão uma rota ** sombreia-o', async () => {
+      const tree = await runner.runSchematic('ng-add', OPCOES, app);
+      const config = configDe(tree);
+
+      const indiceStudio = config.indexOf('provideEvoThemeStudio');
+      const indiceRouter = config.indexOf('provideRouter(');
+
+      expect(indiceStudio).toBeGreaterThan(-1);
+      expect(indiceRouter).toBeGreaterThan(-1);
+      expect(indiceStudio).toBeLessThan(indiceRouter);
+    });
+
+    it('não o regista quando a resposta é não', async () => {
+      const tree = await runner.runSchematic('ng-add', { ...OPCOES, themeStudio: false }, app);
+      expect(configDe(tree)).not.toContain('provideEvoThemeStudio');
+    });
+
+    it('não duplica numa segunda corrida', async () => {
+      const primeira = await runner.runSchematic('ng-add', OPCOES, app);
+      const segunda = await runner.runSchematic('ng-add', OPCOES, primeira);
+
+      const config = configDe(segunda);
+      expect(config.split('provideEvoThemeStudio(').length - 1).toBe(1);
+    });
+  });
+
   it('acrescenta as rotas de autenticação', async () => {
     const tree = await runner.runSchematic('ng-add', OPCOES, app);
     const rotas = tree.readText('/projects/demo/src/app/app.routes.ts');

@@ -9,17 +9,30 @@ always-auth=true
 
 # O token vive no ~/.npmrc da máquina, nunca no repositório:
 #
-#   //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+#   //npm.pkg.github.com/:_authToken=${GITHUB_PACKAGES_TOKEN}
 #
-# e a variável no ambiente do utilizador:
+# e a variável no ambiente do utilizador. Em PowerShell, sem o token aparecer
+# no ecrã nem no histórico:
 #
-#   PowerShell:  [Environment]::SetEnvironmentVariable('GITHUB_TOKEN','ghp_…','User')
-#   bash:        export GITHUB_TOKEN=ghp_…
+#   $t = Read-Host 'Cola o token' -AsSecureString
+#   [Environment]::SetEnvironmentVariable('GITHUB_PACKAGES_TOKEN',
+#     [System.Net.NetworkCredential]::new('', $t).Password, 'User')
 #
-# O npm expande ${GITHUB_TOKEN} na leitura, pelo que o segredo nunca chega a
-# existir em texto num ficheiro.
+# Em bash:
 #
-# O PAT precisa apenas de `read:packages` (e `repo` se o repositório for privado).
+#   read -rs GITHUB_PACKAGES_TOKEN && echo "export GITHUB_PACKAGES_TOKEN=$GITHUB_PACKAGES_TOKEN" >> ~/.bashrc
+#
+# O npm expande ${GITHUB_PACKAGES_TOKEN} na leitura, pelo que o segredo nunca
+# fica escrito em nenhum .npmrc — nem no do projecto, nem no da máquina.
+#
+# Porquê GITHUB_PACKAGES_TOKEN e não GITHUB_TOKEN: o GitHub CLI (`gh`) lê
+# GITHUB_TOKEN automaticamente e passaria a usar este token — que só tem
+# read:packages — em vez do login normal, partindo os comandos do `gh`.
+#
+# O PAT tem de ser classic, com `read:packages` (e `repo` se o repositório for
+# privado). Verificar com:
+#
+#   npm whoami --registry=https://npm.pkg.github.com
 #
 # Em CI, não criar .npmrc à mão — usar:
 #

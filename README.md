@@ -1,18 +1,45 @@
 # Evolium Toolkit
 
-Workspace da **`@evolium-kit/toolkit`**: componentes temáveis, layouts, páginas
-prontas e um kernel de serviços baseado em plugins para aplicações Angular.
+A **`@evolium-kit/toolkit`** é a biblioteca Angular partilhada por todos os
+projectos da Evolium: componentes de UI temáveis por CSS custom properties,
+layouts prontos, páginas de autenticação completas, e um kernel de serviços
+100% baseado em plugins.
 
-A aplicação em `src/` é o playground onde tudo é desenvolvido e verificado antes
-de publicar.
+Um projecto novo deixa de recomeçar do zero o login, o shell da aplicação, os
+componentes visuais e a comunicação com a API.
 
+```ts
+import { EvoButton, EvoCard } from '@evolium-kit/toolkit/components';
 ```
-projects/toolkit/   a library publicada
-src/                playground e demonstração
-tools/              verificação do artefacto e da instalação
-```
 
-## Desenvolver
+Este repositório é o **workspace** onde a toolkit é desenvolvida: contém a
+library publicável em `projects/toolkit/`, e uma aplicação em `src/` que serve
+de playground, onde tudo é exercitado antes de qualquer alteração ser dada por
+terminada.
+
+---
+
+## Instalar num projecto
+
+Guia completo, do token do GitHub ao primeiro componente a funcionar:
+
+**➡️ [`INSTALL.md`](INSTALL.md)**
+
+## Documentação
+
+O índice completo, incluindo a referência de cada módulo, vive em
+**[`docs/README.md`](docs/README.md)**. Atalhos directos:
+
+| Se precisas de...                               | Lê                                                   |
+| ----------------------------------------------- | ---------------------------------------------------- |
+| Instalar a toolkit num projecto                 | [`INSTALL.md`](INSTALL.md)                           |
+| Os primeiros passos depois de instalar          | [`docs/getting-started.md`](docs/getting-started.md) |
+| Perceber porque a toolkit está organizada assim | [`docs/architecture.md`](docs/architecture.md)       |
+| Personalizar o tema                             | [`docs/theming.md`](docs/theming.md)                 |
+| Criar um recurso ligado à tua API               | [`docs/plugins.md`](docs/plugins.md)                 |
+| Contribuir código para a toolkit                | [`docs/contributing.md`](docs/contributing.md)       |
+
+## Desenvolver este repositório
 
 ```bash
 npm ci
@@ -22,58 +49,14 @@ npm run watch:lib     # reconstrói a library
 npm start             # serve o playground em :4200
 ```
 
-O `tsconfig.json` aponta `@evolium-kit/toolkit/*` para `dist/toolkit/*`, pelo
-que é preciso um build da library antes do primeiro `ng serve`.
+Guia completo de desenvolvimento, testes e publicação em
+[`docs/contributing.md`](docs/contributing.md).
 
-Depois de alterar a library, **reiniciar o `ng serve`**: o Vite mantém as
-dependências em cache e não apanha um `dist` reconstruído.
+## Estrutura
 
-| Rota          | O quê                                |
-| ------------- | ------------------------------------ |
-| `/`           | playground dos componentes e do tema |
-| `/auth/login` | página de login da toolkit           |
-| `/painel`     | dashboard, protegido por guard       |
-| `/_evo/theme` | Theme Studio (só em desenvolvimento) |
-
-Credenciais da API de demonstração: `ana@evolium.ao` / `1234`.
-
-## Verificar
-
-```bash
-npm run build:lib          # library + schematics
-npm run test:lib           # 62 testes
-npm run test:schematics    # 23 testes, em Node
-node tools/verify-dist.mjs # o artefacto está publicável?
-node tools/verify-install.mjs  # pack + ng add + build num projecto virgem
 ```
-
-O `verify-install` é lento mas é o único que exercita o pacote como um
-consumidor o vive — foi ele que apanhou o `ng add` a falhar por causa do
-`type: module` e as folhas de estilo fora do `exports`.
-
-## Documentação
-
-Cada entry point tem o seu README, com uma metade sobre **usar** e outra sobre
-**estender**:
-
-- [core](projects/toolkit/core/README.md) ·
-  [theme](projects/toolkit/theme/README.md) ·
-  [components](projects/toolkit/components/README.md)
-- [layouts](projects/toolkit/layouts/README.md) ·
-  [pages](projects/toolkit/pages/README.md) ·
-  [services](projects/toolkit/services/README.md)
-
-## Publicar
-
-A publicação é feita **apenas** pelo GitHub Actions, nunca da máquina local.
-
-```bash
-# actualizar a versão em projects/toolkit/package.json e o CHANGELOG
-git tag v0.1.0
-git push origin v0.1.0
+projects/toolkit/   a library publicada (o que o consumidor instala)
+src/                 playground — nunca publicado, sempre exercitado
+docs/                documentação conceptual
+tools/               verificação do artefacto e da instalação
 ```
-
-O workflow verifica que a tag corresponde à versão, corre os testes e a
-instalação limpa, e só então publica no GitHub Packages.
-
-Para consumir noutro projecto, ver [`.npmrc.example`](.npmrc.example).

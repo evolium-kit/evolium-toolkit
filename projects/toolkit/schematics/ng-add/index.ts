@@ -16,6 +16,7 @@ import {
 import { PEER_DEPS, TOOLKIT } from '../utils/constants';
 import { appendStyles, ensureLayerStatement } from '../utils/styles';
 import { addRoutes } from '../utils/routes';
+import { addThemeStudioProvider } from '../utils/theme-studio';
 
 export interface NgAddOptions {
   project?: string;
@@ -105,6 +106,12 @@ export function ngAdd(options: NgAddOptions): Rule {
           )
         : noop(),
 
+      // 5b. O provider do Theme Studio em si — distinto do passo 5, que só
+      //     regista os metadados. Corrigido nesta versão: antes desta
+      //     correcção, responder "sim" aqui não fazia NADA além de imprimir
+      //     uma mensagem enganadora. Ver utils/theme-studio.ts.
+      options.themeStudio ? addThemeStudioProvider(sourceRoot) : noop(),
+
       // 6. Folhas de estilo da toolkit.
       ensureLayerStatement(sourceRoot),
       appendStyles(sourceRoot),
@@ -118,7 +125,9 @@ export function ngAdd(options: NgAddOptions): Rule {
         ctx.logger.info('  ng g @evolium-kit/toolkit:page <nome>');
         ctx.logger.info('  ng g @evolium-kit/toolkit:resource-plugin <nome>');
         if (options.themeStudio) {
-          ctx.logger.info('  Theme Studio em /_evo/theme (só em desenvolvimento)');
+          ctx.logger.info(
+            '  Theme Studio registado em /_evo/theme — só corre com "ng serve" (isDevMode()).',
+          );
         }
         if (options.authRoutes) {
           ctx.logger.warn(

@@ -12,7 +12,7 @@ export const evoButtonMeta: EvoComponentMeta = {
   label: 'Button',
   category: 'Básicos',
   tags: ['acção', 'formulário', 'cta', 'botão'],
-  variants: ['solid', 'ghost', 'outline', 'danger'],
+  variants: ['solid', 'ghost', 'outline', 'danger'] as const,
   sizes: ['sm', 'md', 'lg'],
   tokens: [
     {

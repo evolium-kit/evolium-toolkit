@@ -1,6 +1,6 @@
 {
   "name": "@evolium-kit/toolkit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Toolkit Angular da Evolium: componentes temáveis, layouts, páginas prontas e um kernel de serviços baseado em plugins.",
   "repository": {
     "type": "git",
