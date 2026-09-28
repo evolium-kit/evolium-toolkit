@@ -5,6 +5,26 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+## [0.1.2] - 2026-09-28
+
+### Adicionado
+
+- **`EvoFormField`** (`evo-form-field`), em `@evolium-kit/toolkit/components`,
+  registado no Theme Studio na categoria _Formulário_. Por agora é só o
+  esqueleto: projecta conteúdo e aceita `disabled`; `label`, `hint` e `error`
+  ainda não existem.
+
+### Corrigido
+
+- **`ng g @evolium-kit/toolkit:page <nome> --resource=<x>` gerava um teste que
+  falhava logo** — o spec não registava o resource e o
+  `registry.get('<x>')` rebentava ao montar a página. O spec gerado passa a
+  pôr o `EvoResourceRegistry` em mock. Quem já gerou páginas com `--resource`
+  pode copiar o provider do template novo.
+- **`ng g @evolium-kit/toolkit:ui-component` usava a categoria `Basicos`**
+  (sem acento), diferente da `Básicos` dos componentes da toolkit: o Theme
+  Studio mostrava duas categorias. A omissão passa a ser `Básicos`.
+
 ## [0.1.1] - 2026-09-24
 
 ### Corrigido
