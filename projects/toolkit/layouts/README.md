@@ -85,6 +85,20 @@ export class LoginPage {}
 
 ### Gerador
 
+Dentro deste repositório (shell novo **da toolkit**):
+
+```bash
+npm run new:layout -- <nome> --dry-run   # ver o que vai ser criado
+npm run new:layout -- <nome> [--slots=brand,topbar-end,footer] [--skip-tests]
+```
+
+O nome vai **sem** o sufixo: `new:layout -- side` gera `EvoSideShell`. O script
+cria a pasta em `layouts/src/lib/<nome>-shell/` e acrescenta o export ao
+`public-api.ts`. `ng g @evolium-kit/toolkit:layout` não funciona aqui — ver
+[`contributing.md`](../../../docs/contributing.md#geradores-internos-npm-run-new).
+
+Num projecto consumidor (shell do próprio projecto, em `src/app/layouts/`):
+
 ```bash
 ng g @evolium-kit/toolkit:layout <nome> --dry-run
 ng g @evolium-kit/toolkit:layout <nome>
@@ -93,12 +107,11 @@ ng g @evolium-kit/toolkit:layout <nome>
 ### Ficheiros
 
 ```
-layouts/src/lib/<nome>/
-├── evo-<nome>-shell.ts
+layouts/src/lib/<nome>-shell/
+├── evo-<nome>-shell.ts        componente, exportado directamente pelo public-api.ts
 ├── <nome>-shell.html
 ├── <nome>-shell.css
-├── evo-<nome>-shell.spec.ts
-└── index.ts
+└── evo-<nome>-shell.spec.ts
 ```
 
 ### Contrato

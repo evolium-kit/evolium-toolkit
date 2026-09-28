@@ -12,6 +12,10 @@
     "test": "ng test",
     "test:lib": "ng test toolkit",
     "test:schematics": "vitest run --config projects/toolkit/schematics/vitest.config.ts",
+    "new:component": "node tools/new.mjs component",
+    "new:layout": "node tools/new.mjs layout",
+    "new:page": "node tools/new.mjs page",
+    "new:plugin": "node tools/new.mjs plugin",
     "serve:ssr:evolium-app-overview": "node dist/evolium-app-overview/server/server.mjs"
   },
   "private": true,

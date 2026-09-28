@@ -180,6 +180,28 @@ describe('geradores', () => {
       expect(ts).toContain("registry.get('facturas')");
       expect(ts).not.toContain('HttpClient');
     });
+
+    it('o spec põe o resource em mock, senão o registry rebenta ao montar', async () => {
+      const tree = await runner.runSchematic(
+        'page',
+        { name: 'facturacao', layout: 'dashboard', resource: 'facturas', skipTests: false },
+        app,
+      );
+
+      const spec = tree.readText('/projects/demo/src/app/pages/facturacao/facturacao.page.spec.ts');
+      expect(spec).toContain('provide: EvoResourceRegistry');
+    });
+
+    it('sem resource, o spec não fala do registry', async () => {
+      const tree = await runner.runSchematic(
+        'page',
+        { name: 'sobre', layout: 'blank', skipTests: false },
+        app,
+      );
+
+      const spec = tree.readText('/projects/demo/src/app/pages/sobre/sobre.page.spec.ts');
+      expect(spec).not.toContain('EvoResourceRegistry');
+    });
   });
 
   describe('layout', () => {

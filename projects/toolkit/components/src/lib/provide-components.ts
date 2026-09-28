@@ -3,6 +3,7 @@ import { provideEvoComponentMeta } from '@evolium-kit/toolkit/core';
 import { evoBadgeMeta } from './badge/badge.tokens';
 import { evoButtonMeta } from './button/button.tokens';
 import { evoCardMeta } from './card/card.tokens';
+import { evoFormFieldMeta } from './form-field/form-field.tokens';
 import { evoInputMeta } from './input/input.tokens';
 
 /** Metadados de todos os componentes da toolkit. */
@@ -11,6 +12,7 @@ export const EVO_BUILTIN_COMPONENT_META = [
   evoInputMeta,
   evoCardMeta,
   evoBadgeMeta,
+  evoFormFieldMeta,
 ] as const;
 
 /**

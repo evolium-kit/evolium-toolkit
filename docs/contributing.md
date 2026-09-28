@@ -55,17 +55,71 @@ detalhe de cada um.
 
 ## Onde cada tipo de contribuição vive
 
-| Queres acrescentar... | Segue o guia                                                       | Gerador                                            |
-| --------------------- | ------------------------------------------------------------------ | -------------------------------------------------- |
-| Um componente de UI   | [`components/README.md`](../projects/toolkit/components/README.md) | `ng g @evolium-kit/toolkit:ui-component <nome>`    |
-| Um layout/shell       | [`layouts/README.md`](../projects/toolkit/layouts/README.md)       | `ng g @evolium-kit/toolkit:layout <nome>`          |
-| Uma página            | [`pages/README.md`](../projects/toolkit/pages/README.md)           | `ng g @evolium-kit/toolkit:page <nome>`            |
-| Um plugin de serviço  | [`plugins.md`](plugins.md)                                         | `ng g @evolium-kit/toolkit:resource-plugin <nome>` |
-| Um token de tema      | [`theming.md`](theming.md)                                         | —                                                  |
+| Queres acrescentar... | Segue o guia                                                       | Gerador (neste repositório)       |
+| --------------------- | ------------------------------------------------------------------ | --------------------------------- |
+| Um componente de UI   | [`components/README.md`](../projects/toolkit/components/README.md) | `npm run new:component -- <nome>` |
+| Um layout/shell       | [`layouts/README.md`](../projects/toolkit/layouts/README.md)       | `npm run new:layout -- <nome>`    |
+| Uma página            | [`pages/README.md`](../projects/toolkit/pages/README.md)           | `npm run new:page -- <nome>`      |
+| Um plugin de serviço  | [`plugins.md`](plugins.md)                                         | `npm run new:plugin -- <nome>`    |
+| Um token de tema      | [`theming.md`](theming.md)                                         | —                                 |
 
-Cada README de módulo tem uma secção **Estender** com o checklist exacto.
+Cada README de módulo tem uma secção **Parte 2** com o checklist exacto.
 Usar sempre o gerador em primeiro lugar: os esqueletos já nascem conformes às
 regras de CSS, de a11y e de SSR — escrever à mão é mais fácil de fazer mal.
+
+### Geradores internos: `npm run new:*`
+
+Os geradores publicados (`ng g @evolium-kit/toolkit:ui-component`, `:layout`,
+`:page`, `:resource-plugin`) são para **projectos consumidores** e não
+funcionam tal e qual dentro deste repositório:
+
+- o Angular CLI procura a collection em `node_modules`, onde a toolkit não
+  está — o `paths` do `tsconfig.json` só serve ao compilador, não aos
+  schematics. Daí o `Collection "@evolium-kit/toolkit" cannot be resolved`;
+- escrevem por omissão em `src/app/…`, que aqui é o playground;
+- não sabem que o resultado tem de entrar no `public-api.ts` do entry point;
+- o `resource-plugin` importa de `@evolium-kit/toolkit/services`, o que dentro
+  de `/services` seria o entry point a importar-se a si próprio.
+
+`tools/new.mjs` corre **os mesmos geradores** a partir do `dist` e adapta o
+resultado à lib. Os geradores publicados não são alterados — são o contrato
+com os consumidores; tudo o que é específico da lib vive no script.
+
+```bash
+npm run new:<tipo> -- <nome> --dry-run   # ver o que vai ser criado e registado
+npm run new:<tipo> -- <nome> [opções do gerador]
+```
+
+| Tipo        | Cria em                            | Regista                                                     | Adapta                                                        | Opções do gerador                                                           |
+| ----------- | ---------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `component` | `components/src/lib/<nome>/`       | `public-api.ts` + `EVO_BUILTIN_COMPONENT_META`              | —                                                             | `--category`, `--variants`, `--skip-tests`                                  |
+| `layout`    | `layouts/src/lib/<nome>-shell/`    | `public-api.ts`                                             | —                                                             | `--slots`, `--skip-tests`                                                   |
+| `page`      | `pages/src/lib/<nome>/`            | `public-api.ts` (a seguir à última página, antes do Studio) | `XPage` → `EvoXPage`, `app-x` → `evo-x-page`                  | `--layout=blank\|dashboard\|auth`, `--resource`, `--skip-tests`             |
+| `plugin`    | `services/src/lib/plugins/<nome>/` | `public-api.ts`, no bloco "Plugins built-in"                | imports relativos ao kernel; nomes públicos com prefixo `Evo` | `--depends-on`, `--endpoints=list,get,create,update,remove`, `--skip-tests` |
+
+Regras que o script aplica, e porquê:
+
+- **Nomes em kebab-case, sem sufixo.** `new:layout -- side` gera
+  `EvoSideShell`; `side-shell` é recusado para não dar `EvoSideShellShell`.
+  O mesmo para `-page`. O nome de um plugin vai no **plural** (`facturas`),
+  porque o gerador deriva dele o singular do modelo (`EvoFactura`).
+- **`--path` e `--project` são recusados**: o destino é sempre dentro da lib.
+- **Os templates são sempre recompilados** antes de gerar, para nunca se gerar
+  a partir de um `dist` desactualizado.
+- **Imports do próprio entry point passam a relativos.** O script lê as
+  declarações `export` do entry point e troca cada
+  `import … from '@evolium-kit/toolkit/services'` pelo caminho do ficheiro que
+  declara o símbolo (`../../kernel/types`, `../auth/auth.plugin`, …) — também o
+  alvo do `declare module`. Não há caminhos do kernel escritos à mão no script.
+- **Os nomes públicos de um plugin levam `Evo`**, como os do `auth`
+  (`EvoAuth`, `EvoAuthApi`, `EvoSession`): vão todos parar ao mesmo
+  `public-api.ts`, e um `toDto` genérico colidiria logo no segundo plugin.
+- **Nada no kernel é tocado.** O plugin novo fica registado só no
+  `public-api.ts`; quem o usa continua a declará-lo com `withPlugin()`.
+
+No fim, o script corre o prettier nos ficheiros que criou e alterou, e diz o
+que falta: implementar, documentar na secção "Usar" do README, exercitar no
+playground, e a bateria de verificação abaixo.
 
 ## Antes de qualquer commit
 

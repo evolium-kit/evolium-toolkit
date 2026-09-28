@@ -115,6 +115,32 @@ implementar — ou o plugin está mal desenhado. Não há atalhos.
 
 ### Preferir o gerador
 
+Dentro deste repositório (plugin **built-in** da toolkit):
+
+```bash
+npm run new:plugin -- facturas --dry-run   # ver o que vai ser criado
+npm run new:plugin -- facturas [--depends-on=auth] [--endpoints=list,get,create,update,remove] [--skip-tests]
+```
+
+O nome vai no **plural**: o gerador deriva dele o singular do modelo. O script
+cria a pasta em `services/src/lib/plugins/<nome>/`, acrescenta o export ao
+bloco "Plugins built-in" do `public-api.ts`, e adapta o resultado à lib:
+
+- **imports relativos** — `import … from '@evolium-kit/toolkit/services'`
+  dentro de `/services` seria o entry point a importar-se a si próprio. Cada
+  símbolo passa a vir do ficheiro que o declara (`../../kernel/types`,
+  `../auth/auth.plugin`), e o `declare module` passa a apontar para
+  `../../kernel/resource-map`, como no `auth`;
+- **nomes públicos com `Evo`** — `EvoFacturas`, `EvoFacturasApi`,
+  `EvoFacturasExtensions`, `EvoFactura`, `EvoFacturaDto`, e `toDto` →
+  `toFacturaDto`. Vão todos para o mesmo `public-api.ts`; sem isto, o segundo
+  plugin colidiria com o primeiro.
+
+O kernel não é tocado. `ng g @evolium-kit/toolkit:resource-plugin` não funciona
+aqui — ver [`contributing.md`](../../../docs/contributing.md#geradores-internos-npm-run-new).
+
+Num projecto consumidor (plugin do próprio projecto, em `src/app/resources/`):
+
 ```bash
 ng g @evolium-kit/toolkit:resource-plugin facturas --dry-run
 ng g @evolium-kit/toolkit:resource-plugin facturas
@@ -124,12 +150,11 @@ ng g @evolium-kit/toolkit:resource-plugin facturas
 
 ```
 services/src/lib/plugins/<nome>/
-├── <nome>.models.ts       modelos de domínio E DTOs da wire, separados
-├── <nome>.mappers.ts      toDomain(dto) / toDto(model)
-├── <nome>.endpoints.ts    definição declarativa dos endpoints
-├── <nome>.plugin.ts       o plugin: name, dependsOn, setup()
-├── <nome>.token.ts        InjectionToken<Evo<Nome>Api>
-├── <nome>.spec.ts         testes com HttpTestingController
+├── <nome>.models.ts        modelos de domínio E DTOs da wire, separados
+├── <nome>.mappers.ts       to<Singular>(dto) / to<Singular>Dto(model)
+├── <nome>.endpoints.ts     definição declarativa dos endpoints
+├── <nome>.plugin.ts        o plugin (name, dependsOn, setup()) e o InjectionToken Evo<Nome>
+├── <nome>.plugin.spec.ts   testes com HttpTestingController
 └── index.ts
 ```
 

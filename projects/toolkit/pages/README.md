@@ -133,6 +133,24 @@ nunca `--evo-*` nem componentes da toolkit.
 
 ### Gerador
 
+Dentro deste repositório (página nova **da toolkit**):
+
+```bash
+npm run new:page -- <nome> --layout=auth --dry-run   # ver o que vai ser criado
+npm run new:page -- <nome> --layout=dashboard [--resource=facturas] [--skip-tests]
+```
+
+O nome vai **sem** o sufixo `-page`. O script cria a pasta em
+`pages/src/lib/<nome>/`, adapta a classe e o selector às convenções da lib
+(`<Nome>Page` → `Evo<Nome>Page`, `app-<nome>` → `evo-<nome>-page`) e acrescenta
+o export ao `public-api.ts`, a seguir à última página e antes do Theme Studio —
+mover depois para o grupo certo (Autenticação, Erros, …). Com `--resource`, o
+spec gerado já traz o `EvoResourceRegistry` em mock. `ng g
+@evolium-kit/toolkit:page` não funciona aqui — ver
+[`contributing.md`](../../../docs/contributing.md#geradores-internos-npm-run-new).
+
+Num projecto consumidor (página do próprio projecto, em `src/app/pages/`):
+
 ```bash
 ng g @evolium-kit/toolkit:page <nome> --layout auth --dry-run
 ng g @evolium-kit/toolkit:page <nome> --layout auth
@@ -142,11 +160,10 @@ ng g @evolium-kit/toolkit:page <nome> --layout auth
 
 ```
 pages/src/lib/<nome>/
-├── evo-<nome>.page.ts
+├── <nome>.page.ts         classe Evo<Nome>Page, exportada directamente pelo public-api.ts
 ├── <nome>.page.html
 ├── <nome>.page.css
-├── evo-<nome>.page.spec.ts
-└── index.ts
+└── <nome>.page.spec.ts
 ```
 
 ### Contrato

@@ -126,8 +126,28 @@ funciona sem nenhum selector mencionar o componente.
 
 ### Preferir o gerador
 
+Dentro deste repositório (componente novo **da toolkit**):
+
 ```bash
-ng g @evolium-kit/toolkit:ui-component <nome> --dry-run   # ver o que vai ser criado
+npm run new:component -- <nome> --dry-run   # ver o que vai ser criado
+npm run new:component -- <nome> [--category=Formulário] [--variants=a,b] [--skip-tests]
+```
+
+Cria a pasta em `components/src/lib/<nome>/`, acrescenta o export ao
+`public-api.ts` e regista os metadados em `EVO_BUILTIN_COMPONENT_META` (por
+isso o componente aparece logo no Theme Studio). A categoria por omissão é
+`Básicos`; usar uma das existentes (`Básicos`, `Formulário`, `Superfícies`) —
+uma grafia diferente cria outro grupo no Studio.
+
+`ng g @evolium-kit/toolkit:ui-component` **não** funciona aqui: o CLI procura a
+collection em `node_modules`, onde a toolkit não está. O script corre o mesmo
+gerador a partir do `dist` — ver
+[`contributing.md`](../../../docs/contributing.md#geradores-internos-npm-run-new).
+
+Num projecto consumidor (componente do próprio projecto, em `src/app/ui/`):
+
+```bash
+ng g @evolium-kit/toolkit:ui-component <nome> --dry-run
 ng g @evolium-kit/toolkit:ui-component <nome>
 ```
 

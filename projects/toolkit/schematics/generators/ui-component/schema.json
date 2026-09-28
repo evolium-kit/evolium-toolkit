@@ -13,7 +13,7 @@
     "path": { "type": "string", "description": "Omissao: <sourceRoot>/app/ui." },
     "category": {
       "type": "string",
-      "default": "Basicos",
+      "default": "Básicos",
       "description": "Agrupamento na lista do Theme Studio."
     },
     "variants": {
