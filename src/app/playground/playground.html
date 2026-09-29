@@ -13,16 +13,12 @@
       </button>
     </div>
   </header>
-  <evo-card>
 
-  <evo-field></evo-field>
-  </evo-card>
   <evo-card>
     <h2 slot="title">1. Um token, toda a aplicação</h2>
     <p class="muted">
-      Mudar <code>--evo-color-p rimary</code> altera tudo o que o consome, em qualquer sítio.
+      Mudar <code>--evo-color-primary</code> altera tudo o que o consome, em qualquer sítio.
     </p>
-
 
     <div class="row">
       @for (cor of amostras; track cor) {
@@ -236,7 +232,7 @@
     </p>
     <div class="row">
       <button evoButton (click)="guardar()">Guardar{{ theme.dirty() ? ' •' : '' }}</button>
-      <button ev  oButton variant="ghost" (click)="exportar()">Exportar CSS + JSON</button>
+      <button evoButton variant="ghost" (click)="exportar()">Exportar CSS + JSON</button>
       <button evoButton variant="ghost" (click)="reporTudo()">Repor</button>
     </div>
   </evo-card>
