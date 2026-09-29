@@ -120,6 +120,20 @@ fundo para a ferramenta desaparecer — sem forma de reverter a não ser limpar 
 Quem acrescentar interface ao Studio deve usar `--st-*` e as classes `.st__*`,
 nunca `--evo-*` nem componentes da toolkit.
 
+Os componentes da própria interface do Studio vivem em
+`theme-studio/components/<nome>/`, um por pasta (hoje: `studio-header` e
+`component-preview`). Não usar `npm run new:component` para eles, porque esse
+gerador cria componentes da toolkit em `/components`, que o Studio não pode
+usar. As classes partilhadas (`.st__botao`, `.st__toggle`, `.st__campo`,
+`.st__sr`) estão em `theme-studio/studio-comum.css`, e cada componente tem de
+as incluir no seu `styleUrls`, porque o encapsulamento não as deixa chegar aos
+filhos. Os tokens `--st-*` chegam por herança e não precisam disto.
+
+A barra do topo guarda com **Ctrl/⌘+S** e põe o foco na pesquisa com
+**Ctrl/⌘+K**. O botão Guardar fica indisponível quando não há alterações por
+gravar ou quando não há persistência configurada. Se a gravação falhar, o erro
+fica visível.
+
 ---
 
 ## Parte 2 — Acrescentar uma página

@@ -134,6 +134,6 @@ export class Playground {
   }
 
   protected async reporTudo(): Promise<void> {
-    await this.theme.clearPersisted();
+    // await this.theme.clearPersisted();
   }
 }

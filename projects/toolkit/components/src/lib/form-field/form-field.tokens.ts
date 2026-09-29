@@ -11,9 +11,9 @@ import { EvoComponentMeta } from '@evolium-kit/toolkit/core';
  */
 export const evoFormFieldMeta: EvoComponentMeta = {
   id: 'form-field',
-  label: 'Form Field',
-  category: 'Formulário',
-  tags: ['campo', 'formulário', 'label', 'erro'],
+  label: 'FormField',
+  category: 'Básicos',
+  tags: ['form-field'],
   tokens: [
     {
       name: 'form-field-bg',

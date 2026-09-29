@@ -1,14 +1,17 @@
-﻿@layer evo.components {
+@layer evo.components {
   /*
-   * A interface do Studio tem tokens PRÃ“PRIOS (--st-*), com valores fixos e
+   * A interface do Studio tem tokens PRÓPRIOS (--st-*), com valores fixos e
    * deliberadamente desligados dos --evo-*.
    *
-   * A razÃ£o Ã© dura de descobrir tarde: o Studio Ã© construÃ­do com os mesmos
+   * A razão é dura de descobrir tarde: o Studio é construído com os mesmos
    * componentes que edita. Se usasse --evo-color-primary, quem pusesse o
-   * primÃ¡rio igual ao fundo deixaria a prÃ³pria ferramenta invisÃ­vel â€” sem
-   * forma de reverter a nÃ£o ser limpar o localStorage Ã  mÃ£o.
+   * primário igual ao fundo deixaria a própria ferramenta invisível — sem
+   * forma de reverter a não ser limpar o localStorage à mão.
    *
-   * SÃ³ o palco de prÃ©-visualizaÃ§Ã£o mostra o tema a sÃ©rio.
+   * Só o palco de pré-visualização mostra o tema a sério.
+   *
+   * As classes partilhadas com os componentes internos (.st__botao,
+   * .st__toggle, .st__campo, .st__sr) vivem em studio-comum.css.
    */
   :host {
     --st-surface: #ffffff;
@@ -20,6 +23,7 @@
     --st-accent: #2563eb;
     --st-accent-soft: #eff6ff;
     --st-on-accent: #ffffff;
+    --st-danger: #dc2626;
 
     --st-space-xs: 0.25rem;
     --st-space-sm: 0.5rem;
@@ -41,7 +45,7 @@
     font-size: var(--st-font-md);
   }
 
-  /* Modo escuro forÃ§ado pelo utilizador. */
+  /* Modo escuro forçado pelo utilizador. */
   :host-context([data-evo-scheme='dark']) {
     --st-surface: #0f172a;
     --st-surface-2: #020617;
@@ -52,6 +56,7 @@
     --st-accent: #60a5fa;
     --st-accent-soft: #1e3a8a;
     --st-on-accent: #0f172a;
+    --st-danger: #f87171;
   }
 
   /* Esquema `system` com o sistema operativo em escuro. */
@@ -66,95 +71,8 @@
       --st-accent: #60a5fa;
       --st-accent-soft: #1e3a8a;
       --st-on-accent: #0f172a;
+      --st-danger: #f87171;
     }
-  }
-
-  /* BotÃµes da prÃ³pria ferramenta. NÃ£o usam EvoButton, pela razÃ£o acima. */
-  .st__botao {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--st-space-xs);
-    min-block-size: 1.75rem;
-    padding-inline: var(--st-space-sm);
-    border: 1px solid transparent;
-    border-radius: var(--st-radius);
-    background-color: var(--st-accent);
-    color: var(--st-on-accent);
-    font: inherit;
-    font-size: var(--st-font-sm);
-    font-weight: 500;
-    white-space: nowrap;
-    cursor: pointer;
-  }
-
-  .st__botao:hover {
-    filter: brightness(0.92);
-  }
-
-  .st__botao:focus-visible {
-    outline: 2px solid var(--st-accent);
-    outline-offset: 2px;
-  }
-
-  .st__botao--discreto {
-    background-color: transparent;
-    color: var(--st-accent);
-    border-color: var(--st-border-strong);
-  }
-
-  .st__botao--discreto:hover {
-    background-color: var(--st-accent-soft);
-    filter: none;
-  }
-
-  /* ---------------------------------------------------------------- topo */
-  .st__topo {
-    display: flex;
-    align-items: center;
-    gap: var(--st-space-sm);
-    padding: var(--st-space-sm) var(--st-space-md);
-    border-block-end: 1px solid var(--st-border);
-    background-color: var(--st-surface);
-  }
-
-  .st__marca {
-    font-weight: 600;
-    white-space: nowrap;
-  }
-
-  .st__pesquisa {
-    flex: 1 1 12rem;
-    max-inline-size: 28rem;
-  }
-
-  .st__accoes {
-    display: flex;
-    align-items: center;
-    gap: var(--st-space-xs);
-  }
-
-  .st__toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    inline-size: 2.25rem;
-    block-size: 2.25rem;
-    border: 1px solid transparent;
-    border-radius: var(--st-radius);
-    background: transparent;
-    color: inherit;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-
-  .st__toggle:hover {
-    background-color: var(--st-surface-2);
-  }
-
-  .st__toggle:focus-visible {
-    outline: 2px solid var(--st-accent);
-    outline-offset: 2px;
   }
 
   /* --------------------------------------------------------------- corpo */
@@ -403,40 +321,9 @@
   }
 
   /* -------------------------------------------------------------- comuns */
-  .st__campo {
-    inline-size: 100%;
-    min-block-size: 2.25rem;
-    padding-inline: var(--st-space-sm);
-    border: 1px solid var(--st-border-strong);
-    border-radius: var(--st-radius);
-    background-color: var(--st-surface);
-    color: var(--st-text);
-    font-family: inherit;
-    font-size: var(--st-font-md);
-  }
-
-  .st__campo:focus-visible {
-    outline: 2px solid var(--st-accent);
-    outline-offset: 2px;
-  }
-
-  .st__campo--mono {
-    font-family: ui-monospace, Consolas, monospace;
-    font-size: var(--st-font-sm);
-  }
-
   .st__vazio {
     color: var(--st-text-muted);
     max-inline-size: 32rem;
-  }
-
-  .st__sr {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
   }
 
   /* --------------------------------------------------------- responsivo */
@@ -455,12 +342,6 @@
 
     .st__lateral--dir {
       inset-inline-end: 0;
-    }
-  }
-
-  @media (width < 640px) {
-    .st__marca {
-      display: none;
     }
   }
 }

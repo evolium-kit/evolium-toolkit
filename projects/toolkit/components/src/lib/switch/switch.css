@@ -1,0 +1,95 @@
+/*
+ * REGRA 1: nenhuma declaração `--evo-switch-*` neste ficheiro.
+ * O valor por omissão vive no fallback do var(). Declará-lo aqui ganharia por
+ * proximidade a qualquer :root do projecto e tornaria o override global
+ * impossível — sem erro nenhum a avisar.
+ *
+ * REGRA 2: nunca registar estes tokens com @property { initial-value }.
+ */
+
+@layer evo.components {
+  :host {
+    display: inline-flex;
+    vertical-align: middle;
+  }
+
+  /*
+   * O tamanho do fundo deriva do diâmetro do círculo (--evo-switch-thumb-size),
+   * mais a folga de 2px à volta: altura = d + 4px, largura = 2d + 4px. Com o
+   * valor por omissão (20px) dá 44×24.
+   */
+  .evo-switch__track {
+    position: relative;
+    display: inline-block;
+    flex-shrink: 0;
+    inline-size: calc(var(--evo-switch-thumb-size, 1.25rem) * 2 + 4px);
+    block-size: calc(var(--evo-switch-thumb-size, 1.25rem) + 4px);
+    padding: 0;
+    border: 0;
+    border-radius: var(--evo-switch-radius, var(--evo-radius-full));
+    background-color: var(--evo-switch-bg, var(--evo-color-border-strong));
+    cursor: pointer;
+    transition: background-color var(--evo-duration-fast) var(--evo-easing);
+  }
+
+  /*
+   * Alvo de toque de pelo menos 44×44 px sem mudar o tamanho visível. Só
+   * alarga o que ficar abaixo de 44px; num círculo grande não faz nada.
+   */
+  .evo-switch__track::before {
+    content: '';
+    position: absolute;
+    inset-block: min(0px, calc((var(--evo-switch-thumb-size, 1.25rem) + 4px - 44px) / 2));
+    inset-inline: min(0px, calc((var(--evo-switch-thumb-size, 1.25rem) * 2 + 4px - 44px) / 2));
+  }
+
+  :host([data-evo-checked]) .evo-switch__track {
+    background-color: var(--evo-switch-bg-checked, var(--evo-color-primary));
+  }
+
+  .evo-switch__track:focus-visible {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: var(--evo-focus-ring-offset);
+  }
+
+  .evo-switch__track:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .evo-switch__thumb {
+    position: absolute;
+    inset-block-start: 2px;
+    inset-inline-start: 2px;
+    inline-size: var(--evo-switch-thumb-size, 1.25rem);
+    block-size: var(--evo-switch-thumb-size, 1.25rem);
+    /* Acompanha o raio do fundo, descontando a folga de 2px à volta. */
+    border-radius: max(0px, calc(var(--evo-switch-radius, var(--evo-radius-full)) - 2px));
+    background-color: var(--evo-switch-thumb-bg, var(--evo-color-on-primary));
+    box-shadow: var(--evo-elevation-2);
+    pointer-events: none;
+    /* inset-inline-start, e não translate, para inverter sozinho em RTL. */
+    transition: inset-inline-start var(--evo-duration-fast) var(--evo-easing);
+  }
+
+  :host([data-evo-checked]) .evo-switch__thumb {
+    inset-inline-start: calc(100% - var(--evo-switch-thumb-size, 1.25rem) - 2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .evo-switch__track,
+    .evo-switch__thumb {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .evo-switch__track {
+      border: 1px solid CanvasText;
+    }
+
+    .evo-switch__thumb {
+      background-color: CanvasText;
+    }
+  }
+}

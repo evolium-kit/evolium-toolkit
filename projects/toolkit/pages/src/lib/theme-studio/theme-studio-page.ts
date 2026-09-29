@@ -8,8 +8,9 @@ import {
   signal,
 } from '@angular/core';
 import { EVO_COMPONENT_META, EvoComponentMeta, EvoTokenMeta } from '@evolium-kit/toolkit/core';
-import { EvoThemeExporter, EvoThemeStore } from '@evolium-kit/toolkit/theme';
-import { EvoComponentPreview } from './component-preview';
+import { EvoThemeStore } from '@evolium-kit/toolkit/theme';
+import { EvoComponentPreview } from './components/component-preview/component-preview';
+import { EvoStudioHeader } from './components/studio-header/studio-header';
 
 /** Onde a edição é escrita. */
 export type EvoEditScope = 'global' | 'variant';
@@ -23,15 +24,14 @@ const PREF_KEY = 'evo.studio.ui.v1';
 
 @Component({
   selector: 'evo-theme-studio-page',
-  imports: [EvoComponentPreview],
+  imports: [EvoComponentPreview, EvoStudioHeader],
   templateUrl: './theme-studio-page.html',
-  styleUrl: './theme-studio-page.css',
+  styleUrls: ['./studio-comum.css', './theme-studio-page.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'evo-studio' },
 })
 export class EvoThemeStudioPage {
   protected readonly theme = inject(EvoThemeStore);
-  private readonly exporter = inject(EvoThemeExporter);
   private readonly doc = inject(DOCUMENT);
   private readonly meta = inject(EVO_COMPONENT_META, { optional: true }) ?? [];
 
@@ -161,10 +161,6 @@ export class EvoThemeStudioPage {
     return noGlobal || emVariante;
   }
 
-  protected actualizarPesquisa(evento: Event): void {
-    this.pesquisa.set((evento.target as HTMLInputElement).value);
-  }
-
   protected escolherVariante(evento: Event): void {
     const valor = (evento.target as HTMLSelectElement).value;
     this.variante.set(valor || null);
@@ -266,13 +262,7 @@ export class EvoThemeStudioPage {
 
   // ------------------------------------------------------------ persistência
 
-  protected async guardar(): Promise<void> {
-    await this.theme.persist();
-  }
-
-  protected exportar(): void {
-    this.exporter.downloadAll(this.theme.snapshot());
-  }
+  // Guardar e Exportar vivem no EvoStudioHeader.
 
   protected async repor(): Promise<void> {
     await this.theme.clearPersisted();

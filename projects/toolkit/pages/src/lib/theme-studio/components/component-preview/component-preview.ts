@@ -1,5 +1,12 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { EvoBadge, EvoButton, EvoCard, EvoField, EvoInput } from '@evolium-kit/toolkit/components';
+import {
+  EvoBadge,
+  EvoButton,
+  EvoCard,
+  EvoField,
+  EvoInput,
+  EvoSwitch,
+} from '@evolium-kit/toolkit/components';
 
 /**
  * Pré-visualização de um componente em todos os seus estados ao mesmo tempo.
@@ -14,7 +21,7 @@ import { EvoBadge, EvoButton, EvoCard, EvoField, EvoInput } from '@evolium-kit/t
  */
 @Component({
   selector: 'evo-component-preview',
-  imports: [EvoButton, EvoCard, EvoBadge, EvoInput, EvoField],
+  imports: [EvoButton, EvoCard, EvoBadge, EvoInput, EvoField, EvoSwitch],
   template: `
     @switch (componentId()) {
       @case ('button') {
@@ -102,6 +109,27 @@ import { EvoBadge, EvoButton, EvoCard, EvoField, EvoInput } from '@evolium-kit/t
           <evo-badge [attr.data-evo-tone]="variant()">Etiqueta</evo-badge>
           <evo-badge [attr.data-evo-tone]="variant()">12</evo-badge>
           <evo-badge [attr.data-evo-tone]="variant()">Texto bastante mais longo</evo-badge>
+        </div>
+      }
+
+      @case ('switch') {
+        <div class="pv__row">
+          <span class="pv__estado">
+            <evo-switch ariaLabel="Desligado" />
+            Desligado
+          </span>
+          <span class="pv__estado">
+            <evo-switch [checked]="true" ariaLabel="Ligado" />
+            Ligado
+          </span>
+          <span class="pv__estado">
+            <evo-switch disabled ariaLabel="Desactivado, desligado" />
+            Desactivado
+          </span>
+          <span class="pv__estado">
+            <evo-switch disabled [checked]="true" ariaLabel="Desactivado, ligado" />
+            Desactivado, ligado
+          </span>
         </div>
       }
 

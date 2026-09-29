@@ -5,6 +5,7 @@ import { evoButtonMeta } from './button/button.tokens';
 import { evoCardMeta } from './card/card.tokens';
 import { evoFormFieldMeta } from './form-field/form-field.tokens';
 import { evoInputMeta } from './input/input.tokens';
+import { evoSwitchMeta } from './switch/switch.tokens';
 
 /** Metadados de todos os componentes da toolkit. */
 export const EVO_BUILTIN_COMPONENT_META = [
@@ -13,6 +14,7 @@ export const EVO_BUILTIN_COMPONENT_META = [
   evoCardMeta,
   evoBadgeMeta,
   evoFormFieldMeta,
+  evoSwitchMeta,
 ] as const;
 
 /**

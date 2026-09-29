@@ -17,6 +17,15 @@
     max-inline-size: 22rem;
   }
 
+  .pv__estado {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--evo-space-sm);
+    color: var(--evo-color-on-surface);
+    font-family: var(--evo-font-sans);
+    font-size: var(--evo-font-size-md);
+  }
+
   .pv__vazio {
     color: var(--evo-color-on-surface-muted);
     font-size: var(--evo-font-size-md);

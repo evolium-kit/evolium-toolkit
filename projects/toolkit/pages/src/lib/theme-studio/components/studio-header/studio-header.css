@@ -1,0 +1,43 @@
+@layer evo.components {
+  :host {
+    display: block;
+  }
+
+  .st__topo {
+    display: flex;
+    align-items: center;
+    gap: var(--st-space-sm);
+    padding: var(--st-space-sm) var(--st-space-md);
+    border-block-end: 1px solid var(--st-border);
+    background-color: var(--st-surface);
+  }
+
+  .st__marca {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .st__pesquisa {
+    flex: 1 1 12rem;
+    max-inline-size: 28rem;
+  }
+
+  .st__accoes {
+    display: flex;
+    align-items: center;
+    gap: var(--st-space-xs);
+    margin-inline-start: auto;
+  }
+
+  .st__erro {
+    color: var(--st-danger);
+    font-size: var(--st-font-sm);
+    white-space: nowrap;
+  }
+
+  @media (width < 640px) {
+    .st__marca {
+      display: none;
+    }
+  }
+}

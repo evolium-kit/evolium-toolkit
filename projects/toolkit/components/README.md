@@ -33,6 +33,7 @@ a folha dos componentes que são directivas:
 | `EvoField`  | `evo-field`                                                 | —                                          | —          |
 | `EvoCard`   | `evo-card`                                                  | plain, sunken, outlined                    | —          |
 | `EvoBadge`  | `evo-badge`                                                 | neutral, primary, success, warning, danger | —          |
+| `EvoSwitch` | `evo-switch`                                                | —                                          | —          |
 
 ```html
 <button evoButton variant="danger" size="sm" [loading]="aApagar()">Eliminar</button>
@@ -51,6 +52,17 @@ a folha dos componentes que são directivas:
   }
 </evo-field>
 ```
+
+```html
+<span id="rotulo-avisos">Receber avisos</span>
+<evo-switch [(checked)]="avisos" ariaLabelledby="rotulo-avisos" />
+<evo-switch formControlName="webLogin" ariaLabel="Acesso pela web" />
+```
+
+O `EvoSwitch` implementa `ControlValueAccessor` e é personalizável por
+`--evo-switch-bg`, `--evo-switch-bg-checked`, `--evo-switch-thumb-bg`,
+`--evo-switch-thumb-size` e `--evo-switch-radius`. A documentação completa está em
+[`src/lib/switch/README.md`](src/lib/switch/README.md).
 
 `EvoButton` e `EvoInput` aplicam-se a elementos nativos em vez de os embrulhar:
 mantêm semântica, foco, validação nativa, `formControlName` e o preenchimento
