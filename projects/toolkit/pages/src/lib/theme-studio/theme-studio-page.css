@@ -192,16 +192,6 @@
     color: var(--st-text-muted);
   }
 
-  .st__palco {
-    display: flex;
-    align-items: center;
-    min-block-size: 12rem;
-    padding: var(--st-space-xl) var(--st-space-lg);
-    border: 1px solid var(--st-border);
-    border-radius: var(--st-radius-lg);
-    background-color: var(--st-surface);
-  }
-
   /* -------------------------------------------------------------- escopo */
   .st__escopo {
     margin: 0;

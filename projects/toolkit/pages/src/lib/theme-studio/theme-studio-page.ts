@@ -9,7 +9,8 @@ import {
 } from '@angular/core';
 import { EVO_COMPONENT_META, EvoComponentMeta, EvoTokenMeta } from '@evolium-kit/toolkit/core';
 import { EvoThemeStore } from '@evolium-kit/toolkit/theme';
-import { EvoComponentPreview } from './components/component-preview/component-preview';
+import { EvoStudioComponentDocs } from './components/component-docs/component-docs';
+import { EvoStudioPreviewFrame } from './components/preview-frame/preview-frame';
 import { EvoStudioHeader } from './components/studio-header/studio-header';
 
 /** Onde a edição é escrita. */
@@ -24,7 +25,7 @@ const PREF_KEY = 'evo.studio.ui.v1';
 
 @Component({
   selector: 'evo-theme-studio-page',
-  imports: [EvoComponentPreview, EvoStudioHeader],
+  imports: [EvoStudioPreviewFrame, EvoStudioComponentDocs, EvoStudioHeader],
   templateUrl: './theme-studio-page.html',
   styleUrls: ['./studio-comum.css', './theme-studio-page.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

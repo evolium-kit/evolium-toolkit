@@ -145,9 +145,9 @@ npm run new:component -- <nome> --dry-run   # ver o que vai ser criado
 npm run new:component -- <nome> [--category=Formulário] [--variants=a,b] [--skip-tests]
 ```
 
-Cria a pasta em `components/src/lib/<nome>/`, acrescenta o export ao
-`public-api.ts` e regista os metadados em `EVO_BUILTIN_COMPONENT_META` (por
-isso o componente aparece logo no Theme Studio). A categoria por omissão é
+Cria a pasta em `components/src/lib/<nome>/` e acrescenta o export ao
+`public-api.ts`. Não há lista de componentes a actualizar: o Theme Studio
+descobre-o pela pasta (ver "Pré-visualização e documentação no Studio"). A categoria por omissão é
 `Básicos`; usar uma das existentes (`Básicos`, `Formulário`, `Superfícies`) —
 uma grafia diferente cria outro grupo no Studio.
 
@@ -170,6 +170,8 @@ components/src/lib/<nome>/
 ├── evo-<nome>.ts          componente
 ├── <nome>.css             estilos (só var(--evo-*))
 ├── <nome>.tokens.ts       metadados para o Theme Studio
+├── <nome>.preview.ts      pré-visualização no Theme Studio (não exportado)
+├── README.md              documentação — o Studio mostra-a
 ├── evo-<nome>.spec.ts     testes
 └── index.ts               re-export
 ```
@@ -279,7 +281,6 @@ export const buttonMeta: EvoComponentMeta = {
   tags: ['acção', 'formulário', 'cta'],
   variants: ['solid', 'ghost', 'outline', 'danger'],
   sizes: ['sm', 'md', 'lg'],
-  preview: () => import('./button.preview').then((m) => m.ButtonPreview),
   tokens: [
     { name: 'button-bg', label: 'Cor de fundo', type: 'color', fallback: '--evo-color-primary' },
     { name: 'button-fg', label: 'Cor do texto', type: 'color', fallback: '--evo-color-on-primary' },
@@ -297,6 +298,27 @@ export const buttonMeta: EvoComponentMeta = {
 ```
 
 Cada token declarado no `.tokens.ts` tem de existir mesmo no CSS, e vice-versa.
+
+### Pré-visualização e documentação no Studio
+
+Não se escrevem os campos `preview` nem `docs` nos metadados, nem se regista o
+componente em lista nenhuma. `tools/generate-component-registry.mjs` (corre
+antes de `build:lib`/`test:lib`, ou com `npm run gen:registry`) percorre as
+pastas de `lib/` e trata como componente cada uma que tenha `<nome>.tokens.ts`.
+Junta-lhe:
+
+- **`<nome>.preview.ts`**: um componente standalone com os estados lado a
+  lado, desenhado pelo Studio num `<iframe>`. Se declarar
+  `variant = input<string | null>(null)` e/ou `size`, recebe a variante e o
+  tamanho escolhidos no Studio. Para a disposição há as classes `pv__row`
+  (em linha), `pv__stack` (em coluna) e `pv__estado` (controlo + rótulo),
+  definidas pela página do iframe. Ver `button/button.preview.ts`.
+- **`README.md`**: convertido em HTML no build e mostrado por baixo da
+  pré-visualização. Os links relativos ficam só com o texto. Ver
+  `switch/README.md` como modelo.
+
+O resultado vai para `lib/generated/`, que está no `.gitignore`. Nunca o
+editar à mão.
 
 ### Onde o CSS tem de viver
 

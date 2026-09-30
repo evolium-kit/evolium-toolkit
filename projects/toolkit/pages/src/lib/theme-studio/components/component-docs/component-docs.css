@@ -1,0 +1,96 @@
+/*
+ * Sem encapsulamento (ver o componente): tudo debaixo de
+ * .evo-studio-component-docs. A documentação é interface do Studio, por isso
+ * usa --st-* e não o tema em edição.
+ */
+@layer evo.components {
+  .evo-studio-component-docs {
+    display: block;
+    padding: var(--st-space-md) var(--st-space-lg);
+    border: 1px solid var(--st-border);
+    border-radius: var(--st-radius-lg);
+    background-color: var(--st-surface);
+    line-height: 1.6;
+  }
+
+  .evo-studio-component-docs .cd__vazio {
+    margin: 0;
+    color: var(--st-text-muted);
+  }
+
+  .evo-studio-component-docs .cd__corpo > :first-child {
+    margin-block-start: 0;
+  }
+
+  .evo-studio-component-docs :is(h1, h2, h3, h4) {
+    margin: var(--st-space-lg) 0 var(--st-space-sm);
+    line-height: 1.3;
+  }
+
+  .evo-studio-component-docs h1 {
+    font-size: 1.25rem;
+  }
+
+  .evo-studio-component-docs h2 {
+    padding-block-start: var(--st-space-md);
+    border-block-start: 1px solid var(--st-border);
+    font-size: 1.0625rem;
+  }
+
+  .evo-studio-component-docs h3 {
+    font-size: var(--st-font-md);
+  }
+
+  .evo-studio-component-docs hr {
+    display: none; /* os h2 já levam separador */
+  }
+
+  .evo-studio-component-docs a {
+    color: var(--st-accent);
+  }
+
+  .evo-studio-component-docs code {
+    padding: 0.1em 0.3em;
+    border-radius: 4px;
+    background-color: var(--st-surface-2);
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 0.85em;
+  }
+
+  .evo-studio-component-docs pre {
+    overflow-x: auto;
+    padding: var(--st-space-sm) var(--st-space-md);
+    border: 1px solid var(--st-border);
+    border-radius: var(--st-radius);
+    background-color: var(--st-surface-2);
+    line-height: 1.45;
+  }
+
+  .evo-studio-component-docs pre code {
+    padding: 0;
+    background: none;
+    font-size: var(--st-font-sm);
+  }
+
+  .evo-studio-component-docs table {
+    display: block;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: var(--st-font-sm);
+  }
+
+  .evo-studio-component-docs :is(th, td) {
+    padding: var(--st-space-xs) var(--st-space-sm);
+    border: 1px solid var(--st-border);
+    text-align: start;
+    vertical-align: top;
+  }
+
+  .evo-studio-component-docs th {
+    background-color: var(--st-surface-2);
+  }
+
+  .evo-studio-component-docs :is(ul, ol) {
+    padding-inline-start: var(--st-space-lg);
+  }
+}

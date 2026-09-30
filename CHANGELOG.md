@@ -5,6 +5,36 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+### Adicionado
+
+- **Theme Studio: pré-visualização num `<iframe>`.** Cada componente é
+  desenhado na rota `<path>/preview` (registada por `evoThemeStudioRoutes()`),
+  isolado do CSS do Studio. A selecção, a variante, o tamanho e as edições de
+  tokens chegam-lhe por `postMessage`, sem recarregar.
+- **Theme Studio: documentação do componente**, vinda do `README.md` da pasta
+  e mostrada por baixo da pré-visualização.
+- **`EvoComponentMeta.docs`**, que devolve o HTML da documentação.
+- **`EvoThemeStore.adopt(state)`**, que substitui o estado inteiro sem marcar
+  `dirty`. Um `restore()` que termine depois é ignorado.
+- **Registo automático dos componentes da toolkit.**
+  `tools/generate-component-registry.mjs` descobre-os pelas pastas, junta o
+  `<nome>.preview.ts` e o `README.md` convertido em HTML (com o `marked`, só no
+  build), e gera `EVO_BUILTIN_COMPONENT_META`.
+- **`ng g ui-component`** gera também `<nome>.preview.ts` e `README.md`, e os
+  metadados já apontam para o preview.
+
+### Alterado
+
+- **Pré-visualizações por componente.** O `@switch` único deu lugar a um
+  `<nome>.preview.ts` em cada pasta de `/components`, e o `FormField` passa a
+  ter pré-visualização.
+
+### Removido
+
+- **`EvoComponentPreview`** (`evo-component-preview`) deixa de ser exportado
+  por `@evolium-kit/toolkit/pages`. Um componente de fora da toolkit fornece a
+  sua pré-visualização no campo `preview` dos metadados.
+
 ## [0.1.3] - 2026-09-29
 
 ### Adicionado

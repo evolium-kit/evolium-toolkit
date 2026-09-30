@@ -47,8 +47,25 @@ export interface EvoComponentMeta {
   readonly variants?: readonly string[];
   readonly sizes?: readonly string[];
   readonly tokens: readonly EvoTokenMeta[];
-  /** Componente de pré-visualização, carregado só quando seleccionado. */
+  /**
+   * Componente de pré-visualização, carregado só quando seleccionado.
+   *
+   * O Studio desenha-o num `<iframe>`, isolado da interface do Studio. Se o
+   * componente declarar os inputs `variant` e/ou `size` (`string | null`),
+   * recebe neles a variante e o tamanho escolhidos; os que não declarar são
+   * simplesmente omitidos.
+   *
+   * Nos componentes da toolkit é preenchido pelo registo gerado a partir do
+   * `<nome>.preview.ts` — ver `tools/generate-component-registry.mjs`.
+   */
   readonly preview?: () => Promise<Type<unknown>>;
+  /**
+   * Documentação do componente, em HTML, carregada só quando seleccionado.
+   *
+   * Nos componentes da toolkit é o `README.md` da pasta, convertido no build.
+   * O Studio passa-a pelo sanitizador do Angular antes de a mostrar.
+   */
+  readonly docs?: () => Promise<string>;
 }
 
 export const EVO_COMPONENT_META = new InjectionToken<readonly EvoComponentMeta[]>(

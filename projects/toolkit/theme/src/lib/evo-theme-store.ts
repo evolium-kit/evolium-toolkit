@@ -80,6 +80,8 @@ export class EvoThemeStore {
   );
 
   private styleElement: HTMLStyleElement | null = null;
+  /** Ver `adopt()`. */
+  private adopted = false;
 
   constructor() {
     // Escrita síncrona inicial: corre no servidor e no browser, antes do
@@ -170,10 +172,28 @@ export class EvoThemeStore {
     };
   }
 
+  /**
+   * Substitui o estado inteiro por outro, vindo de fora — por exemplo, o
+   * Theme Studio a espelhar as suas edições no `<iframe>` de pré-visualização.
+   *
+   * Ao contrário de `restore()`, não funde com os defaults: o estado recebido
+   * já é completo. Não marca `dirty`, e um `restore()` que termine depois disto
+   * é ignorado — senão uma persistência lenta (HTTP) sobreporia o estado
+   * adoptado com o que estava gravado.
+   */
+  adopt(state: Pick<EvoThemeSnapshot, 'tokens' | 'darkTokens' | 'variants' | 'scheme'>): void {
+    this.adopted = true;
+    this._tokens.set(state.tokens);
+    this._darkTokens.set(state.darkTokens);
+    this._variants.set(state.variants);
+    this._scheme.set(state.scheme);
+    this._dirty.set(false);
+  }
+
   async restore(): Promise<void> {
     if (!this.persistence) return;
     const saved = await this.persistence.load();
-    if (!saved || saved.version !== 1) return;
+    if (!saved || saved.version !== 1 || this.adopted) return;
 
     // Fundir sobre os defaults, nunca substituir. Um snapshot guardado descreve
     // o que o utilizador alterou, não a totalidade do tema: se substituísse,

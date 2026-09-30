@@ -1,0 +1,24 @@
+import { ChangeDetectionStrategy, Component<% if (temVariantes) { %>, input<% } %> } from '@angular/core';
+import { Evo<%= classify(name) %> } from './evo-<%= dasherize(name) %>';
+
+/**
+ * Pre-visualizacao para o Theme Studio, desenhada num iframe.
+ *
+ * Mostrar os estados lado a lado e deliberado: e assim que se ve logo se um
+ * override partiu o disabled ou o foco. O Studio passa `variant` e `size` se o
+ * componente os declarar como input.
+ */
+@Component({
+  selector: 'evo-<%= dasherize(name) %>-preview',
+  imports: [Evo<%= classify(name) %>],
+  template: `
+    <div class="pv__row">
+      <evo-<%= dasherize(name) %><% if (temVariantes) { %> [attr.data-evo-variant]="variant()"<% } %>>Normal</evo-<%= dasherize(name) %>>
+      <evo-<%= dasherize(name) %> disabled<% if (temVariantes) { %> [attr.data-evo-variant]="variant()"<% } %>>Desactivado</evo-<%= dasherize(name) %>>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Evo<%= classify(name) %>Preview {
+<% if (temVariantes) { %>  readonly variant = input<string | null>(null);
+<% } %>}

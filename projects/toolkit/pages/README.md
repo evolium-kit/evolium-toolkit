@@ -120,9 +120,16 @@ fundo para a ferramenta desaparecer — sem forma de reverter a não ser limpar 
 Quem acrescentar interface ao Studio deve usar `--st-*` e as classes `.st__*`,
 nunca `--evo-*` nem componentes da toolkit.
 
+A pré-visualização é um `<iframe>` sobre a rota `<path>/preview`
+(`theme-studio/preview/`), que desenha o `preview` dos metadados com o tema
+real. O Studio não tem nenhuma lista de componentes nem nenhum `@switch` por
+componente, e por baixo mostra o `docs` (o README do componente). O protocolo
+de `postMessage` está em `preview/preview-protocol.ts`. Ver
+[`docs/theming.md`](../../../docs/theming.md#pré-visualização-num-iframe-documentação-a-partir-do-readme).
+
 Os componentes da própria interface do Studio vivem em
-`theme-studio/components/<nome>/`, um por pasta (hoje: `studio-header` e
-`component-preview`). Não usar `npm run new:component` para eles, porque esse
+`theme-studio/components/<nome>/`, um por pasta (hoje: `studio-header`,
+`preview-frame` e `component-docs`). Não usar `npm run new:component` para eles, porque esse
 gerador cria componentes da toolkit em `/components`, que o Studio não pode
 usar. As classes partilhadas (`.st__botao`, `.st__toggle`, `.st__campo`,
 `.st__sr`) estão em `theme-studio/studio-comum.css`, e cada componente tem de

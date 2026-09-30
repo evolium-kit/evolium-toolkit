@@ -76,13 +76,12 @@
         }
       </div>
 
-      <div class="st__palco">
-        <evo-component-preview
-          [componentId]="componente.id"
-          [variant]="variante()"
-          [size]="tamanho()"
-        />
-      </div>
+      <evo-studio-preview-frame
+        [componentId]="componente.id"
+        [label]="componente.label"
+        [variant]="variante()"
+        [size]="tamanho()"
+      />
 
       <fieldset class="st__escopo">
         <legend class="st__sr">Alcance da edição</legend>
@@ -115,6 +114,9 @@
           }
         </p>
       </fieldset>
+
+      <h2 class="st__categoria">Documentação</h2>
+      <evo-studio-component-docs [component]="componente" />
     } @else {
       <p class="st__vazio">
         Nenhum componente registado. Acrescenta

@@ -338,36 +338,22 @@ async function acrescentarDepoisDoUltimo(
   await writeFile(ficheiro, linhas.join(eol), 'utf-8');
 }
 
-/** Regista os metadados em EVO_BUILTIN_COMPONENT_META, para o Theme Studio. */
+/**
+ * Não há lista a editar: o registo do Theme Studio é gerado a partir das
+ * pastas. Regenera-se já, para o componente novo aparecer sem esperar pelo
+ * próximo build. O resultado está no .gitignore, por isso não entra nos
+ * ficheiros alterados.
+ *
+ * Os metadados gerados trazem `preview:` apontado ao `<nome>.preview.ts`, que
+ * é o que um projecto consumidor precisa; dentro da toolkit quem o preenche é
+ * o registo, por isso a linha sai.
+ */
 async function registarMetaDoComponente(/** @type {string} */ nome) {
-  const ficheiro = join(toolkit, 'components', 'src', 'lib', 'provide-components.ts');
-  const bruto = await readFile(ficheiro, 'utf-8');
-  const eol = bruto.includes('\r\n') ? '\r\n' : '\n';
-  // Trabalhar em LF: o `$` multilinha não casa antes de um `\r`.
-  let texto = bruto.replaceAll('\r\n', '\n');
-  const meta = `evo${classify(nome)}Meta`;
-  const importLinha = `import { ${meta} } from './${nome}/${nome}.tokens';`;
+  const tokens = join(pasta, `${nome}.tokens.ts`);
+  const texto = await readFile(tokens, 'utf-8');
+  const semPreview = texto.replace(/^\s*preview: \(\) => import\([^\n]*\n/m, '');
+  if (semPreview !== texto) await writeFile(tokens, semPreview, 'utf-8');
 
-  if (!texto.includes(importLinha)) {
-    // Os imports dos metadados estão por ordem alfabética do caminho.
-    const imports = [
-      ...texto.matchAll(/^import \{ \w+ \} from '\.\/([\w-]+)\/[\w-]+\.tokens';$/gm),
-    ];
-    if (imports.length === 0) falhar('provide-components.ts sem imports de *.tokens reconhecíveis');
-    const seguinte = imports.find((m) => m[1] > nome);
-    const ultimo = imports[imports.length - 1];
-    const pos = seguinte
-      ? /** @type {number} */ (seguinte.index)
-      : /** @type {number} */ (ultimo.index) + ultimo[0].length + 1;
-    texto = texto.slice(0, pos) + importLinha + '\n' + texto.slice(pos);
-  }
-
-  if (!new RegExp(`^\\s+${meta},$`, 'm').test(texto)) {
-    const fecho = texto.indexOf('] as const;');
-    if (fecho === -1) falhar('EVO_BUILTIN_COMPONENT_META não encontrado em provide-components.ts');
-    texto = texto.slice(0, fecho) + `  ${meta},\n` + texto.slice(fecho);
-  }
-
-  await writeFile(ficheiro, texto.replaceAll('\n', eol), 'utf-8');
-  return [ficheiro];
+  correr(['tools/generate-component-registry.mjs']);
+  return [];
 }

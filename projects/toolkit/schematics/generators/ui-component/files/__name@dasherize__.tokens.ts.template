@@ -15,7 +15,8 @@ export const evo<%= classify(name) %>Meta: EvoComponentMeta = {
   category: '<%= category %>',
   tags: ['<%= dasherize(name) %>'],
 <% if (temVariantes) { %>  variants: [<%= variants.map(v => "'" + v + "'").join(', ') %>],
-<% } %>  tokens: [
+<% } %>  preview: () => import('./<%= dasherize(name) %>.preview').then((m) => m.Evo<%= classify(name) %>Preview),
+  tokens: [
     {
       name: '<%= dasherize(name) %>-bg',
       label: 'Cor de fundo',

@@ -108,6 +108,39 @@ describe('EvoThemeStore', () => {
     });
   });
 
+  describe('adopt', () => {
+    it('substitui o estado inteiro sem marcar dirty', () => {
+      store.adopt({
+        tokens: { '--evo-color-primary': '#0d9488' },
+        darkTokens: {},
+        variants: { 'button.danger': { '--evo-button-bg': '#b91c1c' } },
+        scheme: 'dark',
+      });
+
+      expect(store.tokens()).toEqual({ '--evo-color-primary': '#0d9488' });
+      expect(store.variants()['button.danger']?.['--evo-button-bg']).toBe('#b91c1c');
+      expect(store.scheme()).toBe('dark');
+      expect(store.dirty()).toBe(false);
+    });
+
+    // O iframe do Studio adopta o estado do Studio; a persistência do próprio
+    // iframe (que arranca com a app) não pode chegar depois e desfazê-lo.
+    it('um restore() que termine depois é ignorado', async () => {
+      persistence.snapshot = snapshotParcial({ tokens: { '--evo-color-primary': '#000000' } });
+      const aCarregar = store.restore();
+
+      store.adopt({
+        tokens: { '--evo-color-primary': '#0d9488' },
+        darkTokens: {},
+        variants: {},
+        scheme: 'light',
+      });
+      await aCarregar;
+
+      expect(store.tokens()['--evo-color-primary']).toBe('#0d9488');
+    });
+  });
+
   it('reset volta aos defaults e limpa o estado por gravar', () => {
     store.setToken('color-primary', '#000000');
     store.reset();

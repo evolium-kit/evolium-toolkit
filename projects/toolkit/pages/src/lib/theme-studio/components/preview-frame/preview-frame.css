@@ -1,0 +1,15 @@
+@layer evo.components {
+  :host {
+    display: block;
+  }
+
+  .pf__frame {
+    display: block;
+    inline-size: 100%;
+    /* Até o iframe comunicar a altura do conteúdo. */
+    min-block-size: 12rem;
+    border: 1px solid var(--st-border);
+    border-radius: var(--st-radius-lg);
+    background-color: var(--st-surface);
+  }
+}

@@ -1,21 +1,16 @@
 import { Provider } from '@angular/core';
 import { provideEvoComponentMeta } from '@evolium-kit/toolkit/core';
-import { evoBadgeMeta } from './badge/badge.tokens';
-import { evoButtonMeta } from './button/button.tokens';
-import { evoCardMeta } from './card/card.tokens';
-import { evoFormFieldMeta } from './form-field/form-field.tokens';
-import { evoInputMeta } from './input/input.tokens';
-import { evoSwitchMeta } from './switch/switch.tokens';
+import { EVO_BUILTIN_COMPONENT_META } from './generated/registry';
 
-/** Metadados de todos os componentes da toolkit. */
-export const EVO_BUILTIN_COMPONENT_META = [
-  evoButtonMeta,
-  evoInputMeta,
-  evoCardMeta,
-  evoBadgeMeta,
-  evoFormFieldMeta,
-  evoSwitchMeta,
-] as const;
+/**
+ * Metadados de todos os componentes da toolkit, com pré-visualização e
+ * documentação.
+ *
+ * A lista não é escrita à mão: é gerada a partir das pastas de `lib/` por
+ * `tools/generate-component-registry.mjs`. Uma pasta com `<nome>.tokens.ts`
+ * entra sozinha no registo.
+ */
+export { EVO_BUILTIN_COMPONENT_META };
 
 /**
  * Regista os componentes da toolkit no Theme Studio.
