@@ -26,14 +26,15 @@ a folha dos componentes que são directivas:
 
 ### Componentes disponíveis
 
-| Componente  | Selector                                                    | Variantes                                  | Tamanhos   |
-| ----------- | ----------------------------------------------------------- | ------------------------------------------ | ---------- |
-| `EvoButton` | `button[evoButton]`, `a[evoButton]`                         | solid, ghost, outline, danger              | sm, md, lg |
-| `EvoInput`  | `input[evoInput]`, `textarea[evoInput]`, `select[evoInput]` | —                                          | sm, md, lg |
-| `EvoField`  | `evo-field`                                                 | —                                          | —          |
-| `EvoCard`   | `evo-card`                                                  | plain, sunken, outlined                    | —          |
-| `EvoBadge`  | `evo-badge`                                                 | neutral, primary, success, warning, danger | —          |
-| `EvoSwitch` | `evo-switch`                                                | —                                          | —          |
+| Componente     | Selector                                                    | Variantes                                  | Tamanhos   |
+| -------------- | ----------------------------------------------------------- | ------------------------------------------ | ---------- |
+| `EvoButton`    | `button[evoButton]`, `a[evoButton]`                         | solid, ghost, outline, danger              | sm, md, lg |
+| `EvoInput`     | `input[evoInput]`, `textarea[evoInput]`, `select[evoInput]` | —                                          | sm, md, lg |
+| `EvoField`     | `evo-field`                                                 | —                                          | —          |
+| `EvoCard`      | `evo-card`                                                  | plain, sunken, outlined                    | —          |
+| `EvoBadge`     | `evo-badge`                                                 | neutral, primary, success, warning, danger | —          |
+| `EvoSwitch`    | `evo-switch`                                                | —                                          | —          |
+| `EvoTextField` | `evo-text-field`                                            | —                                          | sm, md, lg |
 
 ```html
 <button evoButton variant="danger" size="sm" [loading]="aApagar()">Eliminar</button>
@@ -63,6 +64,21 @@ O `EvoSwitch` implementa `ControlValueAccessor` e é personalizável por
 `--evo-switch-bg`, `--evo-switch-bg-checked`, `--evo-switch-thumb-bg`,
 `--evo-switch-thumb-size` e `--evo-switch-radius`. A documentação completa está em
 [`src/lib/switch/README.md`](src/lib/switch/README.md).
+
+```html
+<evo-text-field formControlName="email" label="Email" type="email" autocomplete="email" />
+<evo-text-field formControlName="senha" label="Senha" type="password" hint="Mínimo 8 caracteres." />
+<evo-text-field [(value)]="filtro" label="Filtrar" hideLabel clearable>
+  <svg slot="prefix" aria-hidden="true">…</svg>
+</evo-text-field>
+```
+
+O `EvoTextField` junta etiqueta, campo, ícones, ajuda, erro e contador numa só
+tag, e mostra o erro do controlo sozinho (depois de `touched`), com mensagens
+em português sobreponíveis por `provideEvoTextFieldMessages()`. É composto por
+`EvoField` + o aspecto do `EvoInput`, por isso herda os `--evo-input-*`; os
+tokens próprios são `--evo-text-field-*`. Documentação completa em
+[`src/lib/text-field/README.md`](src/lib/text-field/README.md).
 
 `EvoButton` e `EvoInput` aplicam-se a elementos nativos em vez de os embrulhar:
 mantêm semântica, foco, validação nativa, `formControlName` e o preenchimento

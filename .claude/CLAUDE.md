@@ -51,6 +51,7 @@ isso que são invioláveis e não apenas preferências de estilo.
 | Mexer em `/core`                                                      | `projects/toolkit/core/README.md`       |
 | Mexer em `/theme`                                                     | `projects/toolkit/theme/README.md`      |
 | Mexer em `/services`                                                  | `projects/toolkit/services/README.md`   |
+| Migrar um modelo de `src/app/*-models/` para a toolkit                | `/migrar-recurso` + `projects/toolkit/RESOURCE-MIGRATE.md` |
 
 ## Antes de dar por terminada qualquer alteração
 

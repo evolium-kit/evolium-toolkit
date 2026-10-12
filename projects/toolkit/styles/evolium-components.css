@@ -45,6 +45,18 @@
     margin-block-start: var(--evo-space-md);
   }
 
+  /* Ícones projectados no evo-text-field: também conteúdo projectado. */
+  .evo-text-field :is([slot='prefix'], [slot='suffix']) {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .evo-text-field :is(svg, img):is([slot='prefix'], [slot='suffix']) {
+    inline-size: var(--evo-text-field-icon-size, 1.125rem);
+    block-size: var(--evo-text-field-icon-size, 1.125rem);
+  }
+
   .evo-input {
     inline-size: 100%;
     min-block-size: var(--evo-input-height, 2.25rem);

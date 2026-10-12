@@ -92,3 +92,9 @@ label[for='raio'] {
 .factura > span:nth-of-type(1) {
   flex: 1 1 8rem;
 }
+
+.pg-text-fields {
+  display: grid;
+  gap: var(--evo-space-md);
+  max-inline-size: 28rem;
+}

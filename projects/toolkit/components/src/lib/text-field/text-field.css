@@ -1,0 +1,204 @@
+/*
+ * REGRA 1: nenhuma declaração `--evo-text-field-*` neste ficheiro.
+ * O valor por omissão vive no fallback do var(). Declará-lo aqui ganharia por
+ * proximidade a qualquer :root do projecto e tornaria o override global
+ * impossível — sem erro nenhum a avisar.
+ *
+ * REGRA 2: nunca registar estes tokens com @property { initial-value }.
+ *
+ * A caixa leva a classe global `evo-input`, por isso borda, raio, fundo,
+ * altura, padding e tamanhos vêm de --evo-input-* (folha global). Aqui só se
+ * acrescenta o que é próprio do text-field. Os ícones projectados
+ * ([slot=prefix]/[slot=suffix]) são estilizados na folha global, porque
+ * conteúdo projectado não recebe o atributo de encapsulamento deste componente.
+ */
+
+@layer evo.components {
+  :host {
+    display: block;
+  }
+
+  /* ---------------------------------------------------------------- etiqueta */
+
+  .evo-text-field__required {
+    margin-inline-start: var(--evo-space-xs);
+    color: var(--evo-text-field-required-fg, var(--evo-color-danger));
+  }
+
+  .evo-text-field__optional {
+    margin-inline-start: var(--evo-space-xs);
+    color: var(--evo-text-field-optional-fg, var(--evo-color-on-surface-muted));
+    font-weight: 400;
+  }
+
+  :host([data-evo-hide-label]) .evo-text-field__label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ------------------------------------------------------------------- caixa */
+
+  .evo-text-field__box {
+    display: flex;
+    align-items: center;
+    gap: var(--evo-text-field-icon-gap, var(--evo-space-sm));
+    color: var(--evo-text-field-icon-fg, var(--evo-color-on-surface-muted));
+    cursor: text;
+  }
+
+  .evo-text-field__box:has(textarea) {
+    align-items: flex-start;
+  }
+
+  /*
+   * O anel fica na caixa, e não no <input>, para envolver também os ícones.
+   * O controlo interno perde o outline, mas o substituto está aqui.
+   */
+  :host(:not([data-evo-invalid])) .evo-text-field__box:has(.evo-text-field__control:focus) {
+    border-color: var(--evo-text-field-focus-border-color, var(--evo-color-primary));
+    outline: var(--evo-text-field-ring-width, var(--evo-focus-ring-width)) solid
+      var(--evo-text-field-focus-ring-color, var(--evo-focus-ring-color));
+    outline-offset: var(--evo-text-field-ring-offset, var(--evo-focus-ring-offset));
+  }
+
+  :host([data-evo-invalid]) .evo-text-field__box {
+    outline: var(--evo-text-field-ring-width, var(--evo-focus-ring-width)) solid
+      var(--evo-text-field-error-ring-color, var(--evo-color-danger-soft));
+    outline-offset: var(--evo-text-field-ring-offset, var(--evo-focus-ring-offset));
+  }
+
+  :host([data-evo-disabled]) .evo-text-field__box {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--evo-text-field-disabled-bg, var(--evo-color-surface-sunken));
+    /* Anula o :hover da folha global, que muda a cor da borda. */
+    border-color: var(--evo-input-border-color, var(--evo-color-border-strong));
+  }
+
+  /* ---------------------------------------------------------------- controlo */
+
+  .evo-text-field__control {
+    flex: 1;
+    align-self: stretch;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--evo-input-fg, var(--evo-color-on-surface));
+    font: inherit;
+    outline: none;
+  }
+
+  .evo-text-field__control::placeholder {
+    color: var(--evo-color-on-surface-muted);
+  }
+
+  .evo-text-field__control:disabled {
+    cursor: not-allowed;
+  }
+
+  textarea.evo-text-field__control {
+    resize: vertical;
+  }
+
+  textarea.evo-text-field__control[data-evo-auto-resize] {
+    field-sizing: content;
+    resize: none;
+  }
+
+  /* ------------------------------------------------------- ícones e acções */
+
+  .evo-text-field__prefix,
+  .evo-text-field__suffix {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  /* Sem nada projectado, não ocupa espaço nem cria um gap a mais. */
+  .evo-text-field__prefix:empty,
+  .evo-text-field__suffix:empty {
+    display: none;
+  }
+
+  .evo-text-field__action {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    inline-size: calc(var(--evo-text-field-icon-size, 1.125rem) + var(--evo-space-xs) * 2);
+    block-size: calc(var(--evo-text-field-icon-size, 1.125rem) + var(--evo-space-xs) * 2);
+    padding: 0;
+    border: 0;
+    border-radius: var(--evo-radius-sm);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  /* Alvo de toque de 44×44 px sem mudar o tamanho visível. */
+  .evo-text-field__action::before {
+    content: '';
+    position: absolute;
+    inset: min(
+      0px,
+      calc((var(--evo-text-field-icon-size, 1.125rem) + var(--evo-space-xs) * 2 - 44px) / 2)
+    );
+  }
+
+  .evo-text-field__action:hover:not(:disabled) {
+    color: var(--evo-color-on-surface);
+  }
+
+  .evo-text-field__action:focus-visible {
+    outline: var(--evo-text-field-ring-width, var(--evo-focus-ring-width)) solid
+      var(--evo-text-field-focus-ring-color, var(--evo-focus-ring-color));
+    outline-offset: var(--evo-text-field-ring-offset, var(--evo-focus-ring-offset));
+  }
+
+  .evo-text-field__action:disabled {
+    cursor: not-allowed;
+  }
+
+  .evo-text-field__action svg {
+    inline-size: var(--evo-text-field-icon-size, 1.125rem);
+    block-size: var(--evo-text-field-icon-size, 1.125rem);
+  }
+
+  /* ------------------------------------------------------------------ rodapé */
+
+  /*
+   * As cores reaproveitam os tokens do evo-field (hint/erro): quem os afina
+   * para o evo-field afina também o text-field.
+   */
+  .evo-text-field__footer {
+    display: flex;
+    gap: var(--evo-space-sm);
+    color: var(--evo-field-hint-fg, var(--evo-color-on-surface-muted));
+    font-size: var(--evo-font-size-sm);
+  }
+
+  .evo-text-field__message[data-evo-tone='error'] {
+    color: var(--evo-field-error-fg, var(--evo-color-danger));
+  }
+
+  .evo-text-field__counter {
+    margin-inline-start: auto;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (forced-colors: active) {
+    .evo-text-field__action {
+      color: ButtonText;
+    }
+  }
+}

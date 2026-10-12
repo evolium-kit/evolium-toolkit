@@ -1,6 +1,15 @@
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, JsonPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { EvoBadge, EvoButton, EvoCard, EvoField, EvoInput } from '@evolium-kit/toolkit/components';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  EvoBadge,
+  EvoButton,
+  EvoCard,
+  EvoField,
+  EvoInput,
+  EvoFormField,
+  EvoTextField,
+} from '@evolium-kit/toolkit/components';
 import { EvoTokensDirective } from '@evolium-kit/toolkit/core';
 import { EvoThemeExporter, EvoThemeStore } from '@evolium-kit/toolkit/theme';
 import { RouterLink } from '@angular/router';
@@ -25,6 +34,10 @@ import { EvoAuth, EvoError, EvoResourceRegistry } from '@evolium-kit/toolkit/ser
     EvoTokensDirective,
     RouterLink,
     DecimalPipe,
+    EvoFormField,
+    EvoTextField,
+    ReactiveFormsModule,
+    JsonPipe,
   ],
   templateUrl: './playground.html',
   styleUrl: './playground.css',
@@ -49,6 +62,25 @@ export class Playground {
 
   protected readonly aGravar = signal(false);
   protected readonly emailInvalido = signal(false);
+
+  // ------------------------------------------------------------ text field
+
+  protected readonly registo = inject(NonNullableFormBuilder).group({
+    nome: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    senha: ['', [Validators.required, Validators.minLength(8)]],
+    valor: [null as number | null, Validators.min(0)],
+    obs: [''],
+  });
+
+  protected submeterRegisto(): void {
+    this.registo.markAllAsTouched();
+  }
+
+  protected alternarRegisto(): void {
+    if (this.registo.disabled) this.registo.enable();
+    else this.registo.disable();
+  }
 
   // ------------------------------------------------------- Fase 4: serviços
 
