@@ -240,7 +240,7 @@ Tokens próprios:
 | `--evo-text-field-focus-ring-color`   | anel de foco (caixa e botões internos)       | `--evo-focus-ring-color`       |
 | `--evo-text-field-error-ring-color`   | anel à volta do campo com erro               | `--evo-color-danger-soft`      |
 | `--evo-text-field-ring-width`         | espessura dos dois anéis                     | `--evo-focus-ring-width`       |
-| `--evo-text-field-ring-offset`        | afastamento dos anéis (negativo: por dentro) | `--evo-focus-ring-offset`      |
+| `--evo-text-field-ring-offset`        | afastamento dos anéis (negativo: por dentro) | — (`0`, encostado à borda)     |
 | `--evo-text-field-disabled-bg`        | fundo desactivado                            | `--evo-color-surface-sunken`   |
 | `--evo-text-field-optional-fg`        | "(opcional)"                                 | `--evo-color-on-surface-muted` |
 | `--evo-text-field-required-fg`        | asterisco                                    | `--evo-color-danger`           |
@@ -254,7 +254,7 @@ Tokens próprios:
 :root {
   --evo-input-radius: 6px;
   --evo-text-field-ring-width: 3px;
-  --evo-text-field-ring-offset: 0;
+  --evo-text-field-ring-offset: 2px;
 }
 ```
 
@@ -332,7 +332,6 @@ Para manter o aspecto antigo em toda a aplicação:
   --evo-text-field-focus-ring-color: #fbd5c4; /* brand-orange-200, aprox. */
   --evo-text-field-error-ring-color: #fca5a5; /* red-300 */
   --evo-text-field-ring-width: 3px;
-  --evo-text-field-ring-offset: 0;
   --evo-text-field-optional-fg: #9a9a9a;
   --evo-input-fg: #585959;
   --evo-input-font-size: 0.875rem; /* text-sm */

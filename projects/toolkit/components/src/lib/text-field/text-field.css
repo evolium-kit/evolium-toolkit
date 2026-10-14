@@ -65,13 +65,13 @@
     border-color: var(--evo-text-field-focus-border-color, var(--evo-color-primary));
     outline: var(--evo-text-field-ring-width, var(--evo-focus-ring-width)) solid
       var(--evo-text-field-focus-ring-color, var(--evo-focus-ring-color));
-    outline-offset: var(--evo-text-field-ring-offset, var(--evo-focus-ring-offset));
+    outline-offset: var(--evo-text-field-ring-offset, 0);
   }
 
   :host([data-evo-invalid]) .evo-text-field__box {
     outline: var(--evo-text-field-ring-width, var(--evo-focus-ring-width)) solid
       var(--evo-text-field-error-ring-color, var(--evo-color-danger-soft));
-    outline-offset: var(--evo-text-field-ring-offset, var(--evo-focus-ring-offset));
+    outline-offset: var(--evo-text-field-ring-offset, 0);
   }
 
   :host([data-evo-disabled]) .evo-text-field__box {
@@ -162,7 +162,7 @@
   .evo-text-field__action:focus-visible {
     outline: var(--evo-text-field-ring-width, var(--evo-focus-ring-width)) solid
       var(--evo-text-field-focus-ring-color, var(--evo-focus-ring-color));
-    outline-offset: var(--evo-text-field-ring-offset, var(--evo-focus-ring-offset));
+    outline-offset: var(--evo-text-field-ring-offset, 0);
   }
 
   .evo-text-field__action:disabled {

@@ -49,8 +49,7 @@ export const evoTextFieldMeta: EvoComponentMeta = {
       min: -4,
       max: 6,
       unit: 'px',
-      fallback: '--evo-focus-ring-offset',
-      hint: '0 encosta o anel à borda; negativo desenha-o por dentro.',
+      hint: '0 por omissão: o anel encosta à borda. Negativo desenha-o por dentro.',
     },
     {
       name: 'text-field-disabled-bg',
