@@ -5,7 +5,24 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+## [0.2.0] - 2026-10-14
+
 ### Adicionado
+
+- **`EvoTextField`** (`evo-text-field`), em `@evolium-kit/toolkit/components`:
+  campo de texto completo que compõe `EvoField` + `evo-input`. Implementa
+  `ControlValueAccessor` e funciona também sozinho com `[(value)]`. Mostra o
+  erro do controlo automaticamente (mensagens configuráveis com
+  `provideEvoTextFieldMessages()`), lê o `required` dos validadores, e tem
+  `hint`, `size`, `hideLabel`, mostrar/ocultar senha, `clearable`,
+  `showCount` e textarea com `autoResize`. 11 tokens `--evo-text-field-*`;
+  `--evo-text-field-ring-offset` vale `0` por omissão (anel encostado à
+  borda). Documentação em `components/src/lib/text-field/README.md`.
+- **`[evoTokens]` tipado** (`EvoTokenMap`, `EvoTokenName`, `EvoTokenNames` em
+  `/core`): o editor completa os nomes de todos os tokens da toolkit, e um nome
+  curto desconhecido num objecto literal é erro de compilação (por exemplo
+  `'ring-width'` em vez de `'text-field-ring-width'`). A lista é gerada do CSS
+  no build; uma aplicação acrescenta os seus tokens com `declare module`.
 
 - **Theme Studio: pré-visualização num `<iframe>`.** Cada componente é
   desenhado na rota `<path>/preview` (registada por `evoThemeStudioRoutes()`),
@@ -25,6 +42,9 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ### Alterado
 
+- **`EvoTokenMap`** deixa de ser `Record<string, …>`: um objecto literal com
+  uma chave curta que nenhum CSS da toolkit lê deixa de compilar. Usar o nome
+  completo do token, ou a forma `--nome` para tokens próprios.
 - **Pré-visualizações por componente.** O `@switch` único deu lugar a um
   `<nome>.preview.ts` em cada pasta de `/components`, e o `FormField` passa a
   ter pré-visualização.
