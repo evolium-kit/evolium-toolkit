@@ -54,3 +54,4 @@ Thumbs.db
 
 # Registo do Theme Studio, gerado das pastas por tools/generate-component-registry.mjs
 /projects/toolkit/components/src/lib/generated/
+/projects/toolkit/core/src/lib/generated/

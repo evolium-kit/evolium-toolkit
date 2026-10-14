@@ -117,7 +117,9 @@
        autocomplete="name"
        clearable
        size="lg"
-       [evoTokens]="{'ring-width': '10px', 'ring-offset': '4px', 'ring-color': '#facc15'}"
+       [evoTokens]="{
+         'text-field-ring-width': '4px'
+       }"
       />
       <evo-text-field
         formControlName="email"
@@ -126,6 +128,7 @@
         autocomplete="email"
         hint="Usamos só para recuperar a conta."
         size="lg"
+        [evoTokens]="{ 'text-field-ring-width': '4px', 'text-field-ring-offset': '0px' }"
       >
         <svg
           slot="prefix"
@@ -144,8 +147,7 @@
         label="Senha"
         type="password"
         autocomplete="new-password"
-          size="lg"
-
+        size="lg"
       />
       <evo-text-field
         formControlName="valor"
@@ -157,7 +159,6 @@
         <span slot="suffix">Kz</span>
       </evo-text-field>
       <evo-text-field
-
         formControlName="obs"
         label="Observações"
         type="textarea"

@@ -9,4 +9,5 @@ export * from './lib/theme.model';
 export * from './lib/theme.tokens';
 export * from './lib/token-utils';
 export * from './lib/component-meta';
+export * from './lib/token-names';
 export * from './lib/evo-tokens.directive';

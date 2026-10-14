@@ -51,6 +51,20 @@ Do mais forte para o mais fraco:
 }
 ```
 
+### Os nomes de `[evoTokens]` são verificados
+
+A chave curta inclui sempre o prefixo do componente: `'text-field-ring-width'`,
+nunca `'ring-width'`. A directiva só acrescenta `--evo-`, por isso
+`'ring-width'` viraria `--evo-ring-width`, que nenhum CSS lê. Para isto não
+falhar em silêncio, `[evoTokens]` é tipado (`EvoTokenMap`): o editor completa
+os nomes, e um nome desconhecido é um erro de compilação no template.
+
+A lista é gerada do próprio CSS por `tools/generate-component-registry.mjs`, ao
+mesmo tempo que o registo do Studio (ver mais abaixo). Um token novo num
+componente entra sozinho, no próximo `build:lib`/`test:lib`/`start`, ou com
+`npm run gen:registry`. Detalhes e extensão por aplicações em
+[`core/README.md`](../projects/toolkit/core/README.md).
+
 ### Porque isto funciona sem `!important`
 
 Os níveis 1 e 3 resolvem-se por **herança de CSS**, não por especificidade: o

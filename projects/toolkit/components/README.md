@@ -315,6 +315,11 @@ export const buttonMeta: EvoComponentMeta = {
 
 Cada token declarado no `.tokens.ts` tem de existir mesmo no CSS, e vice-versa.
 
+O autocomplete de `[evoTokens]` não depende do `.tokens.ts`: todo o
+`var(--evo-<nome>-…)` que o CSS do componente lê entra sozinho em
+`EvoTokenNames` no próximo `gen:registry` (ver `core/README.md`). Um token que
+só existe no CSS (fora do Studio) também fica disponível e verificado.
+
 ### Pré-visualização e documentação no Studio
 
 Não se escrevem os campos `preview` nem `docs` nos metadados, nem se regista o

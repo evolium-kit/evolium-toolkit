@@ -36,6 +36,39 @@ import { EvoTokensDirective } from '@evolium-kit/toolkit/core';
 Aceita a forma curta (`button-bg`) ou completa (`--evo-button-bg`). Um valor
 `null` remove o token, deixando-o voltar ao que herdaria.
 
+A forma curta é **tipada** (`EvoTokenMap`): o editor oferece em autocomplete
+todos os tokens da toolkit, e um nome errado é um erro de compilação no
+template, em vez de uma custom property que nenhum CSS lê:
+
+```html
+<!-- ✗ TS2353: 'ring-width' does not exist in type 'EvoTokenMap' -->
+<evo-text-field [evoTokens]="{ 'ring-width': '20px' }" />
+
+<!-- ✓ o nome curto inclui sempre o componente -->
+<evo-text-field [evoTokens]="{ 'text-field-ring-width': '20px' }" />
+```
+
+A lista (`EvoTokenNames`) é gerada no build a partir do CSS da toolkit
+(`tools/generate-component-registry.mjs` → `core/src/lib/generated/token-names.ts`):
+entra todo o `--evo-*` declarado em `styles/` ou lido por um `var(--evo-…)` em
+components, layouts ou pages. Um componente novo não precisa de registar nada:
+basta o seu CSS ler o token.
+
+A forma completa (`--qualquer-coisa`) não é verificada. Para dar autocomplete
+aos tokens próprios de uma aplicação:
+
+```ts
+declare module '@evolium-kit/toolkit/core' {
+  interface EvoTokenNames {
+    'kpi-accent': true;
+  }
+}
+```
+
+A verificação só se aplica a objectos literais (no template ou num
+`signal<EvoTokenMap>({ … })`). Um `Record<string, string>` construído em runtime
+continua a ser aceite sem verificação dos nomes.
+
 Usa `Renderer2` e não `element.style`, para que o override seja serializado no
 HTML servido em SSR — sem isso haveria um flash na hidratação.
 
@@ -61,14 +94,15 @@ um token inválido nunca deve impedir o resto do tema de ser aplicado.
 
 ### Tipos e tokens de DI
 
-| Símbolo                                       | Papel                                    |
-| --------------------------------------------- | ---------------------------------------- |
-| `EvoThemeSnapshot`                            | estado serializável de um tema           |
-| `EvoTokenRecord`, `EvoVariantRecord`          | mapas de tokens                          |
-| `EvoColorScheme`                              | `'light' \| 'dark' \| 'system'`          |
-| `ThemePersistence`                            | contrato das estratégias de persistência |
-| `EVO_THEME_PERSISTENCE`, `EVO_THEME_DEFAULTS` | tokens de DI                             |
-| `EvoComponentMeta`, `EVO_COMPONENT_META`      | metadados para o Theme Studio            |
+| Símbolo                                        | Papel                                    |
+| ---------------------------------------------- | ---------------------------------------- |
+| `EvoThemeSnapshot`                             | estado serializável de um tema           |
+| `EvoTokenRecord`, `EvoVariantRecord`           | mapas de tokens                          |
+| `EvoColorScheme`                               | `'light' \| 'dark' \| 'system'`          |
+| `ThemePersistence`                             | contrato das estratégias de persistência |
+| `EVO_THEME_PERSISTENCE`, `EVO_THEME_DEFAULTS`  | tokens de DI                             |
+| `EvoComponentMeta`, `EVO_COMPONENT_META`       | metadados para o Theme Studio            |
+| `EvoTokenMap`, `EvoTokenName`, `EvoTokenNames` | o que `[evoTokens]` aceita (extensível)  |
 
 ### Registar um componente no Theme Studio
 

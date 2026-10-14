@@ -74,7 +74,7 @@
 
     --evo-border-width: 1px;
     --evo-focus-ring-color: var(--evo-color-primary);
-    --evo-focus-ring-width: 2px;
+    --evo-focus-ring-width: 0px;
     --evo-focus-ring-offset: 2px;
 
     /* Flat design: "elevação" é borda, não sombra difusa. */

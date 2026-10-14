@@ -18,6 +18,9 @@ import { Marked } from 'marked';
  * - `docs`, se existir `README.md`, convertido aqui em HTML — assim o pacote
  *   publicado não precisa de um parser de markdown em runtime.
  *
+ * Gera também `core/src/lib/generated/token-names.ts`, os nomes de token que
+ * `[evoTokens]` aceita (ver `gerarNomesDeTokens`).
+ *
  * Escreve em `components/src/lib/generated/`, que está no `.gitignore`: é
  * sempre derivado das pastas, nunca editado à mão. Corre antes de `build:lib`,
  * `test:lib`, `start` e `build` (scripts `pre*` do package.json).
@@ -123,6 +126,8 @@ ${entradas}
 `,
 );
 
+await gerarNomesDeTokens();
+
 // Um README ou componente apagado não pode deixar um .docs.ts órfão para trás.
 const esperados = new Set([
   'registry.ts',
@@ -142,10 +147,76 @@ function rel(/** @type {string} */ caminho) {
   return relative(raiz, caminho).replaceAll('\\', '/');
 }
 
+/**
+ * Gera `core/src/lib/generated/token-names.ts`: a lista de tokens que
+ * `[evoTokens]` aceita, e que o editor oferece em autocomplete.
+ *
+ * A fonte é o CSS, e não os `.tokens.ts`: os metadados só listam o que o Studio
+ * edita, mas há tokens legítimos fora deles (`field-hint-fg`,
+ * `input-border-width`, os dos shells). Entra todo o `--evo-*` declarado em
+ * `styles/` ou lido por um `var(--evo-…)` em components, layouts ou pages —
+ * por isso um recurso novo fica com autocomplete sem registar nada.
+ *
+ * Não cria dependência de /core para cima: é uma lista de strings, sem imports.
+ */
+async function gerarNomesDeTokens() {
+  const toolkit = join(raiz, 'projects', 'toolkit');
+  const fontes = [
+    join(toolkit, 'styles'),
+    join(toolkit, 'components', 'src'),
+    join(toolkit, 'layouts', 'src'),
+    join(toolkit, 'pages', 'src'),
+  ];
+
+  /** @type {Set<string>} */
+  const nomes = new Set();
+  for (const pasta of fontes) {
+    if (!existsSync(pasta)) continue;
+    for (const entrada of await readdir(pasta, { recursive: true, withFileTypes: true })) {
+      if (!entrada.isFile() || !/\.(css|ts)$/.test(entrada.name)) continue;
+      if (entrada.name.endsWith('.spec.ts')) continue;
+      const caminho = join(entrada.parentPath, entrada.name);
+      if (caminho.includes(`${join('lib', 'generated')}`)) continue;
+
+      const fonte = await readFile(caminho, 'utf-8');
+      for (const m of fonte.matchAll(/var\(\s*--evo-([a-z0-9-]+)/g)) nomes.add(m[1]);
+      // Declarações só contam nas folhas globais: um componente nunca declara
+      // os próprios tokens (Regra 1), e um `--evo-x:` num .ts seria um override.
+      if (pasta === fontes[0]) {
+        for (const m of fonte.matchAll(/(?:^|[\s;{])--evo-([a-z0-9-]+)\s*:/g)) nomes.add(m[1]);
+      }
+    }
+  }
+
+  if (nomes.size === 0) falhar('nenhum token --evo-* encontrado no CSS da toolkit');
+
+  const linhas = [...nomes].sort().map((n) => `  '${n}': true;`);
+  await escrever(
+    'token-names.ts',
+    `${CABECALHO}
+
+/**
+ * Tokens conhecidos pela toolkit, extraídos do CSS. Usar \`EvoTokenNames\`
+ * (token-names.ts), que é a interface pública e extensível.
+ */
+export interface EvoBuiltinTokenNames {
+${linhas.join('\n')}
+}
+`,
+    join(toolkit, 'core', 'src', 'lib', 'generated'),
+  );
+
+  console.log(`[evo] nomes de tokens para [evoTokens]: ${nomes.size}`);
+}
+
 /** Só escreve se mudou, para não disparar rebuilds do `watch` sem razão. */
-async function escrever(/** @type {string} */ nome, /** @type {string} */ conteudo) {
-  await mkdir(destino, { recursive: true });
-  const ficheiro = join(destino, nome);
+async function escrever(
+  /** @type {string} */ nome,
+  /** @type {string} */ conteudo,
+  /** @type {string} */ pasta = destino,
+) {
+  await mkdir(pasta, { recursive: true });
+  const ficheiro = join(pasta, nome);
   const actual = existsSync(ficheiro) ? await readFile(ficheiro, 'utf-8') : null;
   if (actual !== conteudo) await writeFile(ficheiro, conteudo, 'utf-8');
 }

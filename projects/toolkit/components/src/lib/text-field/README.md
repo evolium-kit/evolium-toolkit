@@ -271,6 +271,10 @@ Tokens próprios:
 </section>
 ```
 
+O nome curto inclui sempre `text-field-`: `'ring-width'` sozinho é recusado
+pelo compilador, porque viraria `--evo-ring-width`, que nenhum CSS lê. O editor
+completa os nomes válidos. Os anéis só aparecem com o campo em foco ou em erro.
+
 ### No Theme Studio
 
 Aparece em **Formulário → Text Field**, com os 11 tokens próprios no painel e

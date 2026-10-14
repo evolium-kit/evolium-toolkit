@@ -168,7 +168,11 @@ utilizador tenha trazido ambiguidade real.
      contador de módulo (`let proximoId = 0;` → `evo-<nome>-${proximoId++}`);
    - primitivas complexas pelo `@angular/cdk` (overlay, focus trap, listbox…), nunca à mão.
 3. `<nome>.tokens.ts`: um token por cada valor visual parametrizável — os tokens do `.tokens.ts`
-   e do CSS têm de bater 1:1.
+   e do CSS têm de bater 1:1. Todos os tokens com o prefixo do componente
+   (`--evo-<nome>-<parte>`), nunca nomes genéricos (`--evo-ring-width`): o autocomplete e a
+   verificação de `[evoTokens]` (`EvoTokenNames`) são gerados do CSS por
+   `npm run gen:registry`, sem registo manual. Depois de escrever o CSS, corre-o e confirma que
+   os tokens novos aparecem em `core/src/lib/generated/token-names.ts`.
 4. `<nome>.preview.ts`: todos os estados lado a lado (`pv__row`/`pv__stack`/`pv__estado`).
 5. `evo-<nome>.spec.ts`: render por omissão, cada input reflectido, cada output, ARIA em cada
    estado (e que sai ao sair do estado), teclado, e a verificação textual da Regra 1 (ver
@@ -215,7 +219,8 @@ Cria `README.md` **na pasta do recurso criado**, no formato de
 4. **Exemplos** copiáveis: uso mínimo, cada funcionalidade relevante, Reactive Forms / `ngModel`
    quando aplicável, consumo pelo token e pelo `EvoResourceRegistry` para plugins.
 5. **Personalizar** (componentes): tabela de tokens (token | controla | herda de), exemplos em
-   `:root`, `[evoTokens]` por instância e por subárvore, e como aparece no Theme Studio.
+   `:root`, `[evoTokens]` por instância e por subárvore (sempre com o nome curto completo,
+   ex.: `'text-field-ring-width'`), e como aparece no Theme Studio.
    **Configuração** (plugins): opções do `withPlugin` com omissões.
 6. **Acessibilidade** (componentes) / **SSR e erros** (plugins).
 7. **Migração a partir de `<original>`** — tabela Antes | Agora com cada prop/método/evento/
