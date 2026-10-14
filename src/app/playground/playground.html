@@ -112,14 +112,14 @@
     </p>
     <form class="pg-text-fields" [formGroup]="registo" (ngSubmit)="submeterRegisto()">
       <evo-text-field
-       formControlName="nome"
-       label="Nome completo"
-       autocomplete="name"
-       clearable
-       size="lg"
-       [evoTokens]="{
-         'text-field-ring-width': '4px'
-       }"
+        formControlName="nome"
+        label="Nome completo"
+        autocomplete="name"
+        clearable
+        size="lg"
+        [evoTokens]="{
+          'text-field-ring-width': '4px',
+        }"
       />
       <evo-text-field
         formControlName="email"

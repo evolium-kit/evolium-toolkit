@@ -34,23 +34,23 @@ isso que são invioláveis e não apenas preferências de estilo.
 
 ## Onde ler, por tarefa
 
-| Vais...                                                               | Lê primeiro                             |
-| --------------------------------------------------------------------- | --------------------------------------- |
-| Perceber o estado geral do projecto, antes de mexer em qualquer coisa | `.claude/PROJECT_OVERVIEW.md`           |
-| Saber o que já está feito e o que vem a seguir                        | `.claude/ROADMAP.md`                    |
-| Ver se um problema que encontraste já é conhecido                     | `.claude/KNOWN-BUGS.md`                 |
-| Decidir se precisas de perguntar ao humano antes de continuar         | `.claude/MISSING-INFO.md`               |
-| Instalar a toolkit num projecto consumidor                            | `INSTALL.md`                            |
-| Perceber a arquitectura em profundidade (porquê, não só o quê)        | `docs/architecture.md`                  |
-| Mexer em tokens, cascata, Theme Studio                                | `docs/theming.md`                       |
-| Criar ou estender um plugin de serviço                                | `docs/plugins.md`                       |
-| Preparar o ambiente, testar, publicar                                 | `docs/contributing.md`                  |
-| Acrescentar um componente                                             | `projects/toolkit/components/README.md` |
-| Acrescentar um layout/shell                                           | `projects/toolkit/layouts/README.md`    |
-| Acrescentar uma página                                                | `projects/toolkit/pages/README.md`      |
-| Mexer em `/core`                                                      | `projects/toolkit/core/README.md`       |
-| Mexer em `/theme`                                                     | `projects/toolkit/theme/README.md`      |
-| Mexer em `/services`                                                  | `projects/toolkit/services/README.md`   |
+| Vais...                                                               | Lê primeiro                                                |
+| --------------------------------------------------------------------- | ---------------------------------------------------------- |
+| Perceber o estado geral do projecto, antes de mexer em qualquer coisa | `.claude/PROJECT_OVERVIEW.md`                              |
+| Saber o que já está feito e o que vem a seguir                        | `.claude/ROADMAP.md`                                       |
+| Ver se um problema que encontraste já é conhecido                     | `.claude/KNOWN-BUGS.md`                                    |
+| Decidir se precisas de perguntar ao humano antes de continuar         | `.claude/MISSING-INFO.md`                                  |
+| Instalar a toolkit num projecto consumidor                            | `INSTALL.md`                                               |
+| Perceber a arquitectura em profundidade (porquê, não só o quê)        | `docs/architecture.md`                                     |
+| Mexer em tokens, cascata, Theme Studio                                | `docs/theming.md`                                          |
+| Criar ou estender um plugin de serviço                                | `docs/plugins.md`                                          |
+| Preparar o ambiente, testar, publicar                                 | `docs/contributing.md`                                     |
+| Acrescentar um componente                                             | `projects/toolkit/components/README.md`                    |
+| Acrescentar um layout/shell                                           | `projects/toolkit/layouts/README.md`                       |
+| Acrescentar uma página                                                | `projects/toolkit/pages/README.md`                         |
+| Mexer em `/core`                                                      | `projects/toolkit/core/README.md`                          |
+| Mexer em `/theme`                                                     | `projects/toolkit/theme/README.md`                         |
+| Mexer em `/services`                                                  | `projects/toolkit/services/README.md`                      |
 | Migrar um modelo de `src/app/*-models/` para a toolkit                | `/migrar-recurso` + `projects/toolkit/RESOURCE-MIGRATE.md` |
 
 ## Antes de dar por terminada qualquer alteração
