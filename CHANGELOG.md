@@ -5,6 +5,13 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+### Adicionado
+
+- **`npm run publicar -- --version vX.Y.Z`** (e `/publicar` no Claude Code):
+  valida o repositório, mostra a versão anterior e a nova e pede confirmação,
+  actualiza a versão e o CHANGELOG, corre a pipeline do `release.yml` e envia
+  o commit e a tag com `git push --atomic`. Ver `docs/contributing.md`.
+
 ## [0.2.1] - 2026-10-15
 
 ### Adicionado

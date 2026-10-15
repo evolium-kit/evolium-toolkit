@@ -16,6 +16,8 @@
     "pretest:lib": "npm run gen:registry",
     "test:lib": "ng test toolkit",
     "test:schematics": "vitest run --config projects/toolkit/schematics/vitest.config.ts",
+    "test:tools": "vitest run --config tools/vitest.config.mjs",
+    "publicar": "node tools/publicar.mjs",
     "new:component": "node tools/new.mjs component",
     "new:layout": "node tools/new.mjs layout",
     "new:page": "node tools/new.mjs page",

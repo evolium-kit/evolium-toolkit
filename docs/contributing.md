@@ -164,6 +164,47 @@ consumidor real a vive. Já apanhou dois bugs que nenhum outro teste via.
 A publicação é feita **apenas** pelo GitHub Actions — nunca `npm publish` a
 partir de uma máquina local.
 
+### Com o comando `publicar` (recomendado)
+
+1. Documentar as alterações na secção `## [Não publicado]` do `CHANGELOG.md`,
+   seguindo Keep a Changelog, e fazer commit.
+2. Correr:
+
+   ```bash
+   npm run publicar -- --version v0.2.2
+   ```
+
+   O `--` é obrigatório: sem ele o npm toma `--version` para si e só mostra a
+   versão do próprio npm. No Claude Code, `/publicar v0.2.2` faz o mesmo.
+
+O comando (`tools/publicar.mjs`):
+
+1. **Valida**, sem alterar nada: formato `vX.Y.Z` e maior do que a versão
+   actual, tag livre localmente e no `origin`, ramo `main`, working tree
+   limpa, `main` não atrás do `origin/main`, e `[Não publicado]` com conteúdo.
+2. **Mostra a versão anterior e a nova**, e as notas do CHANGELOG, e pede
+   confirmação. Só depois disto mexe em ficheiros.
+3. Actualiza `projects/toolkit/package.json` e move as notas para
+   `## [X.Y.Z] - AAAA-MM-DD`.
+4. Corre a **mesma pipeline do `release.yml`** (mais `test:tools`), já com a
+   versão nova: `build:lib`, `verify-dist`, `test:lib`, `test:schematics`,
+   `verify-install`, e confirma a versão em `dist/toolkit/package.json`.
+5. Faz commit `chore(release): X.Y.Z`, cria a tag `vX.Y.Z` e envia os dois com
+   `git push --atomic` (ou entram os dois, ou nenhum).
+6. Se o `gh` estiver instalado, acompanha o workflow de release até ao fim.
+
+Se algo falhar antes do push (ou com Ctrl+C), o `package.json` e o
+`CHANGELOG.md` voltam ao que eram; se o push falhar, o commit e a tag locais
+são desfeitos. O comando nunca corre `npm publish`.
+
+| Opção       | Efeito                                                                         |
+| ----------- | ------------------------------------------------------------------------------ |
+| `--dry-run` | tudo até à pipeline, depois mostra o diff e repõe os ficheiros; nada é enviado |
+| `--yes`     | não pede confirmação (o resumo é mostrado na mesma)                            |
+| `--help`    | ajuda                                                                          |
+
+### À mão
+
 1. Actualizar a versão em `projects/toolkit/package.json`.
 2. Documentar a alteração em `CHANGELOG.md`, seguindo Keep a Changelog.
 3. Criar e enviar a tag:
@@ -172,6 +213,8 @@ partir de uma máquina local.
    git tag v0.2.0
    git push origin v0.2.0
    ```
+
+### Depois do push da tag
 
 O workflow `.github/workflows/release.yml` confirma que a tag corresponde à
 versão do pacote, corre `test:lib`, `test:schematics` e `verify-install.mjs`,
