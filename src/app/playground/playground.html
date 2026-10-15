@@ -59,6 +59,11 @@
       <button evoButton variant="danger">Danger</button>
       <button evoButton disabled>Desactivado</button>
       <button evoButton [loading]="aGravar()" (click)="simularEnvio()">Submeter</button>
+
+      <evo-form-field>
+        <label for="nome">Nome</label>
+        <input evoInput id="nome" placeholder="Nome completo" />
+      </evo-form-field>
     </div>
 
     <p class="muted">Tamanhos:</p>
@@ -101,6 +106,145 @@
         }
       </evo-field>
     </div>
+
+    <p class="muted">
+      Text field (Reactive Forms): sai de um campo vazio para ver o erro automático.
+    </p>
+    <form class="pg-text-fields" [formGroup]="registo" (ngSubmit)="submeterRegisto()">
+      <evo-text-field
+        formControlName="nome"
+        label="Nome completo"
+        autocomplete="name"
+        clearable
+        size="lg"
+      />
+      <evo-text-field
+        formControlName="email"
+        label="Email"
+        type="email"
+        autocomplete="email"
+        hint="Usamos só para recuperar a conta."
+        size="lg"
+      >
+        <svg
+          slot="prefix"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="m3 7 9 6 9-6" />
+        </svg>
+      </evo-text-field>
+      <evo-text-field
+        formControlName="senha"
+        label="Senha"
+        type="password"
+        autocomplete="new-password"
+        size="lg"
+      />
+      <evo-text-field
+        formControlName="valor"
+        label="Valor"
+        type="number"
+        inputmode="decimal"
+        optional
+      >
+        <span slot="suffix">Kz</span>
+      </evo-text-field>
+      <evo-text-field
+        formControlName="obs"
+        label="Observações"
+        type="textarea"
+        [rows]="2"
+        autoResize
+        showCount
+        [maxlength]="140"
+        optional
+      />
+      <evo-text-field label="Desactivado" value="Não editável" disabled />
+      <div class="row">
+        <button evoButton>Submeter</button>
+        <button evoButton variant="ghost" type="button" (click)="alternarRegisto()">
+          {{ registo.disabled ? 'Activar' : 'Desactivar' }} formulário
+        </button>
+      </div>
+      <pre class="muted">{{ registo.value | json }}</pre>
+    </form>
+
+    <p class="muted">
+      Select (Reactive Forms): o painel não é cortado pelo contentor com
+      <code>overflow: hidden</code> e herda o <code>[evoTokens]</code> do último campo.
+    </p>
+    <form
+      class="pg-text-fields pg-select-clip"
+      [formGroup]="escolhas"
+      (ngSubmit)="submeterEscolhas()"
+    >
+      <evo-select
+        formControlName="provincia"
+        label="Província"
+        hint="Valores numéricos: o formulário recebe números."
+        [options]="provincias"
+        searchable
+        clearable
+      />
+      <evo-select
+        formControlName="actuacao"
+        label="Províncias de actuação"
+        [options]="provincias"
+        multiple
+        searchable
+        selectAll
+        [maxLabels]="3"
+        optional
+      />
+      <evo-select
+        formControlName="gestor"
+        label="Gestor"
+        [options]="gestores"
+        [compareWith]="mesmoId"
+      >
+        <ng-template [evoSelectOption]="gestores" let-gestor let-marcado="selected">
+          <span class="pg-avatar" aria-hidden="true">{{ gestor.data?.iniciais }}</span>
+          <span>{{ gestor.label }} — {{ gestor.data?.cargo }}</span>
+          @if (marcado) {
+            <strong>✓</strong>
+          }
+        </ng-template>
+      </evo-select>
+      <evo-select
+        label="Cliente (pesquisa no servidor)"
+        [options]="clientes()"
+        [loading]="aPesquisarClientes()"
+        [searchFn]="null"
+        (searchChange)="pesquisarClientes($event)"
+        searchable
+        [(value)]="cliente"
+      />
+      <evo-select
+        label="Com tokens próprios"
+        [options]="provincias"
+        [evoTokens]="{
+          'select-panel-bg': '#fff7ed',
+          'select-option-selected-bg': '#fed7aa',
+          'select-option-selected-fg': '#9a3412',
+          'select-focus-border-color': '#ea580c',
+          'select-panel-radius': '12px',
+        }"
+        [(value)]="provinciaLaranja"
+      />
+      <evo-select label="Desactivado" [options]="provincias" [value]="1" disabled />
+      <div class="row">
+        <button evoButton>Submeter</button>
+        <button evoButton variant="ghost" type="button" (click)="alternarEscolhas()">
+          {{ escolhas.disabled ? 'Activar' : 'Desactivar' }} formulário
+        </button>
+      </div>
+      <pre class="muted">{{ escolhas.value | json }} · cliente: {{ cliente() }}</pre>
+    </form>
   </evo-card>
 
   <evo-card>

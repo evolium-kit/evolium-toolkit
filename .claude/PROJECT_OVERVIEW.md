@@ -36,7 +36,8 @@ projects/toolkit/
 │   ├── persistence/             memory | localStorage | http
 │   └── export/theme-exporter.ts exporta evolium-theme.css + .json
 ├── components/src/lib/
-│   ├── button/ input/ card/ badge/   um directório por componente
+│   ├── button/ input/ card/ …   um directório por componente (+ .preview.ts, README.md)
+│   ├── generated/               GERADO (gitignored): registo + READMEs em HTML
 │   └── provide-components.ts    provideEvoComponents() — regista no Studio
 ├── layouts/src/lib/
 │   ├── auth-shell/ dashboard-shell/ blank-shell/
@@ -149,11 +150,12 @@ Credenciais do mock: `ana@evolium.ao` / `1234`. Rotas: `/`, `/auth/login`,
 
 ## Ferramentas de build e verificação (`tools/`)
 
-| Ficheiro                    | Faz o quê                                                                                                                                                                    |
-| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `copy-schematic-assets.mjs` | copia `files/`, `collection.json`, `schema.json` para `dist/toolkit/schematics/`; escreve `package.json` com `type: commonjs`; corrige o `.npmignore` gerado pelo ng-packagr |
-| `verify-dist.mjs`           | confirma que o artefacto tem os 6 entry points, as 3 folhas de estilo, os `exports` e os schematics — corre no CI a cada PR                                                  |
-| `verify-install.mjs`        | `npm pack` → `ng new` num tmp dir → `npm install` do tarball → `ng add` → `ng build`. O único teste que exercita a instalação real                                           |
+| Ficheiro                          | Faz o quê                                                                                                                                                                                           |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `generate-component-registry.mjs` | descobre os componentes pelas pastas (`<nome>.tokens.ts`), junta `.preview.ts` e o `README.md` convertido em HTML, e escreve `components/src/lib/generated/`; corre antes de `build:lib`/`test:lib` |
+| `copy-schematic-assets.mjs`       | copia `files/`, `collection.json`, `schema.json` para `dist/toolkit/schematics/`; escreve `package.json` com `type: commonjs`; corrige o `.npmignore` gerado pelo ng-packagr                        |
+| `verify-dist.mjs`                 | confirma que o artefacto tem os 6 entry points, as 3 folhas de estilo, os `exports` e os schematics — corre no CI a cada PR                                                                         |
+| `verify-install.mjs`              | `npm pack` → `ng new` num tmp dir → `npm install` do tarball → `ng add` → `ng build`. O único teste que exercita a instalação real                                                                  |
 
 ## Bugs já resolvidos (contexto, não acção)
 

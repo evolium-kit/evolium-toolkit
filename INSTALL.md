@@ -246,12 +246,13 @@ ng add @evolium-kit/toolkit
 
 O schematic faz-te perguntas para configurar a tua aplicação.
 
-| Pergunta                           | O que significa                     | Resposta típica           |
-| ---------------------------------- | ----------------------------------- | ------------------------- |
-| `baseUrl` da API                   | onde vive o teu backend             | `/api`, ou o URL completo |
-| Registar o plugin de autenticação? | login, registo, recuperar senha     | sim                       |
-| Acrescentar as rotas `/auth/*`?    | páginas de login prontas a usar     | sim                       |
-| Registar o Theme Studio?           | ferramenta visual de personalização | sim                       |
+| Pergunta                           | O que significa                                     | Resposta típica           |
+| ---------------------------------- | --------------------------------------------------- | ------------------------- |
+| `baseUrl` da API                   | onde vive o teu backend                             | `/api`, ou o URL completo |
+| Registar o plugin de autenticação? | login, registo, recuperar senha                     | sim                       |
+| Acrescentar as rotas `/auth/*`?    | páginas de login prontas a usar                     | sim                       |
+| Registar o Theme Studio?           | ferramenta visual de personalização                 | sim                       |
+| Configurar o Claude Code?          | o agente de IA passa a conhecer a toolkit instalada | sim                       |
 
 A seguir, altera três ficheiros por ti, sem que precises de fazer nada:
 
@@ -261,6 +262,13 @@ A seguir, altera três ficheiros por ti, sem que precises de fazer nada:
 - **`src/styles.css`** — acrescenta a declaração `@layer` como primeira
   linha, e os `@import` das três folhas de estilo da toolkit.
 - **`src/app/app.routes.ts`** — acrescenta `...evoAuthRoutes()`.
+
+E, se respondeste "sim" ao Claude Code, cria na raiz
+`.claude/skills/evolium-toolkit/SKILL.md` e um bloco no `CLAUDE.md`, que
+mandam o agente ler `node_modules/@evolium-kit/toolkit/AGENTS.md` — o índice
+de tudo o que a versão instalada oferece. Faz commit dos dois. Num projecto
+que já tinha a toolkit: `ng g @evolium-kit/toolkit:ai-context`. Detalhes em
+[`docs/ai-context.md`](docs/ai-context.md).
 
 Podes correr `ng add @evolium-kit/toolkit` (ou `ng generate @evolium-kit/toolkit:ng-add`,
 se foi esse o que usaste) outra vez mais tarde sem problemas: não duplica

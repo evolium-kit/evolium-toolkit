@@ -26,13 +26,16 @@ a folha dos componentes que são directivas:
 
 ### Componentes disponíveis
 
-| Componente  | Selector                                                    | Variantes                                  | Tamanhos   |
-| ----------- | ----------------------------------------------------------- | ------------------------------------------ | ---------- |
-| `EvoButton` | `button[evoButton]`, `a[evoButton]`                         | solid, ghost, outline, danger              | sm, md, lg |
-| `EvoInput`  | `input[evoInput]`, `textarea[evoInput]`, `select[evoInput]` | —                                          | sm, md, lg |
-| `EvoField`  | `evo-field`                                                 | —                                          | —          |
-| `EvoCard`   | `evo-card`                                                  | plain, sunken, outlined                    | —          |
-| `EvoBadge`  | `evo-badge`                                                 | neutral, primary, success, warning, danger | —          |
+| Componente     | Selector                                                    | Variantes                                  | Tamanhos   |
+| -------------- | ----------------------------------------------------------- | ------------------------------------------ | ---------- |
+| `EvoButton`    | `button[evoButton]`, `a[evoButton]`                         | solid, ghost, outline, danger              | sm, md, lg |
+| `EvoInput`     | `input[evoInput]`, `textarea[evoInput]`, `select[evoInput]` | —                                          | sm, md, lg |
+| `EvoField`     | `evo-field`                                                 | —                                          | —          |
+| `EvoCard`      | `evo-card`                                                  | plain, sunken, outlined                    | —          |
+| `EvoBadge`     | `evo-badge`                                                 | neutral, primary, success, warning, danger | —          |
+| `EvoSwitch`    | `evo-switch`                                                | —                                          | —          |
+| `EvoTextField` | `evo-text-field`                                            | —                                          | sm, md, lg |
+| `EvoSelect`    | `evo-select`                                                | —                                          | sm, md, lg |
 
 ```html
 <button evoButton variant="danger" size="sm" [loading]="aApagar()">Eliminar</button>
@@ -51,6 +54,63 @@ a folha dos componentes que são directivas:
   }
 </evo-field>
 ```
+
+```html
+<span id="rotulo-avisos">Receber avisos</span>
+<evo-switch [(checked)]="avisos" ariaLabelledby="rotulo-avisos" />
+<evo-switch formControlName="webLogin" ariaLabel="Acesso pela web" />
+```
+
+O `EvoSwitch` implementa `ControlValueAccessor` e é personalizável por
+`--evo-switch-bg`, `--evo-switch-bg-checked`, `--evo-switch-thumb-bg`,
+`--evo-switch-thumb-size` e `--evo-switch-radius`. A documentação completa está em
+[`src/lib/switch/README.md`](src/lib/switch/README.md).
+
+```html
+<evo-text-field formControlName="email" label="Email" type="email" autocomplete="email" />
+<evo-text-field formControlName="senha" label="Senha" type="password" hint="Mínimo 8 caracteres." />
+<evo-text-field [(value)]="filtro" label="Filtrar" hideLabel clearable>
+  <svg slot="prefix" aria-hidden="true">…</svg>
+</evo-text-field>
+```
+
+O `EvoTextField` junta etiqueta, campo, ícones, ajuda, erro e contador numa só
+tag, e mostra o erro do controlo sozinho (depois de `touched`), com mensagens
+em português sobreponíveis por `provideEvoTextFieldMessages()`. É composto por
+`EvoField` + o aspecto do `EvoInput`, por isso herda os `--evo-input-*`; os
+tokens próprios são `--evo-text-field-*`. Documentação completa em
+[`src/lib/text-field/README.md`](src/lib/text-field/README.md).
+
+```html
+<evo-select
+  formControlName="provincia"
+  label="Província"
+  [options]="provincias"
+  searchable
+  clearable
+/>
+<evo-select
+  formControlName="tags"
+  label="Etiquetas"
+  [options]="tags"
+  multiple
+  selectAll
+  [maxLabels]="3"
+/>
+<evo-select [(value)]="gestor" label="Gestor" [options]="gestores" [compareWith]="mesmoId">
+  <ng-template [evoSelectOption]="gestores" let-g>{{ g.label }} — {{ g.data?.cargo }}</ng-template>
+</evo-select>
+```
+
+O `EvoSelect` é uma lista de escolha simples ou múltipla com pesquisa (sem
+acentos), grupos, ícones, segunda linha, template por opção, "Seleccionar
+todos", `loading` e pesquisa no servidor. O valor é de qualquer tipo (números
+chegam ao formulário como números). Segue o padrão combobox/listbox com
+teclado completo, e o painel é um overlay do CDK em popover inline: nunca é
+cortado e herda os `[evoTokens]`. Herda `--evo-input-*`/`--evo-field-*` e, nos
+estados, os `--evo-text-field-*`; os tokens próprios são `--evo-select-*`.
+Textos por `provideEvoSelectMessages()`. Documentação completa em
+[`src/lib/select/README.md`](src/lib/select/README.md).
 
 `EvoButton` e `EvoInput` aplicam-se a elementos nativos em vez de os embrulhar:
 mantêm semântica, foco, validação nativa, `formControlName` e o preenchimento
@@ -126,8 +186,28 @@ funciona sem nenhum selector mencionar o componente.
 
 ### Preferir o gerador
 
+Dentro deste repositório (componente novo **da toolkit**):
+
 ```bash
-ng g @evolium-kit/toolkit:ui-component <nome> --dry-run   # ver o que vai ser criado
+npm run new:component -- <nome> --dry-run   # ver o que vai ser criado
+npm run new:component -- <nome> [--category=Formulário] [--variants=a,b] [--skip-tests]
+```
+
+Cria a pasta em `components/src/lib/<nome>/` e acrescenta o export ao
+`public-api.ts`. Não há lista de componentes a actualizar: o Theme Studio
+descobre-o pela pasta (ver "Pré-visualização e documentação no Studio"). A categoria por omissão é
+`Básicos`; usar uma das existentes (`Básicos`, `Formulário`, `Superfícies`) —
+uma grafia diferente cria outro grupo no Studio.
+
+`ng g @evolium-kit/toolkit:ui-component` **não** funciona aqui: o CLI procura a
+collection em `node_modules`, onde a toolkit não está. O script corre o mesmo
+gerador a partir do `dist` — ver
+[`contributing.md`](../../../docs/contributing.md#geradores-internos-npm-run-new).
+
+Num projecto consumidor (componente do próprio projecto, em `src/app/ui/`):
+
+```bash
+ng g @evolium-kit/toolkit:ui-component <nome> --dry-run
 ng g @evolium-kit/toolkit:ui-component <nome>
 ```
 
@@ -138,6 +218,8 @@ components/src/lib/<nome>/
 ├── evo-<nome>.ts          componente
 ├── <nome>.css             estilos (só var(--evo-*))
 ├── <nome>.tokens.ts       metadados para o Theme Studio
+├── <nome>.preview.ts      pré-visualização no Theme Studio (não exportado)
+├── README.md              documentação — o Studio mostra-a
 ├── evo-<nome>.spec.ts     testes
 └── index.ts               re-export
 ```
@@ -247,7 +329,6 @@ export const buttonMeta: EvoComponentMeta = {
   tags: ['acção', 'formulário', 'cta'],
   variants: ['solid', 'ghost', 'outline', 'danger'],
   sizes: ['sm', 'md', 'lg'],
-  preview: () => import('./button.preview').then((m) => m.ButtonPreview),
   tokens: [
     { name: 'button-bg', label: 'Cor de fundo', type: 'color', fallback: '--evo-color-primary' },
     { name: 'button-fg', label: 'Cor do texto', type: 'color', fallback: '--evo-color-on-primary' },
@@ -265,6 +346,32 @@ export const buttonMeta: EvoComponentMeta = {
 ```
 
 Cada token declarado no `.tokens.ts` tem de existir mesmo no CSS, e vice-versa.
+
+O autocomplete de `[evoTokens]` não depende do `.tokens.ts`: todo o
+`var(--evo-<nome>-…)` que o CSS do componente lê entra sozinho em
+`EvoTokenNames` no próximo `gen:registry` (ver `core/README.md`). Um token que
+só existe no CSS (fora do Studio) também fica disponível e verificado.
+
+### Pré-visualização e documentação no Studio
+
+Não se escrevem os campos `preview` nem `docs` nos metadados, nem se regista o
+componente em lista nenhuma. `tools/generate-component-registry.mjs` (corre
+antes de `build:lib`/`test:lib`, ou com `npm run gen:registry`) percorre as
+pastas de `lib/` e trata como componente cada uma que tenha `<nome>.tokens.ts`.
+Junta-lhe:
+
+- **`<nome>.preview.ts`**: um componente standalone com os estados lado a
+  lado, desenhado pelo Studio num `<iframe>`. Se declarar
+  `variant = input<string | null>(null)` e/ou `size`, recebe a variante e o
+  tamanho escolhidos no Studio. Para a disposição há as classes `pv__row`
+  (em linha), `pv__stack` (em coluna) e `pv__estado` (controlo + rótulo),
+  definidas pela página do iframe. Ver `button/button.preview.ts`.
+- **`README.md`**: convertido em HTML no build e mostrado por baixo da
+  pré-visualização. Os links relativos ficam só com o texto. Ver
+  `switch/README.md` como modelo.
+
+O resultado vai para `lib/generated/`, que está no `.gitignore`. Nunca o
+editar à mão.
 
 ### Onde o CSS tem de viver
 

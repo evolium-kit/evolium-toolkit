@@ -1,0 +1,58 @@
+/*
+ * Sem encapsulamento (ver o componente): tudo vai debaixo de .evo-pv, para não
+ * vazar para o resto da aplicação.
+ *
+ * Ao contrário da interface do Studio (--st-*), aqui usa-se o tema a sério:
+ * é o palco onde se vê o resultado das edições.
+ */
+/*
+ * O documento do iframe é só o palco: sem margem, com a superfície do tema.
+ * Fora de @layer DE PROPÓSITO: o `body { background }` do styles.css da app
+ * não está em camada, e ganharia a qualquer regra dentro de uma. O `:has()`
+ * torna estas mais específicas do que `body`, e só se aplicam nesta página.
+ */
+:root:has(.evo-pv),
+body:has(.evo-pv) {
+  margin: 0;
+  background-color: var(--evo-color-surface);
+}
+
+@layer evo.components {
+  .evo-pv {
+    /* flow-root: as margens dos filhos contam para a altura medida. */
+    display: flow-root;
+    padding: var(--evo-space-lg);
+    background-color: var(--evo-color-surface);
+    color: var(--evo-color-on-surface);
+    font-family: var(--evo-font-sans);
+    font-size: var(--evo-font-size-md);
+  }
+
+  /* ------------------------------------------ classes para os *.preview.ts */
+
+  .evo-pv .pv__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--evo-space-md);
+  }
+
+  .evo-pv .pv__stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--evo-space-md);
+    max-inline-size: 22rem;
+  }
+
+  .evo-pv .pv__estado {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--evo-space-sm);
+  }
+
+  .evo-pv .pv__vazio {
+    margin: 0;
+    color: var(--evo-color-on-surface-muted);
+    max-inline-size: 32rem;
+  }
+}

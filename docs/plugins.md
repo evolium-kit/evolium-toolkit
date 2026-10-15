@@ -91,6 +91,12 @@ facturas.plugin.spec.ts testes, já a registar as dependências correctas
 index.ts
 ```
 
+Para um plugin **built-in da própria toolkit** (em
+`services/src/lib/plugins/`), dentro deste repositório, usar
+`npm run new:plugin -- facturas` — o `ng g` não resolve aqui, e o resultado
+precisa de imports relativos e nomes com prefixo `Evo`. Ver
+[`services/README.md`](../projects/toolkit/services/README.md#preferir-o-gerador).
+
 ### Porque modelo e DTO são sempre ficheiros separados
 
 O formato que a tua API usa (`total_kwanza`, `full_name`, o que for) nunca

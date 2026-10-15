@@ -60,8 +60,9 @@ Em falta, por ordem provável de necessidade:
 - `EvoMenu` (sobre `CdkMenu`), `EvoTable` (sobre `CdkTable`)
 - `EvoTabs`, `EvoTooltip`
 
-Cada um usa `ng g @evolium-kit/toolkit:ui-component <nome>` como ponto de
-partida — ver `projects/toolkit/components/README.md`.
+Cada um usa `npm run new:component -- <nome>` como ponto de partida (o
+`ng g @evolium-kit/toolkit:ui-component` só resolve em projectos consumidores)
+— ver `projects/toolkit/components/README.md`.
 
 ### Ligação a um backend real
 

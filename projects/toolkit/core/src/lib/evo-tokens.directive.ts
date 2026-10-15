@@ -7,10 +7,8 @@ import {
   inject,
   input,
 } from '@angular/core';
+import { EvoTokenMap, EvoTokenValue } from './token-names';
 import { normalizeTokenName } from './token-utils';
-
-/** Valores aceites por `[evoTokens]`. `null`/`undefined` removem o token. */
-export type EvoTokenMap = Readonly<Record<string, string | number | null | undefined>>;
 
 /**
  * Aplica tokens de tema a um elemento, e por herança a toda a sua subárvore.
@@ -44,7 +42,8 @@ export class EvoTokensDirective {
 
   constructor() {
     effect(() => {
-      const next = this.evoTokens();
+      // O tipo restringe o que se escreve no template; aqui só interessa iterar.
+      const next: Readonly<Record<string, EvoTokenValue>> = this.evoTokens();
 
       // Remover primeiro garante que um token retirado do mapa desaparece mesmo.
       for (const name of this.applied) {

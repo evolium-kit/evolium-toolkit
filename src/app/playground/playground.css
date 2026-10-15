@@ -92,3 +92,27 @@ label[for='raio'] {
 .factura > span:nth-of-type(1) {
   flex: 1 1 8rem;
 }
+
+.pg-text-fields {
+  display: grid;
+  gap: var(--evo-space-md);
+  max-inline-size: 28rem;
+}
+
+/* Prova que o painel do evo-select (top layer) não é cortado pelo contentor. */
+.pg-select-clip {
+  overflow: hidden;
+  padding: var(--evo-space-xs);
+}
+
+.pg-avatar {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  border-radius: var(--evo-radius-full);
+  background: var(--evo-color-primary-soft);
+  color: var(--evo-color-primary);
+  font-size: var(--evo-font-size-sm);
+  font-weight: 600;
+}

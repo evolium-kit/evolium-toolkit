@@ -24,6 +24,8 @@ const SCHEMATICS = [
   'package.json',
   'ng-add/index.js',
   'ng-add/schema.json',
+  'ai-context/index.js',
+  'ai-context/schema.json',
   'generators/page/index.js',
   'generators/layout/index.js',
   'generators/ui-component/index.js',
@@ -113,6 +115,30 @@ if (await existe('schematics/package.json')) {
   );
   if (schematicsPkg.type !== 'commonjs') {
     problemas.push('schematics/package.json não declara type: commonjs — o `ng add` falharia');
+  }
+}
+
+// ------------------------------------------------------- guia para agentes
+/*
+ * O AGENTS.md é o que dá ao agente de IA do projecto consumidor a visão da
+ * toolkit (ver docs/ai-context.md). Um guia de outra versão, ou que cite um
+ * ficheiro que não foi para o pacote, engana-o em silêncio.
+ */
+const guia = await readFile(join(dist, 'AGENTS.md'), 'utf-8').catch(() => null);
+if (guia === null) {
+  problemas.push('AGENTS.md em falta — correr npm run gen:agents depois do build');
+} else {
+  if (!guia.startsWith(`# @evolium-kit/toolkit ${pkg.version} `)) {
+    problemas.push(`AGENTS.md não é da versão ${pkg.version} — foi gerado antes do build`);
+  }
+  const citados = new Set(
+    [...guia.matchAll(/`([\w./-]+\.(?:md|d\.ts|css|json))`/g)]
+      .map((m) => m[1])
+      // `styles.css` é o ficheiro do projecto consumidor, não do pacote.
+      .filter((c) => !c.includes('<') && !c.startsWith('.') && c !== 'styles.css'),
+  );
+  for (const caminho of citados) {
+    await exigir(caminho, 'citado no AGENTS.md');
   }
 }
 

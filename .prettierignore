@@ -1,0 +1,4 @@
+# Modelos vindos de outros projectos, à espera de /migrar-recurso: ficam como
+# chegaram, para a migração os comparar com o original.
+src/app/component-models/
+src/app/service-models/

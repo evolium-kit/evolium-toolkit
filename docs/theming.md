@@ -51,6 +51,20 @@ Do mais forte para o mais fraco:
 }
 ```
 
+### Os nomes de `[evoTokens]` são verificados
+
+A chave curta inclui sempre o prefixo do componente: `'text-field-ring-width'`,
+nunca `'ring-width'`. A directiva só acrescenta `--evo-`, por isso
+`'ring-width'` viraria `--evo-ring-width`, que nenhum CSS lê. Para isto não
+falhar em silêncio, `[evoTokens]` é tipado (`EvoTokenMap`): o editor completa
+os nomes, e um nome desconhecido é um erro de compilação no template.
+
+A lista é gerada do próprio CSS por `tools/generate-component-registry.mjs`, ao
+mesmo tempo que o registo do Studio (ver mais abaixo). Um token novo num
+componente entra sozinho, no próximo `build:lib`/`test:lib`/`start`, ou com
+`npm run gen:registry`. Detalhes e extensão por aplicações em
+[`core/README.md`](../projects/toolkit/core/README.md).
+
 ### Porque isto funciona sem `!important`
 
 Os níveis 1 e 3 resolvem-se por **herança de CSS**, não por especificidade: o
@@ -106,7 +120,32 @@ produção; o runtime serve para experimentar por cima dele — nunca colidem.
 Em desenvolvimento, `/_evo/theme` abre uma interface visual de três painéis:
 lista de componentes à esquerda (com pesquisa), pré-visualização ao centro
 (mostra todos os estados do componente em simultâneo — normal, hover, foco,
-desactivado), e as propriedades editáveis à direita.
+desactivado) seguida da documentação do componente, e as propriedades
+editáveis à direita.
+
+### Pré-visualização num iframe, documentação a partir do README
+
+Nada no Studio conhece um componente pelo nome. Tudo vem dos metadados
+(`EvoComponentMeta`):
+
+- **`preview`** carrega o componente `<nome>.preview.ts`, que o Studio desenha
+  num `<iframe>` apontado para `/_evo/theme/preview`. É a própria aplicação,
+  numa rota à parte, com as mesmas folhas de estilo e providers, mas isolada
+  do CSS do Studio. As media queries respondem à largura do palco. O iframe
+  carrega uma vez; a selecção, a variante, o tamanho e cada edição de token
+  chegam-lhe por `postMessage` (só da mesma origem) e são aplicados com
+  `EvoThemeStore.adopt()`.
+- **`docs`** carrega o HTML da documentação.
+
+Nos componentes da toolkit, ninguém preenche estes campos à mão.
+`tools/generate-component-registry.mjs` percorre `components/src/lib/*/`,
+trata cada pasta com `<nome>.tokens.ts` como um componente, junta-lhe o
+`<nome>.preview.ts` e converte o `README.md` em HTML com o `marked`. O
+resultado vai para `components/src/lib/generated/` (no `.gitignore`), que
+alimenta `EVO_BUILTIN_COMPONENT_META`. Corre sozinho antes de `build:lib`,
+`watch:lib` e `test:lib`, ou à mão com `npm run gen:registry`. Com o
+`watch:lib` a correr, uma alteração a um README só aparece depois de
+`npm run gen:registry`.
 
 ### Porque a interface do Studio não usa os componentes da toolkit
 
@@ -128,6 +167,8 @@ export const meuComponenteMeta: EvoComponentMeta = {
   id: 'meu-componente',
   label: 'O Meu Componente',
   category: 'Básicos',
+  // Opcional: sem isto, o palco diz que não há pré-visualização.
+  preview: () => import('./meu-componente.preview').then((m) => m.MeuComponentePreview),
   tokens: [
     {
       name: 'meu-componente-bg',
@@ -148,6 +189,10 @@ providers: [provideEvoComponentMeta(meuComponenteMeta)];
 
 Cada token declarado aqui tem de existir no CSS do componente, e vice-versa —
 o painel de propriedades é gerado a partir desta lista, sem código manual.
+
+O `ng g @evolium-kit/toolkit:ui-component` já gera o `.preview.ts` e a linha
+`preview`. Num projecto consumidor, o campo `docs` não é preenchido, porque não
+há build que converta o README. Quem o quiser passa uma função que devolva HTML.
 
 ## Acrescentar um token semântico novo
 

@@ -1,0 +1,111 @@
+@layer evo.components {
+  /*
+   * Classes partilhadas por todos os componentes da interface do Studio.
+   *
+   * Com o encapsulamento por omissão, as classes de um componente não chegam
+   * aos filhos — por isso vivem aqui e entram no `styleUrls` de cada um. Os
+   * tokens --st-* são declarados no :host do EvoThemeStudioPage e chegam aos
+   * filhos por herança normal de custom properties.
+   */
+
+  /* Botões da própria ferramenta. Não usam EvoButton — ver theme-studio-page.css. */
+  .st__botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--st-space-xs);
+    min-block-size: 1.75rem;
+    padding-inline: var(--st-space-sm);
+    border: 1px solid transparent;
+    border-radius: var(--st-radius);
+    background-color: var(--st-accent);
+    color: var(--st-on-accent);
+    font: inherit;
+    font-size: var(--st-font-sm);
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .st__botao:hover {
+    filter: brightness(0.92);
+  }
+
+  .st__botao:focus-visible {
+    outline: 2px solid var(--st-accent);
+    outline-offset: 2px;
+  }
+
+  .st__botao--discreto {
+    background-color: transparent;
+    color: var(--st-accent);
+    border-color: var(--st-border-strong);
+  }
+
+  .st__botao--discreto:hover {
+    background-color: var(--st-accent-soft);
+    filter: none;
+  }
+
+  /* aria-disabled em vez de disabled: continua focável, com a dica visível. */
+  .st__botao[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: none;
+  }
+
+  .st__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    border: 1px solid transparent;
+    border-radius: var(--st-radius);
+    background: transparent;
+    color: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .st__toggle:hover {
+    background-color: var(--st-surface-2);
+  }
+
+  .st__toggle:focus-visible {
+    outline: 2px solid var(--st-accent);
+    outline-offset: 2px;
+  }
+
+  .st__campo {
+    inline-size: 100%;
+    min-block-size: 2.25rem;
+    padding-inline: var(--st-space-sm);
+    border: 1px solid var(--st-border-strong);
+    border-radius: var(--st-radius);
+    background-color: var(--st-surface);
+    color: var(--st-text);
+    font-family: inherit;
+    font-size: var(--st-font-md);
+  }
+
+  .st__campo:focus-visible {
+    outline: 2px solid var(--st-accent);
+    outline-offset: 2px;
+  }
+
+  .st__campo--mono {
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: var(--st-font-sm);
+  }
+
+  .st__sr {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

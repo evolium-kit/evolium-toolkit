@@ -5,6 +5,159 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+## [0.3.0] - 2026-10-15
+
+### Adicionado
+
+- **`AGENTS.md` no pacote**: índice da toolkit para agentes de IA (Claude Code,
+  Cursor…), gerado em cada build a partir do código e dos `.d.ts` — entry
+  points, componentes com selector, inputs (tipo e omissão) e tokens, layouts,
+  páginas, tokens de tema, geradores, API pública e regras de uso. O pacote
+  passa também a levar `docs/getting-started.md`, `docs/theming.md`,
+  `docs/plugins.md` e o `CHANGELOG.md`.
+- **`ng g @evolium-kit/toolkit:ai-context`** (alias `ai`), também corrido pelo
+  `ng add` (nova pergunta, sim por omissão): cria a skill do Claude Code
+  `.claude/skills/evolium-toolkit/SKILL.md` e um bloco entre marcadores no
+  `CLAUDE.md`, que mandam o agente ler o `AGENTS.md` da versão instalada.
+  Idempotente. Ver `docs/ai-context.md`.
+
+- **`npm run publicar -- --version vX.Y.Z`** (e `/publicar` no Claude Code):
+  valida o repositório, mostra a versão anterior e a nova e pede confirmação,
+  actualiza a versão e o CHANGELOG, corre a pipeline do `release.yml` e envia
+  o commit e a tag com `git push --atomic`. Ver `docs/contributing.md`.
+
+## [0.2.1] - 2026-10-15
+
+### Adicionado
+
+- **`EvoSelect`** (`evo-select`), em `@evolium-kit/toolkit/components`: lista
+  de escolha simples ou múltipla, migrada de `field-select-v2`. Compõe
+  `EvoField` + `evo-input` e implementa `ControlValueAccessor` (também
+  `[(value)]`). Valor de qualquer tipo, com `compareWith` (números chegam ao
+  formulário como números). Pesquisa sem acentos e fixa no topo do painel,
+  grupos (`group`), ícones (imagem ou fonte, por `iconClass`), segunda linha
+  (`sublabel`), template tipado `<ng-template evoSelectOption>` (aceita também
+  `#optionTemplate`), `clearable`, `loading`, `selectAll`, `maxLabels`, e
+  pesquisa no servidor com `[searchFn]="null"` + `(searchChange)`. Erro
+  automático do controlo com as mensagens do text-field; textos por
+  `provideEvoSelectMessages()`. Padrão combobox/listbox da APG com teclado
+  completo (`ActiveDescendantKeyManager`). O painel é um overlay do CDK em
+  popover inline: nunca é cortado por `overflow: hidden` e herda os
+  `[evoTokens]`. 26 tokens `--evo-select-*`; os de estado caem primeiro nos
+  `--evo-text-field-*`. Documentação em `components/src/lib/select/README.md`.
+
+## [0.2.0] - 2026-10-14
+
+### Adicionado
+
+- **`EvoTextField`** (`evo-text-field`), em `@evolium-kit/toolkit/components`:
+  campo de texto completo que compõe `EvoField` + `evo-input`. Implementa
+  `ControlValueAccessor` e funciona também sozinho com `[(value)]`. Mostra o
+  erro do controlo automaticamente (mensagens configuráveis com
+  `provideEvoTextFieldMessages()`), lê o `required` dos validadores, e tem
+  `hint`, `size`, `hideLabel`, mostrar/ocultar senha, `clearable`,
+  `showCount` e textarea com `autoResize`. 11 tokens `--evo-text-field-*`;
+  `--evo-text-field-ring-offset` vale `0` por omissão (anel encostado à
+  borda). Documentação em `components/src/lib/text-field/README.md`.
+- **`[evoTokens]` tipado** (`EvoTokenMap`, `EvoTokenName`, `EvoTokenNames` em
+  `/core`): o editor completa os nomes de todos os tokens da toolkit, e um nome
+  curto desconhecido num objecto literal é erro de compilação (por exemplo
+  `'ring-width'` em vez de `'text-field-ring-width'`). A lista é gerada do CSS
+  no build; uma aplicação acrescenta os seus tokens com `declare module`.
+
+- **Theme Studio: pré-visualização num `<iframe>`.** Cada componente é
+  desenhado na rota `<path>/preview` (registada por `evoThemeStudioRoutes()`),
+  isolado do CSS do Studio. A selecção, a variante, o tamanho e as edições de
+  tokens chegam-lhe por `postMessage`, sem recarregar.
+- **Theme Studio: documentação do componente**, vinda do `README.md` da pasta
+  e mostrada por baixo da pré-visualização.
+- **`EvoComponentMeta.docs`**, que devolve o HTML da documentação.
+- **`EvoThemeStore.adopt(state)`**, que substitui o estado inteiro sem marcar
+  `dirty`. Um `restore()` que termine depois é ignorado.
+- **Registo automático dos componentes da toolkit.**
+  `tools/generate-component-registry.mjs` descobre-os pelas pastas, junta o
+  `<nome>.preview.ts` e o `README.md` convertido em HTML (com o `marked`, só no
+  build), e gera `EVO_BUILTIN_COMPONENT_META`.
+- **`ng g ui-component`** gera também `<nome>.preview.ts` e `README.md`, e os
+  metadados já apontam para o preview.
+
+### Alterado
+
+- **`EvoTokenMap`** deixa de ser `Record<string, …>`: um objecto literal com
+  uma chave curta que nenhum CSS da toolkit lê deixa de compilar. Usar o nome
+  completo do token, ou a forma `--nome` para tokens próprios.
+- **Pré-visualizações por componente.** O `@switch` único deu lugar a um
+  `<nome>.preview.ts` em cada pasta de `/components`, e o `FormField` passa a
+  ter pré-visualização.
+
+### Removido
+
+- **`EvoComponentPreview`** (`evo-component-preview`) deixa de ser exportado
+  por `@evolium-kit/toolkit/pages`. Um componente de fora da toolkit fornece a
+  sua pré-visualização no campo `preview` dos metadados.
+
+## [0.1.3] - 2026-09-29
+
+### Adicionado
+
+- **`EvoSwitch`** (`evo-switch`), em `@evolium-kit/toolkit/components`: um
+  interruptor ligado/desligado com `role="switch"` que implementa
+  `ControlValueAccessor` (`formControlName`, `[formControl]`, `[(ngModel)]`).
+  Funciona também sozinho, com `[(checked)]`. É personalizável por cinco
+  tokens: `--evo-switch-bg`, `--evo-switch-bg-checked`,
+  `--evo-switch-thumb-bg`, `--evo-switch-thumb-size` e `--evo-switch-radius`.
+  O tamanho do círculo faz crescer o interruptor inteiro, na mesma proporção.
+  Fica registado no Theme Studio em _Formulário → Switch_, com pré-visualização
+  dos estados desligado, ligado e desactivado. Documentação completa em
+  `components/src/lib/switch/README.md`.
+- **Theme Studio: atalhos de teclado.** Ctrl/⌘+S guarda e Ctrl/⌘+K põe o foco
+  na pesquisa.
+
+### Alterado
+
+- **Theme Studio: botão Guardar.** Fica indisponível quando não há alterações
+  por gravar, mostra "A guardar…" e depois "Guardado", e anuncia a gravação a
+  leitores de ecrã.
+- **Theme Studio: organização interna.** Os componentes da interface do Studio
+  (barra do topo e pré-visualização) passaram para
+  `theme-studio/components/<nome>/`. A API pública não muda:
+  `EvoComponentPreview` continua exportado com o mesmo nome.
+
+### Corrigido
+
+- **Theme Studio: erros ao guardar passavam despercebidos.** Uma falha da
+  persistência (por exemplo, HTTP) ficava como promessa rejeitada sem aviso.
+  Agora mostra "Não foi possível guardar." e mantém as alterações por gravar.
+- **Theme Studio: Guardar sem persistência configurada** não fazia nada e não
+  dizia porquê. Agora o botão fica indisponível, com uma dica a sugerir
+  Exportar.
+
+### Notas
+
+- Quem importa `@evolium-kit/toolkit/components` precisa de `@angular/forms`
+  instalado, por causa do `ControlValueAccessor` do `EvoSwitch`. Já está nas
+  `peerDependencies` e uma aplicação criada com `ng new` já o traz.
+
+## [0.1.2] - 2026-09-28
+
+### Adicionado
+
+- **`EvoFormField`** (`evo-form-field`), em `@evolium-kit/toolkit/components`,
+  registado no Theme Studio na categoria _Formulário_. Por agora é só o
+  esqueleto: projecta conteúdo e aceita `disabled`; `label`, `hint` e `error`
+  ainda não existem.
+
+### Corrigido
+
+- **`ng g @evolium-kit/toolkit:page <nome> --resource=<x>` gerava um teste que
+  falhava logo** — o spec não registava o resource e o
+  `registry.get('<x>')` rebentava ao montar a página. O spec gerado passa a
+  pôr o `EvoResourceRegistry` em mock. Quem já gerou páginas com `--resource`
+  pode copiar o provider do template novo.
+- **`ng g @evolium-kit/toolkit:ui-component` usava a categoria `Basicos`**
+  (sem acento), diferente da `Básicos` dos componentes da toolkit: o Theme
+  Studio mostrava duas categorias. A omissão passa a ser `Básicos`.
+
 ## [0.1.1] - 2026-09-24
 
 ### Corrigido

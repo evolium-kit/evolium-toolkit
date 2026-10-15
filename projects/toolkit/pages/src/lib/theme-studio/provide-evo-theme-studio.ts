@@ -23,6 +23,9 @@ export const EVO_THEME_STUDIO_CONFIG = new InjectionToken<Required<EvoThemeStudi
 
 /**
  * Rotas do Theme Studio, para quem preferir registá-las à mão em `app.routes.ts`.
+ *
+ * São duas: o Studio, e `<path>/preview`, a página que o Studio abre no
+ * `<iframe>` de pré-visualização.
  */
 export function evoThemeStudioRoutes(path = '_evo/theme'): Routes {
   return [
@@ -31,6 +34,12 @@ export function evoThemeStudioRoutes(path = '_evo/theme'): Routes {
       title: 'Evolium Theme Studio',
       loadComponent: () => import('./theme-studio-page').then((m) => m.EvoThemeStudioPage),
       data: { evoThemeStudio: true },
+    },
+    {
+      path: `${path}/preview`,
+      title: 'Evolium Theme Studio — pré-visualização',
+      loadComponent: () =>
+        import('./preview/theme-studio-preview-page').then((m) => m.EvoThemeStudioPreviewPage),
     },
   ];
 }

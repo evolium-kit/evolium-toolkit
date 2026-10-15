@@ -58,6 +58,30 @@ try {
 
   const consumidor = join(temporario, 'consumidor');
 
+  /*
+   * Isolar a publicação da toolkit dos releases partidos de terceiros.
+   *
+   * O `ng new` traz o test runner do próprio consumidor (vitest), que este
+   * teste nunca usa — aqui só se empacota, corre `ng add` e `ng build`. Mas o
+   * npm resolve-o na mesma (é peer opcional do @angular/build), e um release
+   * incoerente parte o `npm install` de QUALQUER projecto Angular novo: o
+   * vitest 4.1.12 saiu com @vitest/browser-webdriverio@4.1.12 por publicar e
+   * o npm rebentava com "Cannot read properties of null (reading 'edgesOut')"
+   * (2026-10-15).
+   *
+   * Por isso fixa-se o vitest do consumidor na versão do lockfile deste
+   * workspace — a que os testes da toolkit usam, e que se sabe instalar.
+   */
+  const pkgConsumidor = join(consumidor, 'package.json');
+  const manifesto = JSON.parse(await readFile(pkgConsumidor, 'utf-8'));
+  const vitestLocal = JSON.parse(
+    await readFile(join(raiz, 'node_modules', 'vitest', 'package.json'), 'utf-8'),
+  ).version;
+  manifesto.overrides = { ...manifesto.overrides, vitest: vitestLocal };
+  if (manifesto.devDependencies?.vitest) manifesto.devDependencies.vitest = vitestLocal;
+  await writeFile(pkgConsumidor, `${JSON.stringify(manifesto, null, 2)}\n`, 'utf-8');
+  console.log(`[evo] vitest do consumidor fixado em ${vitestLocal} (lockfile do workspace).`);
+
   console.log('[evo] a instalar…');
   correr('npm', ['install', '--no-audit', '--no-fund'], consumidor);
   correr('npm', ['install', join(temporario, tarball), '--no-audit', '--no-fund'], consumidor);
@@ -72,6 +96,15 @@ try {
   // O `ng add` fez mesmo o que promete?
   const config = await readFile(join(consumidor, 'src/app/app.config.ts'), 'utf-8');
   const estilos = await readFile(join(consumidor, 'src/styles.css'), 'utf-8');
+  const ler = (/** @type {string} */ caminho) =>
+    readFile(join(consumidor, caminho), 'utf-8').catch(() => '');
+  const skill = await ler('.claude/skills/evolium-toolkit/SKILL.md');
+  const claudeMd = await ler('CLAUDE.md');
+  // O índice tem de chegar ao consumidor dentro do tarball, com os READMEs
+  // que cita — é para lá que a skill manda o agente.
+  const pacote = 'node_modules/@evolium-kit/toolkit';
+  const guia = await ler(`${pacote}/AGENTS.md`);
+  const readmeSelect = await ler(`${pacote}/components/src/lib/select/README.md`);
 
   /** @type {[string, boolean][]} */
   const verificacoes = [
@@ -80,6 +113,10 @@ try {
     ['evoDispatchInterceptor no app.config', config.includes('evoDispatchInterceptor')],
     ['declaração de camadas no styles.css', estilos.includes('evo.overrides')],
     ['folha de tema importada', estilos.includes('evolium-theme.css')],
+    ['skill evolium-toolkit', skill.includes(`${pacote}/AGENTS.md`)],
+    ['bloco da toolkit no CLAUDE.md', claudeMd.includes('<!-- evolium-toolkit:inicio')],
+    ['AGENTS.md no pacote instalado', guia.startsWith('# @evolium-kit/toolkit ')],
+    ['README do select no pacote instalado', readmeSelect.length > 0],
   ];
 
   const falhadas = verificacoes.filter(([, ok]) => !ok).map(([nome]) => nome);

@@ -51,3 +51,7 @@ Thumbs.db
 !.env.example
 .mcp.local.json
 .claude/settings.local.json
+
+# Registo do Theme Studio, gerado das pastas por tools/generate-component-registry.mjs
+/projects/toolkit/components/src/lib/generated/
+/projects/toolkit/core/src/lib/generated/

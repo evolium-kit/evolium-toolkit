@@ -1,0 +1,42 @@
+# Evo<%= classify(name) %> — `<evo-<%= dasherize(name) %>>`
+
+TODO: o que o componente faz, numa frase.
+
+Este ficheiro é a documentação que o Theme Studio mostra, por baixo da
+pré-visualização.
+
+## Importar
+
+```ts
+import { Evo<%= classify(name) %> } from './ui/<%= dasherize(name) %>';
+
+@Component({
+  imports: [Evo<%= classify(name) %>],
+  // …
+})
+```
+
+## API
+
+| Nome       | Tipo      | Omissão | Descrição                |
+| ---------- | --------- | ------- | ------------------------ |
+<% if (temVariantes) { %>| `variant`  | `string`  | `'<%= variants[0] %>'` | <%= variants.map(v => '`' + v + '`').join(', ') %> |
+<% } %>| `disabled` | `boolean` | `false` | Desactiva o componente.  |
+
+## Exemplos
+
+```html
+<evo-<%= dasherize(name) %>>Conteúdo</evo-<%= dasherize(name) %>>
+```
+
+## Personalizar
+
+| Token                          | Controla       | Herda de                 |
+| ------------------------------ | -------------- | ------------------------ |
+| `--evo-<%= dasherize(name) %>-bg`     | cor de fundo   | `--evo-color-surface`    |
+| `--evo-<%= dasherize(name) %>-fg`     | cor do texto   | `--evo-color-on-surface` |
+| `--evo-<%= dasherize(name) %>-radius` | raio           | `--evo-radius-md`        |
+
+## Acessibilidade
+
+TODO: role, teclado, foco visível, contraste.

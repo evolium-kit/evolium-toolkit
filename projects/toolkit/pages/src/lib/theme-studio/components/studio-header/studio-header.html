@@ -1,0 +1,76 @@
+<header class="st__topo">
+  <button
+    class="st__toggle"
+    type="button"
+    [attr.aria-expanded]="esquerdaAberta()"
+    aria-controls="st-componentes"
+    aria-label="Mostrar ou esconder a lista de componentes"
+    (click)="alternarEsquerda.emit()"
+  >
+    ☰
+  </button>
+
+  <span class="st__marca">Evolium Theme Studio</span>
+
+  <div class="st__pesquisa">
+    <label class="st__sr" for="st-pesquisa">Pesquisar componente</label>
+    <input
+      #campo
+      id="st-pesquisa"
+      class="st__campo"
+      type="search"
+      placeholder="Pesquisar componente…  (Ctrl+K)"
+      aria-keyshortcuts="Control+K Meta+K"
+      [value]="pesquisa()"
+      (input)="actualizarPesquisa($event)"
+    />
+  </div>
+
+  <div class="st__accoes">
+    @if (estado() === 'erro') {
+      <span class="st__erro" role="alert">Não foi possível guardar.</span>
+    }
+
+    <button class="st__botao st__botao--discreto" type="button" (click)="theme.toggleScheme()">
+      <span aria-hidden="true">{{ theme.resolvedScheme() === 'dark' ? '☀' : '🌙' }}</span>
+      {{ theme.resolvedScheme() === 'dark' ? 'Claro' : 'Escuro' }}
+    </button>
+
+    <!-- aria-disabled, não disabled: o botão continua focável e a dica
+         (title) continua a explicar porque é que não se pode guardar. -->
+    <button
+      class="st__botao"
+      type="button"
+      aria-keyshortcuts="Control+S Meta+S"
+      [attr.aria-disabled]="!podeGuardar()"
+      [attr.aria-busy]="estado() === 'a-guardar'"
+      [title]="dicaGuardar()"
+      (click)="guardar()"
+    >
+      {{ rotuloGuardar() }}
+      @if (theme.dirty() && estado() !== 'a-guardar') {
+        <span aria-hidden="true">•</span>
+        <span class="st__sr">, com alterações por gravar</span>
+      }
+    </button>
+
+    <button class="st__botao st__botao--discreto" type="button" (click)="exportar()">
+      <span aria-hidden="true">⇩</span>
+      Exportar
+    </button>
+
+    <button
+      class="st__toggle"
+      type="button"
+      [attr.aria-expanded]="direitaAberta()"
+      aria-controls="st-propriedades"
+      aria-label="Mostrar ou esconder as propriedades"
+      (click)="alternarDireita.emit()"
+    >
+      ⚙
+    </button>
+  </div>
+
+  <!-- Anuncia a confirmação a leitores de ecrã; o erro já vai por role="alert". -->
+  <p class="st__sr" role="status">{{ estado() === 'ok' ? 'Tema guardado.' : '' }}</p>
+</header>

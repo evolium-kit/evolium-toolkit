@@ -111,6 +111,24 @@ describe('geradores', () => {
       expect(tree.exists(`${base}/painel.css`)).toBe(true);
       expect(tree.exists(`${base}/painel.tokens.ts`)).toBe(true);
       expect(tree.exists(`${base}/evo-painel.spec.ts`)).toBe(true);
+      expect(tree.exists(`${base}/painel.preview.ts`)).toBe(true);
+      expect(tree.exists(`${base}/README.md`)).toBe(true);
+    });
+
+    /** O Studio desenha o preview a partir dos metadados — sem isto aparece vazio. */
+    it('liga os metadados à pré-visualização gerada', async () => {
+      const tree = await runner.runSchematic(
+        'ui-component',
+        { name: 'painel', category: 'Superficies', variants: 'plain', skipTests: true },
+        app,
+      );
+
+      expect(tree.readText(`${base}/painel.tokens.ts`)).toContain(
+        "preview: () => import('./painel.preview').then((m) => m.EvoPainelPreview)",
+      );
+      const preview = tree.readText(`${base}/painel.preview.ts`);
+      expect(preview).toContain('export class EvoPainelPreview');
+      expect(preview).toContain('readonly variant = input<string | null>(null);');
     });
 
     /** O esqueleto tem de nascer conforme, senão a regra não se mantém. */
@@ -179,6 +197,28 @@ describe('geradores', () => {
       const ts = tree.readText('/projects/demo/src/app/pages/facturacao/facturacao.page.ts');
       expect(ts).toContain("registry.get('facturas')");
       expect(ts).not.toContain('HttpClient');
+    });
+
+    it('o spec põe o resource em mock, senão o registry rebenta ao montar', async () => {
+      const tree = await runner.runSchematic(
+        'page',
+        { name: 'facturacao', layout: 'dashboard', resource: 'facturas', skipTests: false },
+        app,
+      );
+
+      const spec = tree.readText('/projects/demo/src/app/pages/facturacao/facturacao.page.spec.ts');
+      expect(spec).toContain('provide: EvoResourceRegistry');
+    });
+
+    it('sem resource, o spec não fala do registry', async () => {
+      const tree = await runner.runSchematic(
+        'page',
+        { name: 'sobre', layout: 'blank', skipTests: false },
+        app,
+      );
+
+      const spec = tree.readText('/projects/demo/src/app/pages/sobre/sobre.page.spec.ts');
+      expect(spec).not.toContain('EvoResourceRegistry');
     });
   });
 

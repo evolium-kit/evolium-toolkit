@@ -120,6 +120,27 @@ fundo para a ferramenta desaparecer — sem forma de reverter a não ser limpar 
 Quem acrescentar interface ao Studio deve usar `--st-*` e as classes `.st__*`,
 nunca `--evo-*` nem componentes da toolkit.
 
+A pré-visualização é um `<iframe>` sobre a rota `<path>/preview`
+(`theme-studio/preview/`), que desenha o `preview` dos metadados com o tema
+real. O Studio não tem nenhuma lista de componentes nem nenhum `@switch` por
+componente, e por baixo mostra o `docs` (o README do componente). O protocolo
+de `postMessage` está em `preview/preview-protocol.ts`. Ver
+[`docs/theming.md`](../../../docs/theming.md#pré-visualização-num-iframe-documentação-a-partir-do-readme).
+
+Os componentes da própria interface do Studio vivem em
+`theme-studio/components/<nome>/`, um por pasta (hoje: `studio-header`,
+`preview-frame` e `component-docs`). Não usar `npm run new:component` para eles, porque esse
+gerador cria componentes da toolkit em `/components`, que o Studio não pode
+usar. As classes partilhadas (`.st__botao`, `.st__toggle`, `.st__campo`,
+`.st__sr`) estão em `theme-studio/studio-comum.css`, e cada componente tem de
+as incluir no seu `styleUrls`, porque o encapsulamento não as deixa chegar aos
+filhos. Os tokens `--st-*` chegam por herança e não precisam disto.
+
+A barra do topo guarda com **Ctrl/⌘+S** e põe o foco na pesquisa com
+**Ctrl/⌘+K**. O botão Guardar fica indisponível quando não há alterações por
+gravar ou quando não há persistência configurada. Se a gravação falhar, o erro
+fica visível.
+
 ---
 
 ## Parte 2 — Acrescentar uma página
@@ -133,6 +154,24 @@ nunca `--evo-*` nem componentes da toolkit.
 
 ### Gerador
 
+Dentro deste repositório (página nova **da toolkit**):
+
+```bash
+npm run new:page -- <nome> --layout=auth --dry-run   # ver o que vai ser criado
+npm run new:page -- <nome> --layout=dashboard [--resource=facturas] [--skip-tests]
+```
+
+O nome vai **sem** o sufixo `-page`. O script cria a pasta em
+`pages/src/lib/<nome>/`, adapta a classe e o selector às convenções da lib
+(`<Nome>Page` → `Evo<Nome>Page`, `app-<nome>` → `evo-<nome>-page`) e acrescenta
+o export ao `public-api.ts`, a seguir à última página e antes do Theme Studio —
+mover depois para o grupo certo (Autenticação, Erros, …). Com `--resource`, o
+spec gerado já traz o `EvoResourceRegistry` em mock. `ng g
+@evolium-kit/toolkit:page` não funciona aqui — ver
+[`contributing.md`](../../../docs/contributing.md#geradores-internos-npm-run-new).
+
+Num projecto consumidor (página do próprio projecto, em `src/app/pages/`):
+
 ```bash
 ng g @evolium-kit/toolkit:page <nome> --layout auth --dry-run
 ng g @evolium-kit/toolkit:page <nome> --layout auth
@@ -142,11 +181,10 @@ ng g @evolium-kit/toolkit:page <nome> --layout auth
 
 ```
 pages/src/lib/<nome>/
-├── evo-<nome>.page.ts
+├── <nome>.page.ts         classe Evo<Nome>Page, exportada directamente pelo public-api.ts
 ├── <nome>.page.html
 ├── <nome>.page.css
-├── evo-<nome>.page.spec.ts
-└── index.ts
+└── <nome>.page.spec.ts
 ```
 
 ### Contrato

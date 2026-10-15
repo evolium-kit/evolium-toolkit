@@ -30,14 +30,30 @@ Guia completo, do token do GitHub ao primeiro componente a funcionar:
 O índice completo, incluindo a referência de cada módulo, vive em
 **[`docs/README.md`](docs/README.md)**. Atalhos directos:
 
-| Se precisas de...                               | Lê                                                   |
-| ----------------------------------------------- | ---------------------------------------------------- |
-| Instalar a toolkit num projecto                 | [`INSTALL.md`](INSTALL.md)                           |
-| Os primeiros passos depois de instalar          | [`docs/getting-started.md`](docs/getting-started.md) |
-| Perceber porque a toolkit está organizada assim | [`docs/architecture.md`](docs/architecture.md)       |
-| Personalizar o tema                             | [`docs/theming.md`](docs/theming.md)                 |
-| Criar um recurso ligado à tua API               | [`docs/plugins.md`](docs/plugins.md)                 |
-| Contribuir código para a toolkit                | [`docs/contributing.md`](docs/contributing.md)       |
+| Se precisas de...                                  | Lê                                                   |
+| -------------------------------------------------- | ---------------------------------------------------- |
+| Instalar a toolkit num projecto                    | [`INSTALL.md`](INSTALL.md)                           |
+| Os primeiros passos depois de instalar             | [`docs/getting-started.md`](docs/getting-started.md) |
+| Perceber porque a toolkit está organizada assim    | [`docs/architecture.md`](docs/architecture.md)       |
+| Personalizar o tema                                | [`docs/theming.md`](docs/theming.md)                 |
+| Criar um recurso ligado à tua API                  | [`docs/plugins.md`](docs/plugins.md)                 |
+| Contribuir código para a toolkit                   | [`docs/contributing.md`](docs/contributing.md)       |
+| Pôr o Claude Code do projecto a conhecer a toolkit | [`docs/ai-context.md`](docs/ai-context.md)           |
+
+## Com agentes de IA (Claude Code)
+
+Cada versão publicada traz um índice para agentes de IA,
+`node_modules/@evolium-kit/toolkit/AGENTS.md`: todos os componentes (selector,
+inputs, tokens), layouts, páginas, tokens de tema, serviços e geradores **da
+versão instalada**, com as regras de uso. O `ng add` instala no projecto uma
+skill do Claude Code e um bloco no `CLAUDE.md` que apontam para ele; num
+projecto que já tinha a toolkit:
+
+```bash
+ng g @evolium-kit/toolkit:ai-context
+```
+
+Como funciona e como manter: **[`docs/ai-context.md`](docs/ai-context.md)**.
 
 ## Desenvolver este repositório
 

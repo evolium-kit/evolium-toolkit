@@ -17,6 +17,7 @@ import { PEER_DEPS, TOOLKIT } from '../utils/constants';
 import { appendStyles, ensureLayerStatement } from '../utils/styles';
 import { addRoutes } from '../utils/routes';
 import { addThemeStudioProvider } from '../utils/theme-studio';
+import { aiContext } from '../ai-context/index';
 
 export interface NgAddOptions {
   project?: string;
@@ -24,6 +25,8 @@ export interface NgAddOptions {
   auth: boolean;
   authRoutes: boolean;
   themeStudio: boolean;
+  /** Skill e bloco no CLAUDE.md para o Claude Code conhecer a toolkit. */
+  aiContext?: boolean;
   skipInstall: boolean;
 }
 
@@ -119,11 +122,20 @@ export function ngAdd(options: NgAddOptions): Rule {
       // 7. Rotas.
       addRoutes(sourceRoot, options),
 
+      // 8. Contexto para o Claude Code: skill + bloco no CLAUDE.md, a apontar
+      //    para o AGENTS.md que vem dentro do pacote. Ver ai-context/index.ts.
+      options.aiContext === false ? noop() : aiContext(),
+
       (_: Tree, ctx: SchematicContext) => {
         ctx.logger.info('');
         ctx.logger.info('[evo] pronto. A seguir:');
         ctx.logger.info('  ng g @evolium-kit/toolkit:page <nome>');
         ctx.logger.info('  ng g @evolium-kit/toolkit:resource-plugin <nome>');
+        if (options.aiContext === false) {
+          ctx.logger.info(
+            '  ng g @evolium-kit/toolkit:ai-context   (Claude Code a conhecer a toolkit)',
+          );
+        }
         if (options.themeStudio) {
           ctx.logger.info(
             '  Theme Studio registado em /_evo/theme — só corre com "ng serve" (isDevMode()).',

@@ -1,53 +1,10 @@
-<header class="st__topo">
-  <button
-    class="st__toggle"
-    type="button"
-    [attr.aria-expanded]="esquerdaAberta()"
-    aria-controls="st-componentes"
-    aria-label="Mostrar ou esconder a lista de componentes"
-    (click)="alternarEsquerda()"
-  >
-    ☰
-  </button>
-
-  <span class="st__marca">Evolium Theme Studio</span>
-
-  <div class="st__pesquisa">
-    <label class="st__sr" for="st-pesquisa">Pesquisar componente</label>
-    <input
-      id="st-pesquisa"
-      class="st__campo"
-      type="search"
-      placeholder="Pesquisar componente…"
-      [value]="pesquisa()"
-      (input)="actualizarPesquisa($event)"
-    />
-  </div>
-
-  <div class="st__accoes">
-    <!-- Botões próprios, não EvoButton: a interface da ferramenta não pode
-         ficar ilegível por causa do tema que está a ser editado. -->
-    <button class="st__botao st__botao--discreto" type="button" (click)="theme.toggleScheme()">
-      {{ theme.resolvedScheme() === 'dark' ? '☀ Claro' : '🌙 Escuro' }}
-    </button>
-    <button class="st__botao" type="button" (click)="guardar()">
-      Guardar{{ theme.dirty() ? ' •' : '' }}
-    </button>
-    <button class="st__botao st__botao--discreto" type="button" (click)="exportar()">
-      ⇩ Exportar
-    </button>
-    <button
-      class="st__toggle"
-      type="button"
-      [attr.aria-expanded]="direitaAberta()"
-      aria-controls="st-propriedades"
-      aria-label="Mostrar ou esconder as propriedades"
-      (click)="alternarDireita()"
-    >
-      ⚙
-    </button>
-  </div>
-</header>
+<evo-studio-header
+  [(pesquisa)]="pesquisa"
+  [esquerdaAberta]="esquerdaAberta()"
+  [direitaAberta]="direitaAberta()"
+  (alternarEsquerda)="alternarEsquerda()"
+  (alternarDireita)="alternarDireita()"
+/>
 
 <div class="st__corpo">
   <!-- ------------------------------------------------ painel esquerdo -->
@@ -119,13 +76,12 @@
         }
       </div>
 
-      <div class="st__palco">
-        <evo-component-preview
-          [componentId]="componente.id"
-          [variant]="variante()"
-          [size]="tamanho()"
-        />
-      </div>
+      <evo-studio-preview-frame
+        [componentId]="componente.id"
+        [label]="componente.label"
+        [variant]="variante()"
+        [size]="tamanho()"
+      />
 
       <fieldset class="st__escopo">
         <legend class="st__sr">Alcance da edição</legend>
@@ -158,6 +114,9 @@
           }
         </p>
       </fieldset>
+
+      <h2 class="st__categoria">Documentação</h2>
+      <evo-studio-component-docs [component]="componente" />
     } @else {
       <p class="st__vazio">
         Nenhum componente registado. Acrescenta

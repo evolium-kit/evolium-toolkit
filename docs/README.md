@@ -13,15 +13,16 @@ páginas pela ordem em que aparecem abaixo.
 
 ## Por onde começar
 
-| Se precisas de...                                                    | Lê                                         |
-| -------------------------------------------------------------------- | ------------------------------------------ |
-| Instalar a toolkit num projecto, do zero                             | [`../INSTALL.md`](../INSTALL.md)           |
-| Perceber o que a toolkit oferece e como se usa no dia a dia          | [`getting-started.md`](getting-started.md) |
-| Perceber **porquê** está organizada assim, antes de a alterar        | [`architecture.md`](architecture.md)       |
-| Personalizar cores, espaçamento e o resto do tema                    | [`theming.md`](theming.md)                 |
-| Criar um recurso novo (facturas, clientes...) que fale com a tua API | [`plugins.md`](plugins.md)                 |
-| Contribuir código para a toolkit — componentes, páginas, plugins     | [`contributing.md`](contributing.md)       |
-| Desenvolver a toolkit em si (não só consumi-la)                      | [`../README.md`](../README.md)             |
+| Se precisas de...                                                       | Lê                                         |
+| ----------------------------------------------------------------------- | ------------------------------------------ |
+| Instalar a toolkit num projecto, do zero                                | [`../INSTALL.md`](../INSTALL.md)           |
+| Perceber o que a toolkit oferece e como se usa no dia a dia             | [`getting-started.md`](getting-started.md) |
+| Perceber **porquê** está organizada assim, antes de a alterar           | [`architecture.md`](architecture.md)       |
+| Personalizar cores, espaçamento e o resto do tema                       | [`theming.md`](theming.md)                 |
+| Criar um recurso novo (facturas, clientes...) que fale com a tua API    | [`plugins.md`](plugins.md)                 |
+| Contribuir código para a toolkit — componentes, páginas, plugins        | [`contributing.md`](contributing.md)       |
+| Pôr o Claude Code (ou outro agente) de um projecto a conhecer a toolkit | [`ai-context.md`](ai-context.md)           |
+| Desenvolver a toolkit em si (não só consumi-la)                         | [`../README.md`](../README.md)             |
 
 ## Referência por módulo
 
