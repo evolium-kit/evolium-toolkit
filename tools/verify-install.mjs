@@ -58,6 +58,30 @@ try {
 
   const consumidor = join(temporario, 'consumidor');
 
+  /*
+   * Isolar a publicação da toolkit dos releases partidos de terceiros.
+   *
+   * O `ng new` traz o test runner do próprio consumidor (vitest), que este
+   * teste nunca usa — aqui só se empacota, corre `ng add` e `ng build`. Mas o
+   * npm resolve-o na mesma (é peer opcional do @angular/build), e um release
+   * incoerente parte o `npm install` de QUALQUER projecto Angular novo: o
+   * vitest 4.1.12 saiu com @vitest/browser-webdriverio@4.1.12 por publicar e
+   * o npm rebentava com "Cannot read properties of null (reading 'edgesOut')"
+   * (2026-10-15).
+   *
+   * Por isso fixa-se o vitest do consumidor na versão do lockfile deste
+   * workspace — a que os testes da toolkit usam, e que se sabe instalar.
+   */
+  const pkgConsumidor = join(consumidor, 'package.json');
+  const manifesto = JSON.parse(await readFile(pkgConsumidor, 'utf-8'));
+  const vitestLocal = JSON.parse(
+    await readFile(join(raiz, 'node_modules', 'vitest', 'package.json'), 'utf-8'),
+  ).version;
+  manifesto.overrides = { ...manifesto.overrides, vitest: vitestLocal };
+  if (manifesto.devDependencies?.vitest) manifesto.devDependencies.vitest = vitestLocal;
+  await writeFile(pkgConsumidor, `${JSON.stringify(manifesto, null, 2)}\n`, 'utf-8');
+  console.log(`[evo] vitest do consumidor fixado em ${vitestLocal} (lockfile do workspace).`);
+
   console.log('[evo] a instalar…');
   correr('npm', ['install', '--no-audit', '--no-fund'], consumidor);
   correr('npm', ['install', join(temporario, tarball), '--no-audit', '--no-fund'], consumidor);
