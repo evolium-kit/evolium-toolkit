@@ -7,6 +7,18 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ### Adicionado
 
+- **`AGENTS.md` no pacote**: índice da toolkit para agentes de IA (Claude Code,
+  Cursor…), gerado em cada build a partir do código e dos `.d.ts` — entry
+  points, componentes com selector, inputs (tipo e omissão) e tokens, layouts,
+  páginas, tokens de tema, geradores, API pública e regras de uso. O pacote
+  passa também a levar `docs/getting-started.md`, `docs/theming.md`,
+  `docs/plugins.md` e o `CHANGELOG.md`.
+- **`ng g @evolium-kit/toolkit:ai-context`** (alias `ai`), também corrido pelo
+  `ng add` (nova pergunta, sim por omissão): cria a skill do Claude Code
+  `.claude/skills/evolium-toolkit/SKILL.md` e um bloco entre marcadores no
+  `CLAUDE.md`, que mandam o agente ler o `AGENTS.md` da versão instalada.
+  Idempotente. Ver `docs/ai-context.md`.
+
 - **`npm run publicar -- --version vX.Y.Z`** (e `/publicar` no Claude Code):
   valida o repositório, mostra a versão anterior e a nova e pede confirmação,
   actualiza a versão e o CHANGELOG, corre a pipeline do `release.yml` e envia

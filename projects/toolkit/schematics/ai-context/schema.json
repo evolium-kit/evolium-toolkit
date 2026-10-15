@@ -1,0 +1,8 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "EvoliumToolkitAiContext",
+  "title": "Evolium Toolkit — contexto para agentes de IA",
+  "type": "object",
+  "properties": {},
+  "required": []
+}

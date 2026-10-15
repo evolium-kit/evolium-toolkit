@@ -7,6 +7,12 @@
       "schema": "./ng-add/schema.json",
       "aliases": ["install"]
     },
+    "ai-context": {
+      "description": "Dá ao Claude Code do projecto a visão da toolkit instalada (skill + CLAUDE.md a apontar para AGENTS.md).",
+      "factory": "./ai-context/index#aiContext",
+      "schema": "./ai-context/schema.json",
+      "aliases": ["ai"]
+    },
     "page": {
       "description": "Gera uma página standalone com os quatro estados obrigatórios.",
       "factory": "./generators/page/index#page",

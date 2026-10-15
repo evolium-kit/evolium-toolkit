@@ -124,12 +124,19 @@ playground, e a bateria de verificação abaixo.
 ## Antes de qualquer commit
 
 ```bash
-npm run build:lib          # library + schematics
+npm run build:lib          # library + schematics + AGENTS.md
 npm run test:lib           # componentes, tema, kernel
 npm run test:schematics    # geradores, em Node
+npm run test:tools         # scripts de tools/ (publicar, gerador do AGENTS.md)
 node tools/verify-dist.mjs # o artefacto está completo e publicável?
 npx prettier --check .
 ```
+
+O `build:lib` termina com `npm run gen:agents`, que gera
+`dist/toolkit/AGENTS.md` — o índice da toolkit para os agentes de IA dos
+projectos consumidores. Um componente novo entra nele sozinho; para sair bem
+descrito, escrever JSDoc na classe e nos `input()`/`model()`/`output()`. Ver
+[`ai-context.md`](ai-context.md).
 
 Antes de um PR que mexa em algo estrutural (providers, `exports`, o `ng add`,
 qualquer coisa em `tools/`):

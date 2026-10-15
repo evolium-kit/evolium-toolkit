@@ -52,6 +52,8 @@ isso que são invioláveis e não apenas preferências de estilo.
 | Mexer em `/theme`                                                     | `projects/toolkit/theme/README.md`                         |
 | Mexer em `/services`                                                  | `projects/toolkit/services/README.md`                      |
 | Migrar um modelo de `src/app/*-models/` para a toolkit                | `/migrar-recurso` + `projects/toolkit/RESOURCE-MIGRATE.md` |
+| Mexer no `AGENTS.md` do pacote ou no gerador `ai-context`             | `docs/ai-context.md`                                       |
+| Publicar uma versão nova                                              | `/publicar` + `docs/contributing.md`                       |
 
 ## Antes de dar por terminada qualquer alteração
 

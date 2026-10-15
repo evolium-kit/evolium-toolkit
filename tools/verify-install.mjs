@@ -72,6 +72,15 @@ try {
   // O `ng add` fez mesmo o que promete?
   const config = await readFile(join(consumidor, 'src/app/app.config.ts'), 'utf-8');
   const estilos = await readFile(join(consumidor, 'src/styles.css'), 'utf-8');
+  const ler = (/** @type {string} */ caminho) =>
+    readFile(join(consumidor, caminho), 'utf-8').catch(() => '');
+  const skill = await ler('.claude/skills/evolium-toolkit/SKILL.md');
+  const claudeMd = await ler('CLAUDE.md');
+  // O índice tem de chegar ao consumidor dentro do tarball, com os READMEs
+  // que cita — é para lá que a skill manda o agente.
+  const pacote = 'node_modules/@evolium-kit/toolkit';
+  const guia = await ler(`${pacote}/AGENTS.md`);
+  const readmeSelect = await ler(`${pacote}/components/src/lib/select/README.md`);
 
   /** @type {[string, boolean][]} */
   const verificacoes = [
@@ -80,6 +89,10 @@ try {
     ['evoDispatchInterceptor no app.config', config.includes('evoDispatchInterceptor')],
     ['declaração de camadas no styles.css', estilos.includes('evo.overrides')],
     ['folha de tema importada', estilos.includes('evolium-theme.css')],
+    ['skill evolium-toolkit', skill.includes(`${pacote}/AGENTS.md`)],
+    ['bloco da toolkit no CLAUDE.md', claudeMd.includes('<!-- evolium-toolkit:inicio')],
+    ['AGENTS.md no pacote instalado', guia.startsWith('# @evolium-kit/toolkit ')],
+    ['README do select no pacote instalado', readmeSelect.length > 0],
   ];
 
   const falhadas = verificacoes.filter(([, ok]) => !ok).map(([nome]) => nome);

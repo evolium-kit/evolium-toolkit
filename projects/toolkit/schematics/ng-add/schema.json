@@ -30,6 +30,11 @@
       "default": true,
       "x-prompt": "Registar o Theme Studio em /_evo/theme (só em desenvolvimento)?"
     },
+    "aiContext": {
+      "type": "boolean",
+      "default": true,
+      "x-prompt": "Configurar o Claude Code para conhecer a toolkit (skill + CLAUDE.md)?"
+    },
     "skipInstall": {
       "type": "boolean",
       "default": false,
