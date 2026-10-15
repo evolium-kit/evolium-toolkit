@@ -5,6 +5,26 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+## [0.2.1] - 2026-10-15
+
+### Adicionado
+
+- **`EvoSelect`** (`evo-select`), em `@evolium-kit/toolkit/components`: lista
+  de escolha simples ou múltipla, migrada de `field-select-v2`. Compõe
+  `EvoField` + `evo-input` e implementa `ControlValueAccessor` (também
+  `[(value)]`). Valor de qualquer tipo, com `compareWith` (números chegam ao
+  formulário como números). Pesquisa sem acentos e fixa no topo do painel,
+  grupos (`group`), ícones (imagem ou fonte, por `iconClass`), segunda linha
+  (`sublabel`), template tipado `<ng-template evoSelectOption>` (aceita também
+  `#optionTemplate`), `clearable`, `loading`, `selectAll`, `maxLabels`, e
+  pesquisa no servidor com `[searchFn]="null"` + `(searchChange)`. Erro
+  automático do controlo com as mensagens do text-field; textos por
+  `provideEvoSelectMessages()`. Padrão combobox/listbox da APG com teclado
+  completo (`ActiveDescendantKeyManager`). O painel é um overlay do CDK em
+  popover inline: nunca é cortado por `overflow: hidden` e herda os
+  `[evoTokens]`. 26 tokens `--evo-select-*`; os de estado caem primeiro nos
+  `--evo-text-field-*`. Documentação em `components/src/lib/select/README.md`.
+
 ## [0.2.0] - 2026-10-14
 
 ### Adicionado
