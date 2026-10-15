@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  PIPELINE,
   compararVersoes,
   hoje,
   normalizarVersao,
@@ -7,6 +8,25 @@ import {
   prepararChangelog,
   trocarVersaoPackageJson,
 } from './publicar-lib.mjs';
+
+describe('PIPELINE', () => {
+  /**
+   * Regressão: num terminal interactivo, `ng test` entra em modo watch e a
+   * publicação ficava parada em "Waiting for file changes…" para sempre.
+   */
+  it('o test:lib corre sem watch', () => {
+    const testLib = PIPELINE.find(([, args]) => args.includes('test:lib'));
+    expect(testLib?.[1]).toEqual(['run', 'test:lib', '--', '--watch=false']);
+  });
+
+  it('segue a ordem do release.yml: build antes de verificar e testar, instalação limpa no fim', () => {
+    const passos = PIPELINE.map(([cmd, args]) => [cmd, ...args].join(' '));
+    expect(passos.findIndex((p) => p.includes('build:lib'))).toBeLessThan(
+      passos.findIndex((p) => p.includes('verify-dist')),
+    );
+    expect(passos.at(-1)).toBe('node tools/verify-install.mjs');
+  });
+});
 
 describe('normalizarVersao', () => {
   it('aceita vX.Y.Z e X.Y.Z, e tira zeros à esquerda', () => {

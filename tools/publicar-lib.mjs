@@ -7,6 +7,26 @@
 
 const SEMVER = /^v?(\d+)\.(\d+)\.(\d+)$/;
 
+/**
+ * A pipeline: a mesma ordem do release.yml, mais os testes do próprio tools/.
+ *
+ * `test:lib` leva `--watch=false` **explícito**: o builder de testes do
+ * Angular entra em modo watch quando corre num terminal interactivo, e a
+ * publicação ficava parada em "Waiting for file changes…" para sempre. (Num
+ * `q` nesse ecrã o watch sai com sucesso e a publicação seguia em frente —
+ * ainda pior.) Os outros já correm uma vez (`vitest run`, scripts node).
+ *
+ * @type {ReadonlyArray<readonly [string, readonly string[]]>}
+ */
+export const PIPELINE = [
+  ['npm', ['run', 'test:tools']],
+  ['npm', ['run', 'build:lib']],
+  ['node', ['tools/verify-dist.mjs']],
+  ['npm', ['run', 'test:lib', '--', '--watch=false']],
+  ['npm', ['run', 'test:schematics']],
+  ['node', ['tools/verify-install.mjs']],
+];
+
 /** Cabeçalho da secção de alterações ainda por publicar (Keep a Changelog). */
 export const NAO_PUBLICADO = '## [Não publicado]';
 

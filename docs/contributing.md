@@ -210,6 +210,22 @@ são desfeitos. O comando nunca corre `npm publish`.
 | `--yes`     | não pede confirmação (o resumo é mostrado na mesma)                            |
 | `--help`    | ajuda                                                                          |
 
+#### Se a publicação parar a meio
+
+- **Interromper sempre com Ctrl+C**, nunca com o `q` de um ecrã de testes. O
+  Ctrl+C repõe o `package.json` e o `CHANGELOG.md` e não envia nada.
+- **Não fazer commit enquanto o comando corre.** Se o `HEAD` mudar, o comando
+  pára antes do commit e **não** repõe os ficheiros, para não desfazer esse
+  commit.
+- Se ficou um commit local com a versão (sem tag e sem push; confirmar com
+  `git status -sb` e `git ls-remote --tags origin`), desfazê-lo e correr de novo:
+
+  ```bash
+  git checkout -- CHANGELOG.md projects/toolkit/package.json   # só se aparecerem como alterados
+  git reset --keep HEAD~1                                      # tira o commit da versão
+  npm run publicar -- --version vX.Y.Z
+  ```
+
 ### À mão
 
 1. Actualizar a versão em `projects/toolkit/package.json`.

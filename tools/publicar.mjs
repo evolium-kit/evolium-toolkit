@@ -6,6 +6,7 @@ import { createInterface } from 'node:readline/promises';
 import { fileURLToPath } from 'node:url';
 import {
   NAO_PUBLICADO,
+  PIPELINE,
   compararVersoes,
   hoje,
   normalizarVersao,
@@ -46,16 +47,6 @@ const PKG = join(raiz, 'projects', 'toolkit', 'package.json');
 const PKG_DIST = join(raiz, 'dist', 'toolkit', 'package.json');
 const CHANGELOG = join(raiz, 'CHANGELOG.md');
 const RAMO = 'main';
-
-/** A mesma ordem do release.yml, mais os testes do próprio tools/. */
-const PIPELINE = [
-  ['npm', ['run', 'test:tools']],
-  ['npm', ['run', 'build:lib']],
-  ['node', ['tools/verify-dist.mjs']],
-  ['npm', ['run', 'test:lib']],
-  ['npm', ['run', 'test:schematics']],
-  ['node', ['tools/verify-install.mjs']],
-];
 
 const USO = `Uso: npm run publicar -- --version vX.Y.Z [--dry-run] [--yes]
 
@@ -98,7 +89,9 @@ function falhar(msg) {
 function correr(cmd, args, { capturar = false, permitirFalha = false } = {}) {
   const r = spawnSync(cmd, args, {
     cwd: raiz,
-    stdio: capturar ? ['ignore', 'pipe', 'pipe'] : 'inherit',
+    // stdin nunca é do filho: nenhum passo da pipeline pode ficar à espera de
+    // teclas (modo watch, prompts). A única pergunta é a do próprio script.
+    stdio: capturar ? ['ignore', 'pipe', 'pipe'] : ['ignore', 'inherit', 'inherit'],
     encoding: 'utf8',
     shell: process.platform === 'win32' && cmd === 'npm',
   });
@@ -111,6 +104,7 @@ function correr(cmd, args, { capturar = false, permitirFalha = false } = {}) {
 }
 
 const git = (/** @type {string[]} */ ...args) => correr('git', args, { capturar: true }).saida;
+const headActual = () => git('rev-parse', 'HEAD');
 
 /** @param {string} titulo */
 function passo(titulo) {
@@ -242,11 +236,23 @@ async function resumirEConfirmar({ versao, actual, notas, dryRun, sim }) {
  */
 function guardarOriginais(ficheiros) {
   const originais = new Map(ficheiros.map((f) => [f, readFileSync(f, 'utf8')]));
+  const head = headActual();
   let reposto = false;
   const semEol = (/** @type {string} */ t) => t.replace(/\r\n/g, '\n');
   const repor = () => {
     if (reposto) return;
     reposto = true;
+    // Se alguém fez commit enquanto o script corria, os ficheiros já não são
+    // só nossos: repô-los desfaria esse commit no working tree, em silêncio.
+    if (headActual() !== head) {
+      console.error(
+        amarelo(
+          '\nO HEAD mudou durante a publicação (houve um commit entretanto): ' +
+            'package.json e CHANGELOG.md NÃO foram repostos. Confirmar com "git status" e "git log".',
+        ),
+      );
+      return;
+    }
     for (const [f, texto] of originais) {
       // Depois de um `git reset` o ficheiro já está certo, mas com o fim de
       // linha do checkout (autocrlf); reescrevê-lo deixaria um "M" fantasma.
@@ -254,13 +260,29 @@ function guardarOriginais(ficheiros) {
     }
   };
   const aoInterromper = () => {
+    console.error(vermelho('\nInterrompido. Nada foi enviado.'));
     repor();
-    console.error(vermelho('\nInterrompido: package.json e CHANGELOG.md repostos.'));
     process.exit(130);
   };
   process.once('SIGINT', aoInterromper);
   return {
     repor,
+    /** Antes de fazer commit: o repositório continua como o deixámos? */
+    confirmarIntacto: () => {
+      if (headActual() !== head) {
+        falhar(
+          'o HEAD mudou durante a publicação (houve um commit entretanto). ' +
+            'Nada foi enviado. Ver docs/contributing.md, "Se a publicação parar a meio".',
+        );
+      }
+      const alheios = git('status', '--porcelain')
+        .split('\n')
+        .filter(Boolean)
+        .filter((l) => !/ (projects\/toolkit\/package\.json|CHANGELOG\.md)$/.test(l));
+      if (alheios.length) {
+        falhar(`apareceram outras alterações durante a publicação:\n${alheios.join('\n')}`);
+      }
+    },
     /** Depois do commit, já não há nada a repor. */
     largar: () => process.off('SIGINT', aoInterromper),
   };
@@ -393,6 +415,7 @@ async function main() {
       return;
     }
 
+    ficheiros.confirmarIntacto();
     enviar(versao);
     ficheiros.largar();
   } catch (e) {
