@@ -3,7 +3,11 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-    "schematicCollections": ["@evolium-kit/toolkit", "@schematics/angular"]
+    "schematicCollections": [
+      "@evolium-kit/toolkit",
+      "@schematics/angular"
+    ],
+    "analytics": "9f9caef3-5a48-49af-b36d-a99d350872e1"
   },
   "schematics": {
     "@evolium-kit/toolkit:page": {
