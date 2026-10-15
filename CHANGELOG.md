@@ -5,6 +5,8 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+## [0.3.0] - 2026-10-15
+
 ### Adicionado
 
 - **`AGENTS.md` no pacote**: índice da toolkit para agentes de IA (Claude Code,
