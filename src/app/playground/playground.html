@@ -173,6 +173,78 @@
       </div>
       <pre class="muted">{{ registo.value | json }}</pre>
     </form>
+
+    <p class="muted">
+      Select (Reactive Forms): o painel não é cortado pelo contentor com
+      <code>overflow: hidden</code> e herda o <code>[evoTokens]</code> do último campo.
+    </p>
+    <form
+      class="pg-text-fields pg-select-clip"
+      [formGroup]="escolhas"
+      (ngSubmit)="submeterEscolhas()"
+    >
+      <evo-select
+        formControlName="provincia"
+        label="Província"
+        hint="Valores numéricos: o formulário recebe números."
+        [options]="provincias"
+        searchable
+        clearable
+      />
+      <evo-select
+        formControlName="actuacao"
+        label="Províncias de actuação"
+        [options]="provincias"
+        multiple
+        searchable
+        selectAll
+        [maxLabels]="3"
+        optional
+      />
+      <evo-select
+        formControlName="gestor"
+        label="Gestor"
+        [options]="gestores"
+        [compareWith]="mesmoId"
+      >
+        <ng-template [evoSelectOption]="gestores" let-gestor let-marcado="selected">
+          <span class="pg-avatar" aria-hidden="true">{{ gestor.data?.iniciais }}</span>
+          <span>{{ gestor.label }} — {{ gestor.data?.cargo }}</span>
+          @if (marcado) {
+            <strong>✓</strong>
+          }
+        </ng-template>
+      </evo-select>
+      <evo-select
+        label="Cliente (pesquisa no servidor)"
+        [options]="clientes()"
+        [loading]="aPesquisarClientes()"
+        [searchFn]="null"
+        (searchChange)="pesquisarClientes($event)"
+        searchable
+        [(value)]="cliente"
+      />
+      <evo-select
+        label="Com tokens próprios"
+        [options]="provincias"
+        [evoTokens]="{
+          'select-panel-bg': '#fff7ed',
+          'select-option-selected-bg': '#fed7aa',
+          'select-option-selected-fg': '#9a3412',
+          'select-focus-border-color': '#ea580c',
+          'select-panel-radius': '12px',
+        }"
+        [(value)]="provinciaLaranja"
+      />
+      <evo-select label="Desactivado" [options]="provincias" [value]="1" disabled />
+      <div class="row">
+        <button evoButton>Submeter</button>
+        <button evoButton variant="ghost" type="button" (click)="alternarEscolhas()">
+          {{ escolhas.disabled ? 'Activar' : 'Desactivar' }} formulário
+        </button>
+      </div>
+      <pre class="muted">{{ escolhas.value | json }} · cliente: {{ cliente() }}</pre>
+    </form>
   </evo-card>
 
   <evo-card>

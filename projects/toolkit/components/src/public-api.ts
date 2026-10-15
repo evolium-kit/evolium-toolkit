@@ -15,3 +15,4 @@ export * from './lib/badge';
 export * from './lib/form-field';
 export * from './lib/switch';
 export * from './lib/text-field';
+export * from './lib/select';

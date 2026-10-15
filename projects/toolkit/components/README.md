@@ -35,6 +35,7 @@ a folha dos componentes que são directivas:
 | `EvoBadge`     | `evo-badge`                                                 | neutral, primary, success, warning, danger | —          |
 | `EvoSwitch`    | `evo-switch`                                                | —                                          | —          |
 | `EvoTextField` | `evo-text-field`                                            | —                                          | sm, md, lg |
+| `EvoSelect`    | `evo-select`                                                | —                                          | sm, md, lg |
 
 ```html
 <button evoButton variant="danger" size="sm" [loading]="aApagar()">Eliminar</button>
@@ -79,6 +80,37 @@ em português sobreponíveis por `provideEvoTextFieldMessages()`. É composto po
 `EvoField` + o aspecto do `EvoInput`, por isso herda os `--evo-input-*`; os
 tokens próprios são `--evo-text-field-*`. Documentação completa em
 [`src/lib/text-field/README.md`](src/lib/text-field/README.md).
+
+```html
+<evo-select
+  formControlName="provincia"
+  label="Província"
+  [options]="provincias"
+  searchable
+  clearable
+/>
+<evo-select
+  formControlName="tags"
+  label="Etiquetas"
+  [options]="tags"
+  multiple
+  selectAll
+  [maxLabels]="3"
+/>
+<evo-select [(value)]="gestor" label="Gestor" [options]="gestores" [compareWith]="mesmoId">
+  <ng-template [evoSelectOption]="gestores" let-g>{{ g.label }} — {{ g.data?.cargo }}</ng-template>
+</evo-select>
+```
+
+O `EvoSelect` é uma lista de escolha simples ou múltipla com pesquisa (sem
+acentos), grupos, ícones, segunda linha, template por opção, "Seleccionar
+todos", `loading` e pesquisa no servidor. O valor é de qualquer tipo (números
+chegam ao formulário como números). Segue o padrão combobox/listbox com
+teclado completo, e o painel é um overlay do CDK em popover inline: nunca é
+cortado e herda os `[evoTokens]`. Herda `--evo-input-*`/`--evo-field-*` e, nos
+estados, os `--evo-text-field-*`; os tokens próprios são `--evo-select-*`.
+Textos por `provideEvoSelectMessages()`. Documentação completa em
+[`src/lib/select/README.md`](src/lib/select/README.md).
 
 `EvoButton` e `EvoInput` aplicam-se a elementos nativos em vez de os embrulhar:
 mantêm semântica, foco, validação nativa, `formControlName` e o preenchimento
