@@ -5,6 +5,43 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+### Adicionado
+
+- **`EvoDataTable`** (`evo-data-table`), em `@evolium-kit/toolkit/components`:
+  tabela de dados migrada de `data-tabela-generica-v2`, sobre o `CdkTable`
+  (`<table>`/`<th>`/`<td>` nativos). Três formas de dar os dados: `[data]` em
+  memória (a tabela pesquisa, ordena e pagina), `[source]` — uma função
+  `(query, abortSignal) => Promise | Observable<{ items, total }>` que a
+  tabela chama a cada página, com debounce da pesquisa (300ms), cancelamento
+  de pedidos obsoletos, linhas-esqueleto no primeiro carregamento, barra fina
+  nos seguintes, erro com "Tentar de novo", `reload()` e correcção de uma
+  página que deixou de existir — e `paging="server"` + `[total]`, em que o pai
+  carrega e a tabela só emite `[(page)]`, `[(pageSize)]`, `[(search)]` e
+  `[(sort)]`. Ordenação por coluna (`aria-sort`; números, datas e texto pela
+  ordem local), pesquisa sem acentos (`searchFn` sobreponível), selecção entre
+  páginas (`selectable`, `[(selection)]`, "seleccionar página"), linhas
+  expansíveis (`<ng-template evoRowDetail>`), templates de célula e de acções
+  tipados (`evoCell`, `evoRowActions`), clique na linha por rato e teclado
+  (`rowClickable`, `(rowClick)`), `rowKey`, `pageSizeOptions`,
+  `stickyHeader`/`maxHeight`, `size`, slots `toolbar-start`/`toolbar-end`/
+  `summary`/`footer-start`/`empty`/`error`, e anúncio dos resultados por
+  `LiveAnnouncer`. Com `source`, não pede nada no render do servidor salvo
+  `ssr`. Textos por `provideEvoDataTableMessages()`. 19 tokens
+  `--evo-data-table-*`, incluindo a borda externa e o separador das linhas
+  (cor e espessura). Também exportados `EvoDataTableColumn`,
+  `EvoDataTableSource`, `EvoDataTablePage`, `EvoDataTableQuery`,
+  `EvoDataTableSort` e `evoSortParam()` (`'nome,desc'`). Documentação em
+  `components/src/lib/data-table/README.md`.
+- **`EvoPagination`** (`evo-pagination`), em `@evolium-kit/toolkit/components`:
+  paginação usada pela tabela e também usável sozinha. Mostra sempre o mesmo
+  número de botões, com reticências, para os botões não mudarem de sítio. Tem
+  `[(page)]`, `[(pageSize)]`, `length`, `pageSizeOptions`, `showSummary`
+  ("A mostrar 1–10 de 124"), `siblings`/`boundaries`, `hideSinglePage`,
+  `disabled` e `size`; `aria-current="page"` e alvos de toque de 44px. A
+  função `evoPageItems()` é exportada. Textos por
+  `provideEvoPaginationMessages()`. 6 tokens `--evo-pagination-*`.
+  Documentação em `components/src/lib/pagination/README.md`.
+
 ## [0.3.1] - 2026-10-16
 
 ### Adicionado
