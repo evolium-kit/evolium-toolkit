@@ -5,6 +5,8 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+## [0.3.2] - 2026-10-16
+
 ### Adicionado
 
 - **Entry point `@evolium-kit/toolkit/crud`**: CRUD de entidades sobre
