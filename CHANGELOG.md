@@ -5,6 +5,8 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+## [0.3.1] - 2026-10-16
+
 ### Adicionado
 
 - **`EvoModal`** (`evo-modal`) e **`EvoModalService`**, em
