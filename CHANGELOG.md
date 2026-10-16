@@ -7,6 +7,23 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ### Adicionado
 
+- **Entry point `@evolium-kit/toolkit/crud`**: CRUD de entidades sobre
+  TanStack Query (`@tanstack/angular-query-experimental`, peer opcional — só
+  quem importa este entry point o instala), migrado de `crud-kit`.
+  `injectCrudResource()` lista, cria, actualiza e apaga com cache e
+  revalidação (`items`, `meta`, `loading`, `error`, `one()` com
+  `cache-only`/`fetch-on-miss`, adaptadores de resposta);
+  `injectCrudController()` abre o formulário de criar/editar em modal
+  (`EvoModalService`) ou numa rota, e apaga com confirmação;
+  `injectCrudForm()` liga os erros de campo da API ao `FormGroup`
+  (`bindErrors`) e dá o `formError`; `injectCrudPage()` resolve o registo de
+  uma rota `/:id`. Hooks (`afterList`, `before*`/`after*`, `onError`,
+  `beforeOpenForm`, `afterCloseForm`) locais ou globais por
+  `withPlugin(crudPlugin(), { hooks })`, e três prontos: `crudToasts()`,
+  `crudSoftDelete()` e `crudInvalidate()`. Os pedidos passam pelo kernel de
+  `/services` (`baseUrl`, Bearer do `authPlugin()`, `EvoError`). Documentação
+  em `crud/README.md`.
+
 - **`EvoDataTable`** (`evo-data-table`), em `@evolium-kit/toolkit/components`:
   tabela de dados migrada de `data-tabela-generica-v2`, sobre o `CdkTable`
   (`<table>`/`<th>`/`<td>` nativos). Três formas de dar os dados: `[data]` em
