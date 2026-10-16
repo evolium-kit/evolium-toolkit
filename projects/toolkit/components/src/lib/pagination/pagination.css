@@ -1,0 +1,141 @@
+/*
+ * REGRA 1: nenhuma declaração `--evo-pagination-*` neste ficheiro.
+ * O valor por omissão vive no fallback do var(). Declará-lo aqui ganharia por
+ * proximidade a qualquer :root do projecto e tornaria o override global
+ * impossível — sem erro nenhum a avisar.
+ *
+ * REGRA 2: nunca registar estes tokens com @property { initial-value }.
+ */
+
+@layer evo.components {
+  :host {
+    display: block;
+    font-family: var(--evo-font-sans);
+    font-size: var(--evo-font-size-sm);
+    color: var(--evo-color-on-surface-muted);
+  }
+
+  .evo-pagination__nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--evo-space-sm) var(--evo-space-md);
+  }
+
+  .evo-pagination__summary {
+    margin-inline-end: auto;
+  }
+
+  .evo-pagination__size {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--evo-space-sm);
+    white-space: nowrap;
+  }
+
+  .evo-pagination__size-select {
+    inline-size: auto;
+  }
+
+  .evo-pagination__pages {
+    display: flex;
+    align-items: center;
+    gap: var(--evo-space-xs);
+    margin: 0 0 0 auto;
+    padding: 0;
+    list-style: none;
+  }
+
+  .evo-pagination__item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--evo-pagination-item-size, 2rem);
+    block-size: var(--evo-pagination-item-size, 2rem);
+    padding: 0 var(--evo-space-xs);
+    border: var(--evo-border-width) solid
+      var(--evo-pagination-item-border-color, var(--evo-color-border));
+    border-radius: var(--evo-pagination-item-radius, var(--evo-radius-full));
+    background: transparent;
+    color: var(--evo-pagination-item-fg, var(--evo-color-on-surface-muted));
+    font: inherit;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    transition:
+      background-color var(--evo-duration-fast) var(--evo-easing),
+      color var(--evo-duration-fast) var(--evo-easing);
+  }
+
+  /* Alvo de toque de pelo menos 44×44 px sem mudar o tamanho visível. */
+  .evo-pagination__item::before {
+    content: '';
+    position: absolute;
+    inset: min(0px, calc((var(--evo-pagination-item-size, 2rem) - 44px) / 2));
+  }
+
+  .evo-pagination__item:hover:not(:disabled, [aria-current]) {
+    background-color: var(--evo-color-surface-sunken);
+  }
+
+  .evo-pagination__item[aria-current='page'] {
+    border-color: var(--evo-pagination-item-bg-active, var(--evo-color-primary));
+    background-color: var(--evo-pagination-item-bg-active, var(--evo-color-primary));
+    color: var(--evo-pagination-item-fg-active, var(--evo-color-on-primary));
+  }
+
+  .evo-pagination__item:focus-visible {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: var(--evo-focus-ring-offset);
+  }
+
+  .evo-pagination__item:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .evo-pagination__step svg {
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+  }
+
+  /* As setas apontam para o sentido da leitura. */
+  :host-context([dir='rtl']) .evo-pagination__step svg {
+    transform: scaleX(-1);
+  }
+
+  .evo-pagination__gap {
+    display: inline-flex;
+    justify-content: center;
+    min-inline-size: 1.5rem;
+  }
+
+  :host([data-evo-size='sm']) .evo-pagination__item {
+    min-inline-size: calc(var(--evo-pagination-item-size, 2rem) * 0.8);
+    block-size: calc(var(--evo-pagination-item-size, 2rem) * 0.8);
+  }
+
+  :host([data-evo-size='lg']) {
+    font-size: var(--evo-font-size-md);
+  }
+
+  :host([data-evo-size='lg']) .evo-pagination__item {
+    min-inline-size: calc(var(--evo-pagination-item-size, 2rem) * 1.25);
+    block-size: calc(var(--evo-pagination-item-size, 2rem) * 1.25);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .evo-pagination__item {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .evo-pagination__item[aria-current='page'] {
+      border-color: Highlight;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+  }
+}

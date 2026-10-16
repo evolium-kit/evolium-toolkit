@@ -26,17 +26,19 @@ a folha dos componentes que são directivas:
 
 ### Componentes disponíveis
 
-| Componente     | Selector                                                    | Variantes                                      | Tamanhos             |
-| -------------- | ----------------------------------------------------------- | ---------------------------------------------- | -------------------- |
-| `EvoButton`    | `button[evoButton]`, `a[evoButton]`                         | solid, ghost, outline, danger                  | sm, md, lg           |
-| `EvoInput`     | `input[evoInput]`, `textarea[evoInput]`, `select[evoInput]` | —                                              | sm, md, lg           |
-| `EvoField`     | `evo-field`                                                 | —                                              | —                    |
-| `EvoCard`      | `evo-card`                                                  | plain, sunken, outlined                        | —                    |
-| `EvoBadge`     | `evo-badge`                                                 | neutral, primary, success, warning, danger     | —                    |
-| `EvoSwitch`    | `evo-switch`                                                | —                                              | —                    |
-| `EvoTextField` | `evo-text-field`                                            | —                                              | sm, md, lg           |
-| `EvoSelect`    | `evo-select`                                                | —                                              | sm, md, lg           |
-| `EvoModal`     | `evo-modal` + `EvoModalService`                             | tons: success, danger, warning, info, question | sm, md, lg, xl, full |
+| Componente      | Selector                                                    | Variantes                                      | Tamanhos             |
+| --------------- | ----------------------------------------------------------- | ---------------------------------------------- | -------------------- |
+| `EvoButton`     | `button[evoButton]`, `a[evoButton]`                         | solid, ghost, outline, danger                  | sm, md, lg           |
+| `EvoInput`      | `input[evoInput]`, `textarea[evoInput]`, `select[evoInput]` | —                                              | sm, md, lg           |
+| `EvoField`      | `evo-field`                                                 | —                                              | —                    |
+| `EvoCard`       | `evo-card`                                                  | plain, sunken, outlined                        | —                    |
+| `EvoBadge`      | `evo-badge`                                                 | neutral, primary, success, warning, danger     | —                    |
+| `EvoSwitch`     | `evo-switch`                                                | —                                              | —                    |
+| `EvoTextField`  | `evo-text-field`                                            | —                                              | sm, md, lg           |
+| `EvoSelect`     | `evo-select`                                                | —                                              | sm, md, lg           |
+| `EvoModal`      | `evo-modal` + `EvoModalService`                             | tons: success, danger, warning, info, question | sm, md, lg, xl, full |
+| `EvoDataTable`  | `evo-data-table`                                            | —                                              | sm, md, lg           |
+| `EvoPagination` | `evo-pagination`                                            | —                                              | sm, md, lg           |
 
 ```html
 <button evoButton variant="danger" size="sm" [loading]="aApagar()">Eliminar</button>
@@ -143,6 +145,52 @@ são `EvoButton`; os tokens próprios são `--evo-modal-*`, e os `[evoTokens]`
 dos ancestrais são copiados para o overlay ao abrir. Textos por
 `provideEvoModalMessages()`. Documentação completa em
 [`src/lib/modal/README.md`](src/lib/modal/README.md).
+
+```html
+<!-- Em memória: a tabela pesquisa, ordena e pagina -->
+<evo-data-table [columns]="colunas" [data]="facturas()" searchable [pageSizeOptions]="[10, 25]">
+  <h2 slot="toolbar-start">Facturas</h2>
+  <ng-template evoCell="pago" [evoCellOf]="facturas()" let-f>
+    <evo-badge [tone]="f.pago ? 'success' : 'warning'">{{ f.estado }}</evo-badge>
+  </ng-template>
+  <ng-template evoRowActions [evoRowActionsOf]="facturas()" let-f>
+    <button evoButton variant="ghost" size="sm" (click)="editar(f)">Editar</button>
+  </ng-template>
+</evo-data-table>
+
+<!-- Da API: a tabela pede cada página (debounce, cancelamento, esqueleto, erro + repetir) -->
+<evo-data-table
+  [columns]="colunas"
+  [source]="carregarFacturas"
+  searchable
+  selectable
+  [(selection)]="sel"
+/>
+
+<evo-pagination [(page)]="pagina" [length]="total()" showSummary />
+```
+
+```ts
+readonly carregarFacturas: EvoDataTableSource<Factura> = (q) =>
+  this.http.get<EvoDataTablePage<Factura>>('/facturas', {
+    params: { page: q.page, size: q.pageSize, q: q.search, sort: evoSortParam(q.sort) },
+  });
+```
+
+O `EvoDataTable` assenta no `CdkTable` e tem três formas de dados: `[data]`
+em memória, `[source]` (a tabela pede cada página, com debounce da pesquisa,
+cancelamento de pedidos obsoletos, esqueleto, barra de recarregamento e erro
+com "Tentar de novo") e `paging="server"` (o pai pede, a tabela emite
+`[(page)]`/`[(search)]`/`[(sort)]`). Tem ordenação por coluna, selecção
+(`[(selection)]`), linhas expansíveis (`evoRowDetail`), clique na linha por
+rato e teclado, cabeçalho fixo e densidade. A pesquisa é um `EvoTextField` e
+o rodapé um `EvoPagination`, também usável sozinho (janela de páginas fixa
+com reticências, resumo, linhas por página). Os tokens próprios são
+`--evo-data-table-*` (incluindo borda externa e separador das linhas: cor e
+espessura) e `--evo-pagination-*`. Textos por `provideEvoDataTableMessages()`
+e `provideEvoPaginationMessages()`. Documentação completa em
+[`src/lib/data-table/README.md`](src/lib/data-table/README.md) e
+[`src/lib/pagination/README.md`](src/lib/pagination/README.md).
 
 `EvoButton` e `EvoInput` aplicam-se a elementos nativos em vez de os embrulhar:
 mantêm semântica, foco, validação nativa, `formControlName` e o preenchimento

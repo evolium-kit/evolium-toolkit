@@ -1,0 +1,17 @@
+<div class="flex justify-end mb-4">
+  <button type="button" class="button primary" (click)="crud.abrirCriar()">Novo usuário</button>
+</div>
+
+<data-tabela-generica
+  [headers]="tableHeaders"
+  [data]="crud.resource.list.data() ?? []"
+  [carregando]="crud.resource.list.isLoading()"
+  [pageSize]="10"
+>
+  <ng-template dataTabelaGenericaActions let-item>
+    <div class="flex items-center gap-x-3">
+      <button type="button" class="hover:text-blue-600" (click)="crud.abrirEditar(item)">Editar</button>
+      <button type="button" class="hover:text-red-600" (click)="crud.apagar(item)">Apagar</button>
+    </div>
+  </ng-template>
+</data-tabela-generica>

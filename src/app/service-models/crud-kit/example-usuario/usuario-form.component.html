@@ -1,0 +1,25 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-y-4 p-4">
+  <form-input-field
+    label="Nome"
+    formControlName="nome"
+    [erro]="form.get('nome')?.touched && form.get('nome')?.invalid ? 'Nome é obrigatório' : null"
+  />
+
+  <form-input-field
+    label="Idade"
+    type="number"
+    formControlName="idade"
+    [erro]="form.get('idade')?.touched && form.get('idade')?.invalid ? 'Informe uma idade válida' : null"
+  />
+
+  <field-select-v2
+    label="Perfil"
+    formControlName="perfil"
+    [options]="opcoesPerfil"
+  />
+
+  <div class="flex justify-end gap-x-2 pt-2">
+    <button type="button" class="button secondary" (click)="onCancelar()">Cancelar</button>
+    <button type="submit" class="button primary">Salvar</button>
+  </div>
+</form>

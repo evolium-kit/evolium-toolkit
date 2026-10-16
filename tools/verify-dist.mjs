@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(raiz, 'dist', 'toolkit');
 
-const ENTRY_POINTS = ['core', 'theme', 'components', 'layouts', 'pages', 'services'];
+const ENTRY_POINTS = ['core', 'theme', 'components', 'layouts', 'pages', 'services', 'crud'];
 const ESTILOS = ['evolium-theme.css', 'evolium-components.css', 'evolium-layouts.css'];
 const SCHEMATICS = [
   'collection.json',

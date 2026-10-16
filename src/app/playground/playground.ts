@@ -4,6 +4,7 @@ import { EvoButton } from '@evolium-kit/toolkit/components';
 import { EvoThemeStore } from '@evolium-kit/toolkit/theme';
 import { BadgeDemo } from './badge/badge-demo';
 import { ButtonDemo } from './button/button-demo';
+import { DataTableDemo } from './data-table/data-table-demo';
 import { FieldDemo } from './field/field-demo';
 import { ModalDemo } from './modal/modal-demo';
 import { SelectDemo } from './select/select-demo';
@@ -34,6 +35,7 @@ import { ThemeDemo } from './theme/theme-demo';
     TextFieldDemo,
     SelectDemo,
     ModalDemo,
+    DataTableDemo,
     ServicesDemo,
   ],
   templateUrl: './playground.html',

@@ -1,0 +1,7 @@
+@if (page.isLoading()) {
+  <p class="text-sm text-gray-500">Carregando...</p>
+} @else if (page.naoEncontrado()) {
+  <p class="text-sm text-red-600">Usuário não encontrado.</p>
+} @else {
+  <app-usuario-form [usuarioInicial]="page.dado()" (salvo)="onSalvo($event)" (cancelado)="onCancelado()" />
+}

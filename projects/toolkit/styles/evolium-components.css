@@ -116,6 +116,28 @@
     font: inherit;
   }
 
+  /*
+   * evo-data-table: regras que dependem do conteúdo projectado (slots), que
+   * o styleUrl encapsulado do componente não consegue ler.
+   * A barra de cima só aparece se tiver alguma coisa (pesquisa ou slots).
+   */
+  /* Classe repetida: tem de ganhar ao `display: flex` encapsulado (classe + atributo). */
+  .evo-data-table > .evo-data-table__toolbar.evo-data-table__toolbar:not(:has(> * > *)) {
+    display: none;
+  }
+
+  /* Um slot="empty"/"error" substitui o texto por omissão. */
+  .evo-data-table__state-slot:empty,
+  .evo-data-table__state-slot:not(:empty) + .evo-data-table__state-default {
+    display: none;
+  }
+
+  .evo-data-table__toolbar-start > :is(h1, h2, h3, h4, p)[slot='toolbar-start'] {
+    margin: 0;
+    font-size: var(--evo-font-size-lg);
+    font-weight: 600;
+  }
+
   .evo-input {
     inline-size: 100%;
     min-block-size: var(--evo-input-height, 2.25rem);

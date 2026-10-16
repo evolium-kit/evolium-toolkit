@@ -1,0 +1,376 @@
+/*
+ * REGRA 1: nenhuma declaração `--evo-data-table-*` neste ficheiro.
+ * O valor por omissão vive no fallback do var(). Declará-lo aqui ganharia por
+ * proximidade a qualquer :root do projecto e tornaria o override global
+ * impossível — sem erro nenhum a avisar.
+ *
+ * REGRA 2: nunca registar estes tokens com @property { initial-value }.
+ *
+ * A barra de cima esconde-se quando não tem nada: essa regra lê conteúdo
+ * projectado, por isso vive em styles/evolium-components.css.
+ */
+
+@layer evo.components {
+  :host {
+    display: block;
+    overflow: hidden;
+    border: var(--evo-data-table-border-width, var(--evo-border-width)) solid
+      var(--evo-data-table-border-color, var(--evo-color-border));
+    border-radius: var(--evo-data-table-radius, var(--evo-radius-lg));
+    background-color: var(--evo-data-table-bg, var(--evo-color-surface));
+    box-shadow: var(--evo-data-table-shadow, var(--evo-elevation-1));
+    color: var(--evo-data-table-fg, var(--evo-color-on-surface));
+    font-family: var(--evo-font-sans);
+    font-size: var(--evo-font-size-md);
+  }
+
+  /* ------------------------------------------------------------ barra de cima */
+
+  .evo-data-table__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--evo-space-sm) var(--evo-space-md);
+    padding: var(--evo-data-table-cell-padding-y, var(--evo-space-md))
+      var(--evo-data-table-cell-padding-x, var(--evo-space-lg));
+    border-block-end: var(--evo-data-table-row-border-width, var(--evo-border-width)) solid
+      var(--evo-data-table-row-border-color, var(--evo-color-border));
+    background-color: var(--evo-data-table-header-bg, var(--evo-color-surface-sunken));
+    color: var(--evo-data-table-header-fg, var(--evo-color-on-surface));
+  }
+
+  .evo-data-table__toolbar-start {
+    min-inline-size: 0;
+  }
+
+  .evo-data-table__toolbar-end {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--evo-space-sm) var(--evo-space-md);
+    margin-inline-start: auto;
+  }
+
+  /* Largura fixa, não percentual: a barra mede-se pelo conteúdo, e 100% dela seria circular. */
+  .evo-data-table__search {
+    inline-size: 18rem;
+    max-inline-size: 100%;
+  }
+
+  /* ------------------------------------------------------------ tabela */
+
+  .evo-data-table__scroll {
+    position: relative;
+    overflow: auto;
+  }
+
+  .evo-data-table__table {
+    inline-size: 100%;
+    border-collapse: collapse;
+  }
+
+  .evo-data-table__caption,
+  .evo-data-table__sr-only {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  th,
+  td {
+    padding: var(--evo-data-table-cell-padding-y, var(--evo-space-md))
+      var(--evo-data-table-cell-padding-x, var(--evo-space-lg));
+    text-align: start;
+    vertical-align: middle;
+  }
+
+  th {
+    border-block-end: var(--evo-data-table-row-border-width, var(--evo-border-width)) solid
+      var(--evo-data-table-row-border-color, var(--evo-color-border));
+    background-color: var(--evo-data-table-header-bg, var(--evo-color-surface-sunken));
+    color: var(--evo-data-table-header-fg, var(--evo-color-on-surface));
+    font-size: var(--evo-font-size-sm);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /*
+   * Um separador por cima de cada linha menos a primeira: a última nunca fica
+   * com borda a mais. Sem `tbody` no selector: o CdkTable cria-o em runtime,
+   * sem o atributo do encapsulamento, e a regra nunca correspondia.
+   */
+  tr:not(:first-child) > td {
+    border-block-start: var(--evo-data-table-row-border-width, var(--evo-border-width)) solid
+      var(--evo-data-table-row-border-color, var(--evo-color-border));
+  }
+
+  [data-evo-align='center'] {
+    text-align: center;
+  }
+
+  [data-evo-align='end'] {
+    text-align: end;
+  }
+
+  :host([data-evo-size='sm']) :is(th, td) {
+    padding-block: calc(var(--evo-data-table-cell-padding-y, var(--evo-space-md)) * 0.5);
+    padding-inline: calc(var(--evo-data-table-cell-padding-x, var(--evo-space-lg)) * 0.66);
+  }
+
+  :host([data-evo-size='lg']) :is(th, td) {
+    padding-block: calc(var(--evo-data-table-cell-padding-y, var(--evo-space-md)) * 1.5);
+  }
+
+  :host([data-evo-size='sm']) {
+    font-size: var(--evo-font-size-sm);
+  }
+
+  /* ------------------------------------------------------------ linhas */
+
+  .evo-data-table__row {
+    transition: background-color var(--evo-duration-fast) var(--evo-easing);
+  }
+
+  .evo-data-table__row[data-evo-even] {
+    background-color: var(--evo-data-table-row-striped-bg, transparent);
+  }
+
+  .evo-data-table__row:not([data-evo-skeleton]):hover {
+    background-color: var(--evo-data-table-row-hover-bg, var(--evo-color-surface-sunken));
+  }
+
+  .evo-data-table__row:is([data-evo-selected], [data-evo-expanded]),
+  .evo-data-table__row:is([data-evo-selected], [data-evo-expanded]):hover {
+    background-color: var(--evo-data-table-row-selected-bg, var(--evo-color-primary-soft));
+  }
+
+  .evo-data-table__row[data-evo-clickable] {
+    cursor: pointer;
+  }
+
+  .evo-data-table__row[data-evo-clickable]:focus-visible {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: calc(var(--evo-focus-ring-width) * -1);
+  }
+
+  .evo-data-table__detail-row > td {
+    border-block-start: 0;
+    background-color: var(--evo-data-table-row-selected-bg, var(--evo-color-primary-soft));
+  }
+
+  /* ------------------------------------------------------------ controlos */
+
+  .evo-data-table__control-cell {
+    inline-size: 1%;
+    padding-inline-end: 0;
+  }
+
+  .evo-data-table__checkbox {
+    inline-size: 1rem;
+    block-size: 1rem;
+    margin: 0;
+    accent-color: var(--evo-color-primary);
+    cursor: pointer;
+  }
+
+  .evo-data-table__checkbox:focus-visible,
+  .evo-data-table__expand:focus-visible,
+  .evo-data-table__sort:focus-visible {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: var(--evo-focus-ring-offset);
+  }
+
+  .evo-data-table__expand {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--evo-radius-full);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .evo-data-table__expand:hover {
+    background-color: var(--evo-data-table-row-hover-bg, var(--evo-color-surface-sunken));
+  }
+
+  .evo-data-table__expand svg {
+    inline-size: 1rem;
+    block-size: 1rem;
+    transition: transform var(--evo-duration-fast) var(--evo-easing);
+  }
+
+  .evo-data-table__expand[aria-expanded='true'] svg {
+    transform: rotate(90deg);
+  }
+
+  :host-context([dir='rtl']) .evo-data-table__expand[aria-expanded='false'] svg {
+    transform: scaleX(-1);
+  }
+
+  .evo-data-table__actions-cell {
+    inline-size: 1%;
+    white-space: nowrap;
+  }
+
+  /* ------------------------------------------------------------ ordenação */
+
+  .evo-data-table__sort {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--evo-space-xs);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .evo-data-table__sort-icon {
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+    flex-shrink: 0;
+  }
+
+  .evo-data-table__sort-icon path {
+    opacity: 0.35;
+  }
+
+  .evo-data-table__sort-icon[data-evo-direction='asc'] .evo-data-table__sort-up,
+  .evo-data-table__sort-icon[data-evo-direction='desc'] .evo-data-table__sort-down {
+    opacity: 1;
+  }
+
+  .evo-data-table__sort-icon[data-evo-direction='asc'] .evo-data-table__sort-down,
+  .evo-data-table__sort-icon[data-evo-direction='desc'] .evo-data-table__sort-up {
+    opacity: 0;
+  }
+
+  /* ------------------------------------------------------------ estados */
+
+  .evo-data-table__skeleton {
+    display: block;
+    inline-size: 70%;
+    min-inline-size: 2rem;
+    block-size: 0.75rem;
+    border-radius: var(--evo-radius-sm);
+    background-color: var(--evo-data-table-skeleton-bg, var(--evo-color-border));
+    animation: evo-data-table-pulse 1.2s ease-in-out infinite;
+  }
+
+  .evo-data-table__progress {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: 2;
+    block-size: 2px;
+    overflow: hidden;
+  }
+
+  .evo-data-table__progress::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inline-size: 40%;
+    background-color: var(--evo-data-table-progress-color, var(--evo-color-primary));
+    animation: evo-data-table-progress 1s var(--evo-easing) infinite;
+  }
+
+  .evo-data-table__state {
+    padding: var(--evo-space-xl) var(--evo-space-lg);
+    color: var(--evo-data-table-fg-muted, var(--evo-color-on-surface-muted));
+    text-align: center;
+  }
+
+  .evo-data-table__state p {
+    margin: 0;
+  }
+
+  .evo-data-table__state-default:is(div) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--evo-space-md);
+  }
+
+  /* ------------------------------------------------------------ rodapé */
+
+  .evo-data-table__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--evo-space-sm) var(--evo-space-md);
+    padding: calc(var(--evo-data-table-cell-padding-y, var(--evo-space-md)) * 0.75)
+      var(--evo-data-table-cell-padding-x, var(--evo-space-lg));
+    border-block-start: var(--evo-data-table-row-border-width, var(--evo-border-width)) solid
+      var(--evo-data-table-row-border-color, var(--evo-color-border));
+    background-color: var(--evo-data-table-footer-bg, var(--evo-color-surface-sunken));
+    color: var(--evo-data-table-fg-muted, var(--evo-color-on-surface-muted));
+  }
+
+  .evo-data-table__footer-start {
+    min-inline-size: 0;
+  }
+
+  .evo-data-table__footer-start:empty {
+    display: none;
+  }
+
+  .evo-data-table__pagination {
+    flex: 1;
+  }
+
+  @keyframes evo-data-table-pulse {
+    50% {
+      opacity: 0.45;
+    }
+  }
+
+  @keyframes evo-data-table-progress {
+    from {
+      inset-inline-start: -40%;
+    }
+    to {
+      inset-inline-start: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .evo-data-table__row,
+    .evo-data-table__expand svg {
+      transition: none;
+    }
+
+    .evo-data-table__skeleton {
+      animation: none;
+    }
+
+    .evo-data-table__progress::before {
+      inset-inline: 0;
+      inline-size: auto;
+      animation: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .evo-data-table__row:is([data-evo-selected], [data-evo-expanded]) {
+      outline: 1px solid Highlight;
+      outline-offset: -1px;
+    }
+
+    .evo-data-table__skeleton,
+    .evo-data-table__progress::before {
+      background-color: GrayText;
+    }
+  }
+}

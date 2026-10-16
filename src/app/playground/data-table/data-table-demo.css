@@ -1,0 +1,35 @@
+evo-data-table {
+  margin-block: var(--evo-space-md);
+}
+
+.detalhe {
+  margin: 0;
+}
+
+.estados {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: var(--evo-space-md);
+}
+
+.vazio {
+  display: grid;
+  justify-items: center;
+  gap: var(--evo-space-sm);
+}
+
+.cartoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: var(--evo-space-sm);
+  margin: var(--evo-space-md) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cartoes li {
+  padding: var(--evo-space-sm) var(--evo-space-md);
+  border: var(--evo-border-width) solid var(--evo-color-border);
+  border-radius: var(--evo-radius-md);
+  font-size: var(--evo-font-size-sm);
+}

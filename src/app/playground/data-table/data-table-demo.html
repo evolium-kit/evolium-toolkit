@@ -1,0 +1,164 @@
+<evo-card>
+  <h2 slot="title">Data table</h2>
+  <p class="muted">
+    1. Em memória (137 motoristas): pesquisa sem acentos, ordenação, selecção entre páginas, detalhe
+    expansível, clique na linha só nos <strong>activos</strong> (também por Enter/Espaço).
+  </p>
+
+  <evo-data-table
+    [columns]="colunas"
+    [data]="motoristas"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 25]"
+    [(page)]="pagina"
+    [(sort)]="ordem"
+    [(selection)]="seleccao"
+    [rowClickable]="soActivos"
+    (rowClick)="ultimoClique.set($event)"
+    selectable
+    searchable
+    caption="Motoristas"
+  >
+    <strong slot="toolbar-start">Motoristas</strong>
+    <button
+      slot="toolbar-end"
+      evoButton
+      variant="ghost"
+      size="sm"
+      [disabled]="!seleccao().length"
+      (click)="seleccao.set([])"
+    >
+      Limpar selecção ({{ seleccao().length }})
+    </button>
+
+    <ng-template evoCell="activo" [evoCellOf]="motoristas" let-m>
+      <evo-badge [tone]="m.activo ? 'success' : 'neutral'">{{
+        m.activo ? 'Activo' : 'Inactivo'
+      }}</evo-badge>
+    </ng-template>
+
+    <ng-template evoRowActions [evoRowActionsOf]="motoristas" let-m>
+      <button evoButton variant="ghost" size="sm" (click)="ultimoClique.set(m)">Ver</button>
+    </ng-template>
+
+    <ng-template evoRowDetail [evoRowDetailOf]="motoristas" let-m let-i="index">
+      <p class="detalhe">
+        #{{ i + 1 }} · {{ m.nome }} faz {{ m.viagens }} viagens a partir de {{ m.provincia }}.
+      </p>
+    </ng-template>
+  </evo-data-table>
+
+  <p class="muted">
+    Página <code>{{ pagina() }}</code> · ordem <code>{{ ordem() | json }}</code> · último clique:
+    <code>{{ ultimoClique()?.nome ?? '—' }}</code>
+  </p>
+
+  <hr class="sep" />
+
+  <p class="muted">
+    2. <code>[source]</code>: Observable com 700ms de latência. Esqueleto no primeiro carregamento,
+    barra fina nos seguintes, pesquisa com debounce de 300ms, pedido anterior cancelado.
+  </p>
+  <div class="row">
+    <evo-switch [(checked)]="falhar" ariaLabelledby="dt-falhar" />
+    <span id="dt-falhar">Simular falha da API</span>
+    <button evoButton variant="outline" size="sm" (click)="tabelaApi.reload()">Recarregar</button>
+  </div>
+
+  <evo-data-table
+    #tabelaApi
+    [columns]="colunas"
+    [source]="carregar"
+    [pageSize]="5"
+    searchable
+    searchPlaceholder="Nome ou província…"
+  >
+    <span slot="toolbar-start">Da API</span>
+    <ng-template evoCell="activo" [evoCellOf]="motoristas" let-m>
+      <evo-badge [tone]="m.activo ? 'success' : 'neutral'">{{
+        m.activo ? 'Activo' : 'Inactivo'
+      }}</evo-badge>
+    </ng-template>
+  </evo-data-table>
+  <p class="muted">
+    Pedidos: <code>{{ pedidos() }}</code> · última query: <code>{{ ultimaQuery() | json }}</code>
+  </p>
+
+  <hr class="sep" />
+
+  <p class="muted">
+    3. <code>paging="server"</code> com <code>resource()</code> no pai, cabeçalho fixo, densidade
+    <code>sm</code> e bordas por <code>[evoTokens]</code> (sem borda externa, separador de 2px).
+  </p>
+  <evo-data-table
+    [columns]="colunas"
+    paging="server"
+    [data]="paginaRemota.value()?.items"
+    [total]="paginaRemota.value()?.total"
+    [loading]="paginaRemota.isLoading()"
+    [(page)]="paginaPai"
+    [(pageSize)]="porPaginaPai"
+    [(search)]="pesquisaPai"
+    [(sort)]="ordemPai"
+    [pageSizeOptions]="[8, 16]"
+    stickyHeader
+    maxHeight="16rem"
+    size="sm"
+    searchable
+    [evoTokens]="{
+      'data-table-border-width': '0',
+      'data-table-row-border-width': '2px',
+      'data-table-row-border-color': '#fed7aa',
+      'data-table-row-striped-bg': 'color-mix(in srgb, #fed7aa 25%, transparent)',
+      'pagination-item-bg-active': '#c2410c',
+    }"
+  >
+    <ng-template evoCell="activo" [evoCellOf]="motoristas" let-m>
+      <evo-badge [tone]="m.activo ? 'success' : 'neutral'">{{
+        m.activo ? 'Activo' : 'Inactivo'
+      }}</evo-badge>
+    </ng-template>
+  </evo-data-table>
+
+  <hr class="sep" />
+
+  <p class="muted">4. Estados: a carregar, erro (com "Tentar de novo") e vazio com slot próprio.</p>
+  <div class="row">
+    <evo-switch [(checked)]="estadoCarregar" ariaLabelledby="dt-carregar" />
+    <span id="dt-carregar">A carregar</span>
+    <evo-switch [(checked)]="estadoErro" ariaLabelledby="dt-erro" />
+    <span id="dt-erro">Erro</span>
+  </div>
+  <div class="estados">
+    <evo-data-table
+      [columns]="colunas"
+      [data]="[]"
+      [loading]="estadoCarregar()"
+      [error]="estadoErro() ? 'O servidor não respondeu.' : null"
+      [pageSize]="3"
+      (retry)="estadoErro.set(false)"
+    />
+    <evo-data-table [columns]="colunas" [data]="[]">
+      <div slot="empty" class="vazio">
+        <strong>Ainda não há motoristas.</strong>
+        <button evoButton size="sm">Adicionar o primeiro</button>
+      </div>
+    </evo-data-table>
+  </div>
+
+  <hr class="sep" />
+
+  <p class="muted">5. <code>&lt;evo-pagination&gt;</code> sozinha, a paginar cartões.</p>
+  <ul class="cartoes">
+    @for (m of cartoes(); track m.id) {
+      <li>{{ m.nome }}</li>
+    }
+  </ul>
+  <evo-pagination
+    [(page)]="paginaSolta"
+    [(pageSize)]="porPaginaSolta"
+    [length]="motoristas.length"
+    [pageSizeOptions]="[12, 24, 48]"
+    showSummary
+  />
+</evo-card>

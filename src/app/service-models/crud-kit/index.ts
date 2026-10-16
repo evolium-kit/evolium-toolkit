@@ -1,0 +1,12 @@
+export * from './crud-kit.types';
+export * from './create-crud-resource';
+export * from './create-crud-controller';
+export * from './use-crud-form-bridge';
+export * from './crud-form-erros.service';
+export * from './crud-form-erro-banner';
+export * from './use-crud-page-state';
+export * from './crud-kit-plugin.types';
+export * from './crud-kit-plugin.token';
+export { pluginToastAutomatico } from './plugins/plugin-toast-automatico';
+export { pluginSoftDelete } from './plugins/plugin-soft-delete';
+export { pluginInvalidarRelacionados } from './plugins/plugin-invalidar-relacionados';

@@ -42,6 +42,7 @@ const ENTRY_POINTS = [
   ['layouts', 'Shells de aplicação'],
   ['pages', 'Páginas prontas (autenticação, 404, Theme Studio)'],
   ['services', 'Kernel de serviços por plugins, autenticação, HTTP'],
+  ['crud', 'CRUD sobre TanStack Query: resource, controller com modais, página, formulário'],
 ];
 
 /** Documentos do repositório que vão para o pacote, para o guia os poder citar. */
