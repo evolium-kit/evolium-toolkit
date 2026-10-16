@@ -5,6 +5,27 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+### Adicionado
+
+- **`EvoModal`** (`evo-modal`) e **`EvoModalService`**, em
+  `@evolium-kit/toolkit/components`: modal declarativo por `[(open)]` e
+  serviço com `open()` (componente, `TemplateRef` ou mensagem com acções),
+  `alert()`/`success()`/`error()`/`warning()`/`info()`, `confirm()` →
+  `boolean` e `prompt()`. Migrado de `AlertModalService` + `ModalGenerico`.
+  Assenta no `Dialog` do `@angular/cdk` (focus trap, Escape, bloqueio do
+  scroll, devolução do foco, `aria-modal`). Tamanhos, `position`, tons com
+  ícone (ou `slot="icon"` próprio), `beforeClose`, acções assíncronas com
+  `loading` e erro no modal, `EvoModalRef<R, E>` tipado com `EVO_MODAL_DATA`
+  / `injectModalRef()` / `emit()`, abertura pelo fragmento da URL com
+  `provideEvoModals({ fragments })`, `provideEvoModalMessages()` e
+  `prefers-reduced-motion`. 25 tokens `--evo-modal-*`; os `[evoTokens]` do
+  host e dos ancestrais são copiados para o overlay ao abrir.
+
+### Corrigido
+
+- **`npm run publicar`**: erros de validação do CHANGELOG (secção
+  `[Não publicado]` ausente ou vazia) saem como mensagem `✖`, sem stack trace.
+
 ## [0.3.0] - 2026-10-15
 
 ### Adicionado

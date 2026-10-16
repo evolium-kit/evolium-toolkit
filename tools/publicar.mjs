@@ -197,8 +197,14 @@ function validar(versao) {
   }
 
   const textoChangelog = readFileSync(CHANGELOG, 'utf8');
-  const notas = notasNaoPublicadas(textoChangelog);
-  const changelog = prepararChangelog(textoChangelog, versao, hoje());
+  let notas, changelog;
+  try {
+    notas = notasNaoPublicadas(textoChangelog);
+    changelog = prepararChangelog(textoChangelog, versao, hoje());
+  } catch (e) {
+    // Erros de validação da lib, não bugs: mensagem limpa, sem stack trace.
+    falhar(e instanceof Error ? e.message : String(e));
+  }
   console.log(`  ramo ${RAMO}, working tree limpa, tag ${tag} livre, CHANGELOG com conteúdo.`);
   return { changelog, actual, notas };
 }
