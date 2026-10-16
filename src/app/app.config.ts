@@ -3,7 +3,7 @@ import { ApplicationConfig, isDevMode, provideBrowserGlobalErrorListeners } from
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
-import { provideEvoComponents } from '@evolium-kit/toolkit/components';
+import { provideEvoComponents, provideEvoModals } from '@evolium-kit/toolkit/components';
 import { provideEvoThemeStudio } from '@evolium-kit/toolkit/pages';
 import {
   authPlugin,
@@ -22,6 +22,7 @@ import {
 import { routes } from './app.routes';
 import { demoApiInterceptor } from './demo-api.interceptor';
 import { facturasPlugin } from './facturas.plugin';
+import { FormMotorista } from './playground/modal/form-motorista';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -61,5 +62,17 @@ export const appConfig: ApplicationConfig = {
 
     // Sem isto o Theme Studio abre vazio.
     provideEvoComponents(),
+
+    // Abrir /#registar-motorista (ou recarregar com ele na URL) abre o modal.
+    provideEvoModals({
+      fragments: {
+        'registar-motorista': (m) =>
+          m.open(FormMotorista, {
+            title: 'Registar motorista',
+            data: { mode: 'create' },
+            position: 'top',
+          }),
+      },
+    }),
   ],
 };

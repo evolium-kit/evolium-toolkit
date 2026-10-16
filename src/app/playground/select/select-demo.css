@@ -1,0 +1,21 @@
+/* Prova que o painel do evo-select (top layer) não é cortado pelo contentor. */
+.select-clip {
+  overflow: hidden;
+  padding: var(--evo-space-xs);
+}
+
+/*
+ * O template da opção é desenhado no painel (overlay), mas pertence a esta
+ * vista: o encapsulamento emulado continua a aplicar-se.
+ */
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  border-radius: var(--evo-radius-full);
+  background: var(--evo-color-primary-soft);
+  color: var(--evo-color-primary);
+  font-size: var(--evo-font-size-sm);
+  font-weight: 600;
+}

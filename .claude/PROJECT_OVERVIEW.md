@@ -141,7 +141,8 @@ src/app/
 ├── app.routes.ts            evoAuthRoutes() + rota /painel + 404
 ├── demo-api.interceptor.ts  API falsa (sem backend real) para /demo-api/*
 ├── facturas.plugin.ts       plugin ESCRITO FORA da toolkit — prova o kernel
-├── playground/               componentes, tokens, override de instância/subárvore
+├── playground/               orquestrador + uma pasta por componente (<nome>/<nome>-demo.*),
+│                             theme/, services/ e shared/demo.css
 └── painel/                   dashboard real: painel.ts, painel-shell.ts
 ```
 

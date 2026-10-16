@@ -1,0 +1,41 @@
+/* Modal Genérico - Estilos adicionais */
+
+:host {
+  display: block;
+}
+
+/* Animações personalizadas se necessário */
+
+@keyframes modalSlideIn {
+  0% {
+    transform: translateY(15px);
+    opacity: 0;
+  }
+/*
+  50% {
+    transform: scale(1.01) translateY(0);
+    opacity: 1;
+  }
+
+  75% {
+    transform: scale(0.98) translateY(0);
+    opacity: 1;
+  } */
+
+  100% {
+    transform:  translateY(0);
+    opacity: 1;
+  }
+}
+
+.enter-animation {
+  animation: modalSlideIn 0.2s ease-in;
+}
+
+.leaving {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 500ms ease-out,
+    transform 500ms ease-out;
+}

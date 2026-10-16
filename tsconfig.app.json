@@ -7,5 +7,8 @@
     "types": ["node"]
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.spec.ts"]
+  // Os *-models são cópias de recursos de outros projectos, à espera de
+  // /migrar-recurso: referência, não código da aplicação (e podem importar
+  // pacotes que este projecto não tem, como @ng-icons).
+  "exclude": ["src/**/*.spec.ts", "src/app/*-models/**"]
 }

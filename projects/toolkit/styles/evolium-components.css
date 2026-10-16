@@ -57,6 +57,65 @@
     block-size: var(--evo-text-field-icon-size, 1.125rem);
   }
 
+  /*
+   * Modal. O fundo e o painel são elementos do overlay do CDK, fora de
+   * qualquer template; o ícone e o título são conteúdo projectado no
+   * evo-modal-panel. Nada disto alcançaria um styleUrl encapsulado.
+   */
+  .evo-modal-backdrop {
+    background-color: var(
+      --evo-modal-backdrop,
+      color-mix(in srgb, var(--evo-color-on-surface) 40%, transparent)
+    );
+    backdrop-filter: blur(var(--evo-modal-backdrop-blur, 0));
+  }
+
+  .evo-modal-pane[data-evo-position='top'] {
+    margin-block: var(--evo-space-xl) auto;
+  }
+
+  .evo-modal-pane[data-evo-size~='full'] {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .evo-modal-panel__icon > [slot='icon'] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--evo-modal-icon-size, 4rem);
+    block-size: var(--evo-modal-icon-size, 4rem);
+  }
+
+  .evo-modal-panel__icon > [slot='icon'] :is(svg, img),
+  .evo-modal-panel__icon > :is(svg, img)[slot='icon'] {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* Um ícone próprio substitui o do tom (que vem a seguir no DOM). */
+  .evo-modal-panel__icon > [slot='icon'] ~ .evo-modal-panel__tone-icon {
+    display: none;
+  }
+
+  /* Com ícone, o modal é um alerta: tudo ao centro. */
+  .evo-modal-panel:has(> .evo-modal-panel__icon:not(:empty)) {
+    text-align: center;
+  }
+
+  .evo-modal-panel:has(> .evo-modal-panel__icon:not(:empty)) > .evo-modal-panel__title {
+    padding-inline: var(--evo-space-xl);
+  }
+
+  .evo-modal-panel:has(> .evo-modal-panel__icon:not(:empty)) > .evo-modal-panel__footer {
+    justify-content: var(--evo-modal-actions-align, center);
+  }
+
+  .evo-modal-panel > .evo-modal-panel__title > [slot='title'] {
+    margin: 0;
+    font: inherit;
+  }
+
   .evo-input {
     inline-size: 100%;
     min-block-size: var(--evo-input-height, 2.25rem);

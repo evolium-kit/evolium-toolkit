@@ -1,0 +1,20 @@
+<evo-card>
+  <h2 slot="title">Botão</h2>
+
+  <p class="muted">Variantes:</p>
+  <div class="row">
+    <button evoButton>Solid</button>
+    <button evoButton variant="ghost">Ghost</button>
+    <button evoButton variant="outline">Outline</button>
+    <button evoButton variant="danger">Danger</button>
+    <button evoButton disabled>Desactivado</button>
+    <button evoButton [loading]="aGravar()" (click)="simularEnvio()">Submeter</button>
+  </div>
+
+  <p class="muted">Tamanhos:</p>
+  <div class="row">
+    <button evoButton size="sm">Pequeno</button>
+    <button evoButton size="md">Médio</button>
+    <button evoButton size="lg">Grande</button>
+  </div>
+</evo-card>

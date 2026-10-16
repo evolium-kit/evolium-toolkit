@@ -1,0 +1,58 @@
+/*
+ * Utilitários de layout partilhados por todas as demos do playground.
+ * Cada demo inclui este ficheiro no seu `styleUrl`/`styleUrls` (o
+ * encapsulamento emulado não deixa os estilos do pai chegarem aos filhos).
+ * Só layout: a aparência dos componentes vem de @evolium-kit/toolkit/components.
+ */
+
+.muted {
+  margin: var(--evo-space-sm) 0 0;
+  color: var(--evo-color-on-surface-muted);
+  font-size: var(--evo-font-size-md);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--evo-space-sm);
+  margin-block-start: var(--evo-space-xs);
+}
+
+.row--fields {
+  align-items: start;
+  gap: var(--evo-space-md);
+}
+
+.row--fields > * {
+  flex: 1 1 14rem;
+}
+
+.stack {
+  display: grid;
+  gap: var(--evo-space-md);
+}
+
+.form-demo {
+  display: grid;
+  gap: var(--evo-space-md);
+  max-inline-size: 28rem;
+}
+
+code {
+  font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-size: var(--evo-font-size-sm);
+  color: var(--evo-color-on-surface-muted);
+}
+
+.erro {
+  margin: var(--evo-space-sm) 0 0;
+  color: var(--evo-color-danger);
+  font-size: var(--evo-font-size-md);
+}
+
+.sep {
+  margin-block: var(--evo-space-md);
+  border: 0;
+  border-block-start: var(--evo-border-width) solid var(--evo-color-border);
+}

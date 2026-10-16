@@ -1,0 +1,116 @@
+<evo-card>
+  <h2 slot="title">Modal</h2>
+  <p class="muted">
+    Cada botão abre o modal que descreve. Escape, fundo e × fecham; o foco volta ao botão que
+    abriu.
+  </p>
+
+  <p class="muted">Declarativo — <code>&lt;evo-modal [(open)]&gt;</code>:</p>
+  <div class="row">
+    <button evoButton variant="outline" (click)="empresaAberta.set(true)">
+      Modal com formulário e footer
+    </button>
+    <button evoButton variant="outline" (click)="topoAberto.set(true)">
+      Modal encostado ao topo
+    </button>
+    <button evoButton variant="outline" (click)="cheioAberto.set(true)">
+      Modal em ecrã inteiro
+    </button>
+    <button evoButton variant="outline" (click)="iconeAberto.set(true)">
+      Modal com ícone próprio
+    </button>
+    <span [evoTokens]="{ 'modal-radius': '24px 24px 0 0', 'button-bg': '#0d9488' }">
+      <button evoButton variant="outline" (click)="subarvoreAberta.set(true)">
+        Modal que herda tokens da subárvore
+      </button>
+      <evo-modal [(open)]="subarvoreAberta" heading="Herda da subárvore" size="sm">
+        <p style="margin: 0">Cantos só em cima, e o botão verde: vêm do ancestral.</p>
+        <div slot="footer">
+          <button evoButton (click)="subarvoreAberta.set(false)">OK</button>
+        </div>
+      </evo-modal>
+    </span>
+  </div>
+
+  <p class="muted">Serviço — <code>EvoModalService</code>:</p>
+  <div class="row">
+    <button evoButton variant="ghost" (click)="modals.success('Pagamento aceite com sucesso.')">
+      Modal de sucesso
+    </button>
+    <button evoButton variant="ghost" (click)="modals.error('Não foi possível gravar.')">
+      Modal de erro
+    </button>
+    <button evoButton variant="ghost" (click)="modals.warning('A sessão expira em 2 minutos.')">
+      Modal de aviso
+    </button>
+    <button evoButton variant="ghost" (click)="modals.info('Há uma versão nova disponível.')">
+      Modal de informação
+    </button>
+  </div>
+  <div class="row">
+    <button evoButton variant="ghost" (click)="eliminar()">Modal com confirmar</button>
+    <button evoButton variant="ghost" (click)="pedirMotivo()">Modal com campo de texto</button>
+    <button evoButton variant="ghost" (click)="submeterComFalha()">
+      Modal com acção assíncrona
+    </button>
+    <button evoButton variant="ghost" (click)="registarMotorista()">
+      Modal com componente (e #fragmento na URL)
+    </button>
+    <button evoButton variant="ghost" (click)="abrirTemplate()">
+      Modal com template e tokens próprios
+    </button>
+  </div>
+
+  <pre class="muted">{{ resultado() }}</pre>
+</evo-card>
+
+<!-- Os modais declarativos não desenham nada aqui: só existem quando abertos. -->
+<evo-modal
+  [(open)]="empresaAberta"
+  heading="Editar empresa"
+  size="lg"
+  [beforeClose]="perguntarSeSai"
+  (closed)="resultado.set('evo-modal fechou: ' + $event)"
+>
+  <form id="f-empresa" class="stack" [formGroup]="empresa" (ngSubmit)="gravarEmpresa()">
+    <evo-text-field formControlName="nome" label="Nome" />
+    <evo-text-field formControlName="nif" label="NIF" />
+  </form>
+  <div slot="footer">
+    <button evoButton variant="ghost" (click)="empresaAberta.set(false)">Cancelar</button>
+    <button evoButton type="submit" form="f-empresa">Gravar</button>
+  </div>
+</evo-modal>
+
+<evo-modal [(open)]="topoAberto" heading="Encostado ao topo" position="top">
+  <p style="margin: 0">Bom para formulários longos.</p>
+</evo-modal>
+
+<evo-modal [(open)]="cheioAberto" heading="Ecrã inteiro" size="full">
+  <p style="margin: 0">Ocupa a janela toda. Escape ou × para sair.</p>
+</evo-modal>
+
+<evo-modal [(open)]="iconeAberto" tone="success" heading="Conta verificada" size="sm">
+  <svg
+    slot="icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linejoin="round"
+  >
+    <path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Z" />
+    <path d="m8.5 12 2.5 2.5 4.5-5" />
+  </svg>
+  <p style="margin: 0">Já pode emitir facturas.</p>
+  <div slot="footer">
+    <button evoButton (click)="iconeAberto.set(false)">Continuar</button>
+  </div>
+</evo-modal>
+
+<ng-template #detalheFactura let-factura let-ref="ref">
+  <p style="margin: 0">{{ factura.numero }} — {{ factura.total }} Kz</p>
+  <div class="row" style="justify-content: flex-end; margin-top: 1rem">
+    <button evoButton (click)="ref.close('vista')">Fechar</button>
+  </div>
+</ng-template>

@@ -1,0 +1,68 @@
+<evo-card>
+  <h2 slot="title">Text field</h2>
+  <p class="muted">Reactive Forms: sai de um campo vazio para ver o erro automático.</p>
+
+  <form class="form-demo" [formGroup]="registo" (ngSubmit)="submeterRegisto()">
+    <evo-text-field
+      formControlName="nome"
+      label="Nome completo"
+      autocomplete="name"
+      clearable
+      size="lg"
+    />
+    <evo-text-field
+      formControlName="email"
+      label="Email"
+      type="email"
+      autocomplete="email"
+      hint="Usamos só para recuperar a conta."
+      size="lg"
+    >
+      <svg
+        slot="prefix"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true"
+      >
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="m3 7 9 6 9-6" />
+      </svg>
+    </evo-text-field>
+    <evo-text-field
+      formControlName="senha"
+      label="Senha"
+      type="password"
+      autocomplete="new-password"
+      size="lg"
+    />
+    <evo-text-field
+      formControlName="valor"
+      label="Valor"
+      type="number"
+      inputmode="decimal"
+      optional
+    >
+      <span slot="suffix">Kz</span>
+    </evo-text-field>
+    <evo-text-field
+      formControlName="obs"
+      label="Observações"
+      type="textarea"
+      [rows]="2"
+      autoResize
+      showCount
+      [maxlength]="140"
+      optional
+    />
+    <evo-text-field label="Desactivado" value="Não editável" disabled />
+    <div class="row">
+      <button evoButton>Submeter</button>
+      <button evoButton variant="ghost" type="button" (click)="alternarRegisto()">
+        {{ registo.disabled ? 'Activar' : 'Desactivar' }} formulário
+      </button>
+    </div>
+    <pre class="muted">{{ registo.value | json }}</pre>
+  </form>
+</evo-card>

@@ -1,0 +1,163 @@
+/*
+ * Estilos da caixa do modal (evo-modal-panel).
+ *
+ * REGRA 1: nenhuma declaração `--evo-modal-*` neste ficheiro. O valor por
+ * omissão vive no fallback do var(). Declará-lo aqui ganharia por
+ * proximidade a qualquer :root do projecto e tornaria o override global
+ * impossível — sem erro nenhum a avisar.
+ *
+ * REGRA 2: nunca registar estes tokens com @property { initial-value }.
+ *
+ * O fundo, a posição no ecrã e o que é projectado (slot="icon", título) vivem
+ * na folha global (styles/evolium-components.css): o fundo e o painel do CDK
+ * não pertencem a nenhum template, e o conteúdo projectado leva o atributo de
+ * encapsulamento de quem o escreveu.
+ */
+
+@layer evo.components {
+  :host {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--evo-space-md);
+    box-sizing: border-box;
+    inline-size: min(var(--evo-modal-width-md, 28rem), 100vw - 2 * var(--evo-space-md));
+    max-block-size: var(--evo-modal-max-height, 90dvh);
+    padding: var(--evo-modal-padding, var(--evo-space-lg));
+    border: 1px solid var(--evo-modal-border-color, transparent);
+    border-radius: var(--evo-modal-radius, var(--evo-radius-lg));
+    background-color: var(--evo-modal-bg, var(--evo-color-surface-raised));
+    box-shadow: var(--evo-modal-shadow, var(--evo-elevation-2));
+    color: var(--evo-modal-fg, var(--evo-color-on-surface));
+    font-family: var(--evo-font-sans);
+    animation: evo-modal-entrar var(--evo-modal-duration, var(--evo-duration-fast)) ease-out;
+  }
+
+  .evo-modal-panel__icon {
+    display: flex;
+    justify-content: center;
+    block-size: var(--evo-modal-icon-size, 4rem);
+    color: var(--evo-modal-icon-info, var(--evo-color-primary));
+  }
+
+  .evo-modal-panel__icon:empty {
+    display: none;
+  }
+
+  .evo-modal-panel__tone-icon {
+    inline-size: var(--evo-modal-icon-size, 4rem);
+    block-size: var(--evo-modal-icon-size, 4rem);
+  }
+
+  .evo-modal-panel__title {
+    margin: 0;
+    /* Espaço para o × não tapar o título. */
+    padding-inline-end: var(--evo-space-xl);
+    font-size: var(--evo-modal-title-size, var(--evo-font-size-lg));
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .evo-modal-panel__title:empty {
+    display: none;
+  }
+
+  .evo-modal-panel__body {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow-y: auto;
+    /* O anel de foco de um campo no limite do corpo não fica cortado. */
+    margin-inline: calc(-1 * var(--evo-focus-ring-width) - var(--evo-focus-ring-offset));
+    padding-inline: calc(var(--evo-focus-ring-width) + var(--evo-focus-ring-offset));
+  }
+
+  .evo-modal-panel__footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: var(--evo-modal-actions-align, flex-end);
+    gap: var(--evo-space-sm);
+    padding-block-start: var(--evo-space-md);
+    border-block-start: 1px solid var(--evo-modal-divider-color, var(--evo-color-border));
+  }
+
+  .evo-modal-panel__body:empty,
+  .evo-modal-panel__footer:empty {
+    display: none;
+  }
+
+  .evo-modal-panel__close {
+    position: absolute;
+    inset-block-start: var(--evo-space-xs);
+    inset-inline-end: var(--evo-space-xs);
+    display: inline-grid;
+    place-items: center;
+    /* Alvo de toque de 44×44 px. */
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--evo-radius-md);
+    background: none;
+    color: var(--evo-modal-close-color, var(--evo-color-on-surface-muted));
+    cursor: pointer;
+  }
+
+  .evo-modal-panel__close:hover {
+    color: var(--evo-modal-close-color-hover, var(--evo-color-on-surface));
+  }
+
+  .evo-modal-panel__close:focus-visible {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: calc(-1 * var(--evo-focus-ring-width));
+  }
+
+  .evo-modal-panel__close svg {
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+  }
+
+  @keyframes evo-modal-entrar {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :host {
+      animation: none;
+    }
+  }
+}
+
+@layer evo.variants {
+  :host([data-evo-size~='sm']) {
+    inline-size: min(var(--evo-modal-width-sm, 24rem), 100vw - 2 * var(--evo-space-md));
+  }
+
+  :host([data-evo-size~='lg']) {
+    inline-size: min(var(--evo-modal-width-lg, 32rem), 100vw - 2 * var(--evo-space-md));
+  }
+
+  :host([data-evo-size~='xl']) {
+    inline-size: min(var(--evo-modal-width-xl, 42rem), 100vw - 2 * var(--evo-space-md));
+  }
+
+  :host([data-evo-size~='full']) {
+    inline-size: 100vw;
+    block-size: 100dvh;
+    max-block-size: none;
+  }
+
+  :host([data-evo-tone~='success']) .evo-modal-panel__icon {
+    color: var(--evo-modal-icon-success, var(--evo-color-success));
+  }
+
+  :host([data-evo-tone~='danger']) .evo-modal-panel__icon {
+    color: var(--evo-modal-icon-danger, var(--evo-color-danger));
+  }
+
+  :host([data-evo-tone~='warning']) .evo-modal-panel__icon {
+    color: var(--evo-modal-icon-warning, var(--evo-color-warning));
+  }
+}

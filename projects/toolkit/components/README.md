@@ -26,16 +26,17 @@ a folha dos componentes que são directivas:
 
 ### Componentes disponíveis
 
-| Componente     | Selector                                                    | Variantes                                  | Tamanhos   |
-| -------------- | ----------------------------------------------------------- | ------------------------------------------ | ---------- |
-| `EvoButton`    | `button[evoButton]`, `a[evoButton]`                         | solid, ghost, outline, danger              | sm, md, lg |
-| `EvoInput`     | `input[evoInput]`, `textarea[evoInput]`, `select[evoInput]` | —                                          | sm, md, lg |
-| `EvoField`     | `evo-field`                                                 | —                                          | —          |
-| `EvoCard`      | `evo-card`                                                  | plain, sunken, outlined                    | —          |
-| `EvoBadge`     | `evo-badge`                                                 | neutral, primary, success, warning, danger | —          |
-| `EvoSwitch`    | `evo-switch`                                                | —                                          | —          |
-| `EvoTextField` | `evo-text-field`                                            | —                                          | sm, md, lg |
-| `EvoSelect`    | `evo-select`                                                | —                                          | sm, md, lg |
+| Componente     | Selector                                                    | Variantes                                      | Tamanhos             |
+| -------------- | ----------------------------------------------------------- | ---------------------------------------------- | -------------------- |
+| `EvoButton`    | `button[evoButton]`, `a[evoButton]`                         | solid, ghost, outline, danger                  | sm, md, lg           |
+| `EvoInput`     | `input[evoInput]`, `textarea[evoInput]`, `select[evoInput]` | —                                              | sm, md, lg           |
+| `EvoField`     | `evo-field`                                                 | —                                              | —                    |
+| `EvoCard`      | `evo-card`                                                  | plain, sunken, outlined                        | —                    |
+| `EvoBadge`     | `evo-badge`                                                 | neutral, primary, success, warning, danger     | —                    |
+| `EvoSwitch`    | `evo-switch`                                                | —                                              | —                    |
+| `EvoTextField` | `evo-text-field`                                            | —                                              | sm, md, lg           |
+| `EvoSelect`    | `evo-select`                                                | —                                              | sm, md, lg           |
+| `EvoModal`     | `evo-modal` + `EvoModalService`                             | tons: success, danger, warning, info, question | sm, md, lg, xl, full |
 
 ```html
 <button evoButton variant="danger" size="sm" [loading]="aApagar()">Eliminar</button>
@@ -111,6 +112,37 @@ cortado e herda os `[evoTokens]`. Herda `--evo-input-*`/`--evo-field-*` e, nos
 estados, os `--evo-text-field-*`; os tokens próprios são `--evo-select-*`.
 Textos por `provideEvoSelectMessages()`. Documentação completa em
 [`src/lib/select/README.md`](src/lib/select/README.md).
+
+```html
+<evo-modal [(open)]="aEditar" heading="Editar empresa" size="lg">
+  <form id="f-empresa" [formGroup]="form" (ngSubmit)="gravar()">…</form>
+  <div slot="footer">
+    <button evoButton variant="ghost" (click)="aEditar.set(false)">Cancelar</button>
+    <button evoButton type="submit" form="f-empresa">Gravar</button>
+  </div>
+</evo-modal>
+```
+
+```ts
+const modals = inject(EvoModalService);
+
+await modals.success('Pagamento aceite.');
+if (await modals.confirm({ message: 'Eliminar a factura?', tone: 'danger' })) { … }
+
+const ref = modals.open(FormMotorista, { title: 'Novo motorista', data: { mode: 'create' } });
+const motorista = await ref.closed;
+```
+
+O `EvoModal` é o modal declarativo (`[(open)]`, slots `icon`/`title`/corpo/
+`footer`) e o `EvoModalService` abre por código alertas, `confirm()`,
+`prompt()` e componentes/templates com dados (`EVO_MODAL_DATA`), eventos e
+resultado tipados (`EvoModalRef`), acções assíncronas com `loading`,
+`beforeClose` e ligação ao `#fragmento` da URL (`provideEvoModals()`). Assenta
+no `Dialog` do CDK (focus trap, Escape, scroll, devolução do foco). Os botões
+são `EvoButton`; os tokens próprios são `--evo-modal-*`, e os `[evoTokens]`
+dos ancestrais são copiados para o overlay ao abrir. Textos por
+`provideEvoModalMessages()`. Documentação completa em
+[`src/lib/modal/README.md`](src/lib/modal/README.md).
 
 `EvoButton` e `EvoInput` aplicam-se a elementos nativos em vez de os embrulhar:
 mantêm semântica, foco, validação nativa, `formControlName` e o preenchimento

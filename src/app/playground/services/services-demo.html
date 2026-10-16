@@ -1,0 +1,95 @@
+<evo-card>
+  <h2 slot="title">Kernel de serviços</h2>
+  <p class="muted">
+    Plugins activos, por ordem topológica: <code>{{ plugins().join(' → ') }}</code
+    >. O <code>facturas</code> está definido em <code>src/app/facturas.plugin.ts</code> — fora da
+    toolkit, sem uma linha alterada no kernel.
+  </p>
+
+  @if (auth.isAuthenticated()) {
+    <div class="row">
+      <evo-badge tone="success">Sessão activa</evo-badge>
+      <span>{{ auth.currentUser()?.name }}</span>
+      @for (papel of auth.roles(); track papel) {
+        <evo-badge>{{ papel }}</evo-badge>
+      }
+      <button evoButton variant="ghost" size="sm" (click)="sair()">Sair</button>
+    </div>
+  } @else {
+    <p class="muted">
+      Credenciais da API de demonstração: <code>ana@evolium.ao</code> / <code>1234</code>
+    </p>
+    <div class="row row--fields">
+      <evo-field>
+        <label for="login-email">Email</label>
+        <input
+          evoInput
+          id="login-email"
+          type="email"
+          [value]="email()"
+          (input)="actualizarEmail($event)"
+        />
+      </evo-field>
+      <evo-field>
+        <label for="login-senha">Senha</label>
+        <input
+          evoInput
+          id="login-senha"
+          type="password"
+          [value]="senha()"
+          (input)="actualizarSenha($event)"
+        />
+      </evo-field>
+    </div>
+    <div class="row">
+      <button evoButton [loading]="aEntrar()" (click)="entrar()">Entrar</button>
+    </div>
+  }
+
+  @if (erroAuth(); as erro) {
+    <p class="erro" role="alert">{{ erro }}</p>
+  }
+
+  <hr class="sep" />
+
+  <p class="muted">
+    O plugin <code>facturas</code> declara <code>dependsOn: ['auth']</code> e o seu pedido leva o
+    Bearer através do interceptor do plugin de auth. Sem sessão, a API responde 401.
+  </p>
+  <div class="row">
+    <button
+      evoButton
+      variant="outline"
+      [loading]="aCarregarFacturas()"
+      (click)="carregarFacturas()"
+    >
+      Carregar facturas
+    </button>
+    @if (facturas.lista().length) {
+      <evo-badge tone="primary">{{ facturas.total() | number }} Kz no total</evo-badge>
+    }
+  </div>
+
+  @if (erroFacturas(); as erro) {
+    <p class="erro" role="alert">{{ erro }}</p>
+  }
+
+  @for (factura of facturas.lista(); track factura.id) {
+    <div class="row factura">
+      <code>{{ factura.id }}</code>
+      <span>{{ factura.cliente }}</span>
+      <span>{{ factura.total | number }} Kz</span>
+      <evo-badge
+        [tone]="
+          factura.estado === 'paga'
+            ? 'success'
+            : factura.estado === 'vencida'
+              ? 'danger'
+              : 'warning'
+        "
+      >
+        {{ factura.estado }}
+      </evo-badge>
+    </div>
+  }
+</evo-card>

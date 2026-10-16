@@ -1,0 +1,42 @@
+<!-- Modal Backdrop -->
+@if (isAberto()) {
+<div class="fixed inset-0 z-40 bg-white/10 backdrop-blur-md opacity-60 transition-opacity" [class.opacity-0]="!isAberto()"
+  (click)="aoClicarNoFundoFn($event)" role="button" tabindex="0" aria-hidden="true"></div>
+
+<!-- Modal Container -->
+<div class="fixed inset-0 z-50 flex items-center  justify-center p-4 bg-black/20 backdrop-blur-lg border border-white/30 shadow-xl"  role="dialog" [attr.aria-modal]="true"
+  [attr.aria-labelledby]="titulo() ? 'modal-titulo' : null">
+  <!-- Modal Content -->
+  <div [class]="tamanhoClass()" animate.enter="enter-animation"
+    class=" flex flex-col bg-white rounded-lg shadow-2xl max-h-[90vh]  overflow-y-auto animate-in fade-in zoom-in-95 duration-200">
+    <!-- Header -->
+
+
+    @if (headerVisisvel()) {
+    <div class="flex items-center justify-between border-b border-gray-200 p-2">
+      @if (titulo()) {
+      <h2 id="modal-titulo" class="text-xl font-bold text-[#333333]">
+        {{ titulo() }}
+      </h2>
+      }
+
+      <!-- Botão de Fechar -->
+      <button (click)="fechar()"
+        class="ml-auto -mr-2 -mt-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-[#DC2626] transition-colors"
+        aria-label="Fechar modal">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    }
+    <!-- Body -->
+    <div class="{{isModalPersonalizado() ? '':  'pt-6 px-6 max-h-120'}} overflow-y-auto">
+      <ng-content></ng-content>
+    </div>
+    <div class="border-t border-gray-100 px-6 py-2">
+      <ng-content select="[slot='footer']"></ng-content>
+    </div>
+  </div>
+</div>
+}

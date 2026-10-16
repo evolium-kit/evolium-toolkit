@@ -1,0 +1,36 @@
+<evo-card>
+  <h2 slot="title">Field + input</h2>
+
+  <p class="muted"><code>&lt;evo-field&gt;</code> com ajuda e erro:</p>
+  <div class="row row--fields">
+    <evo-field>
+      <label for="field-nome">Nome</label>
+      <input evoInput id="field-nome" placeholder="Nome completo" />
+      <span slot="hint">Como aparece nos documentos.</span>
+    </evo-field>
+
+    <evo-field>
+      <label for="field-email">Email</label>
+      <input
+        evoInput
+        id="field-email"
+        type="email"
+        placeholder="nome@evolium.ao"
+        [invalid]="emailInvalido()"
+        aria-describedby="field-email-erro"
+        (blur)="emailInvalido.set(true)"
+      />
+      @if (emailInvalido()) {
+        <span slot="error" id="field-email-erro">Email inválido.</span>
+      }
+    </evo-field>
+  </div>
+
+  <p class="muted"><code>&lt;evo-form-field&gt;</code>:</p>
+  <div class="row row--fields">
+    <evo-form-field>
+      <label for="form-field-nome">Nome</label>
+      <input evoInput id="form-field-nome" placeholder="Nome completo" />
+    </evo-form-field>
+  </div>
+</evo-card>

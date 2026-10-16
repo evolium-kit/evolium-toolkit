@@ -1,0 +1,107 @@
+@if (!carregando()) {
+<div class="w-full overflow-hidden rounded-2xl border border-[#F5E1D8] bg-white">
+  <div class="flex justify-between items-center gap-4 bg-[#FDF2EA] px-6 py-4 border-b border-[#F5E1D8]">
+    <div>
+      <ng-content select="[headerLeftV2]"></ng-content>
+    </div>
+    <div class="flex gap-x-4 items-center">
+      @if (filter()) {
+      <input type="text"
+        class="border border-[#E9D9CD] bg-white rounded-full px-4 py-1.5 text-sm text-[#3A3A3A] placeholder:text-[#B0B0B0] focus:outline-none focus:ring-1 focus:ring-[#E05319]"
+        placeholder="Pesquisar..." [value]="filtroLocal()" (input)="onFilterChange($event)" />
+      }
+      <ng-content select="[headerRightV2]"></ng-content>
+    </div>
+  </div>
+
+  <div class="w-full overflow-x-auto">
+    <table class="w-full min-w-175 border-collapse">
+      <thead>
+        <tr class="bg-[#FDF2EA] border-b border-[#F5E1D8]">
+          @for (header of headers(); track header.key) {
+          <th class="text-left px-6 py-4 text-sm font-semibold text-[#1F1F1F] whitespace-nowrap"
+            [style.width]="header.width || null">
+            {{ header.label }}
+          </th>
+          }
+          @if (hasActions()) {
+          <th class="text-left px-6 py-4 text-sm font-semibold text-[#1F1F1F] whitespace-nowrap">Ações</th>
+          }
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (item of dataPagina(); track $index; let rowIndex = $index) {
+        <tr class="border-b border-[#F0F0F0] last:border-b-0 transition-colors {{ classesLinha(item) }}"
+          (click)="aoClicarLinha(item, $event)">
+
+          @for (header of headers(); track header.key) {
+          <td class="px-6 py-4">
+
+            @if (getCustomTemplate(header.key); as tpl) {
+            <ng-container *ngTemplateOutlet="tpl; context: { $implicit: item, item: item, index: rowIndex }">
+            </ng-container>
+            } @else {
+            <p [class]="getCellClass(item, header)">
+              {{ getCellValue(item, header, rowIndex) }}
+            </p>
+            }
+
+          </td>
+          }
+
+          @if (hasActions()) {
+          <td class="px-6 py-4">
+            <ng-container
+              *ngTemplateOutlet="actions?.templateRef; context: { $implicit: item, item: item, index: rowIndex }">
+            </ng-container>
+          </td>
+          }
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Linha opcional entre a tabela e a paginação (ex: subtotais da consulta). -->
+  <ng-content select="[resumoV2]"></ng-content>
+
+  @if (totalPaginas() > 1 || hasFooterLeft()) {
+  <div class="flex items-center gap-2 px-6 py-4 bg-[#FDF9F6] border-t border-[#F5E1D8]">
+    <div class="min-w-0">
+      <ng-content select="[footerLeftV2]"></ng-content>
+    </div>
+
+    <div class="flex-1 flex items-center gap-2 {{ hasFooterLeft() ? 'justify-end' : 'justify-center' }}">
+      @if (totalPaginas() > 1) {
+    <button type="button" (click)="irParaPagina(paginaAtual() - 1)" [disabled]="paginaAtual() === 1"
+      class="w-8 h-8 rounded-full flex items-center justify-center border border-[#E2E8F0] text-[#5C5C5C] disabled:opacity-40 transition-colors cursor-pointer">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+
+    @for (pagina of paginas(); track pagina) {
+    <button type="button" (click)="irParaPagina(pagina)"
+      class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-colors cursor-pointer"
+      [class]="paginaAtual() === pagina ? 'bg-[#E47202] text-white' : 'border border-[#E2E8F0] text-[#5C5C5C]'">
+      {{ pagina < 10 ? '0' + pagina : pagina }} </button>
+        }
+
+        <button type="button" (click)="irParaPagina(paginaAtual() + 1)" [disabled]="paginaAtual() === totalPaginas()"
+          class="w-8 h-8 rounded-full flex items-center justify-center border border-[#E2E8F0] text-[#5C5C5C] disabled:opacity-40 transition-colors cursor-pointer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+      }
+    </div>
+  </div>
+  }
+</div>
+} @else {
+<div class="w-full flex justify-center items-center min-h-100 rounded-2xl border border-[#F5E1D8]">
+  <div class="animate-spin  border-brand-orange-500 rounded-full h-8 w-8 border-dashed border-5"></div>
+</div>
+}

@@ -179,8 +179,11 @@ utilizador tenha trazido ambiguidade real.
    `button/evo-button.spec.ts`).
 6. Acrescenta o componente à tabela e aos exemplos da secção "Usar" de
    `projects/toolkit/components/README.md`.
-7. Exercita-o no playground (`src/app/playground/`) — uma secção com os estados e um exemplo com
-   Reactive Forms se for controlo de formulário.
+7. Exercita-o no playground — numa pasta própria `src/app/playground/<componente>/`
+   (`<componente>-demo.ts/.html`, estilos partilhados em `../shared/demo.css`), registada em
+   `playground.ts`/`.html`, que só orquestra. Mostra os estados e um exemplo com Reactive Forms se
+   for controlo de formulário; overlays (modais, etc.) abrem-se por botões que descrevem o que
+   abrem, nunca abertos ao carregar.
 
 ## Fase 4-S — Gerar um serviço/plugin
 
