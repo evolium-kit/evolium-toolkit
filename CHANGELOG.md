@@ -5,6 +5,27 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+### Adicionado
+
+- **`EvoDrawer`** (`evo-drawer`) e **`EvoDrawerService`**, em
+  `@evolium-kit/toolkit/components`: painéis sobrepostos que entram de um dos
+  lados do ecrã, migrados de `app-drawer-overlay`. Duas formas com o mesmo
+  aspecto e os mesmos tokens — `<evo-drawer>` declarativo, aberto por
+  `[(open)]`, e `EvoDrawerService.open()` por código, com componente,
+  `TemplateRef` ou só título/mensagem/acções, dados e resultado tipados
+  (`EvoDrawerRef<R, E>`, `injectDrawerRef()`, `EVO_DRAWER_DATA`). Assenta no
+  `Dialog` do `@angular/cdk` (focus trap, Escape, bloqueio do scroll,
+  devolução do foco, `aria-modal`). `position` (`left`/`right`/`top`/
+  `bottom`), `size` (`sm`/`md`/`lg`/`full`/custom), `backdrop`,
+  `closeOnBackdrop`, `closeOnEscape`, `showClose`, `beforeClose` (assíncrono),
+  `(closed)` com o motivo (`escape`, `backdrop`, `close-button`,
+  `programmatic`, `navigation`), slots `slot="header"`/`slot="footer"`,
+  acções do rodapé com `loading` e erro mostrado no drawer, abertura pelo
+  fragmento da URL com `provideEvoDrawers({ fragments })`, e
+  `provideEvoDrawerMessages()`. 17 tokens `--evo-drawer-*`, copiados dos
+  `[evoTokens]` do host e dos ancestrais para o overlay ao abrir (como no
+  `EvoModal`). Documentação em `components/src/lib/drawer/README.md`.
+
 ## [0.3.2] - 2026-10-16
 
 ### Adicionado
