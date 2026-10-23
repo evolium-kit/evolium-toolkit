@@ -5,6 +5,8 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+## [0.3.3] - 2026-10-23
+
 ### Adicionado
 
 - **`EvoDrawer`** (`evo-drawer`) e **`EvoDrawerService`**, em
