@@ -1,0 +1,100 @@
+<evo-card>
+  <h2 slot="title">Drawer</h2>
+  <p class="muted">
+    Cada botão abre o drawer que descreve. Escape, fundo e × fecham; o foco volta ao botão que
+    abriu.
+  </p>
+
+  <p class="muted">Declarativo — <code>&lt;evo-drawer [(open)]&gt;</code>:</p>
+  <div class="row">
+    <button evoButton variant="outline" (click)="comandosAberto.set(true)">
+      Drawer da direita (omissão)
+    </button>
+    <button evoButton variant="outline" (click)="detalheAberto.set(true)">
+      Drawer da esquerda, com cabeçalho próprio
+    </button>
+    <button evoButton variant="outline" (click)="filtrosAberto.set(true)">
+      Drawer de baixo, com beforeClose
+    </button>
+    <button evoButton variant="outline" (click)="cheioAberto.set(true)">
+      Drawer em ecrã inteiro
+    </button>
+    <span [evoTokens]="{ 'drawer-width-sm': '18rem', 'button-bg': '#0d9488' }">
+      <button evoButton variant="outline" (click)="subarvoreAberta.set(true)">
+        Drawer que herda tokens da subárvore
+      </button>
+      <evo-drawer [(open)]="subarvoreAberta" heading="Herda da subárvore" size="sm">
+        <p style="margin: 0">A largura e o botão verde vêm do ancestral.</p>
+        <div slot="footer">
+          <button evoButton (click)="subarvoreAberta.set(false)">OK</button>
+        </div>
+      </evo-drawer>
+    </span>
+  </div>
+
+  <p class="muted">Serviço — <code>EvoDrawerService</code>:</p>
+  <div class="row">
+    <button evoButton variant="ghost" (click)="registarMotorista()">
+      Drawer com componente (e #fragmento na URL)
+    </button>
+    <button evoButton variant="ghost" (click)="exportarComFalha()">
+      Drawer com acção assíncrona
+    </button>
+    <button evoButton variant="ghost" (click)="abrirTemplate()">
+      Drawer com template e tokens próprios
+    </button>
+  </div>
+
+  <pre class="muted">{{ resultado() }}</pre>
+</evo-card>
+
+<!-- Os drawers declarativos não desenham nada aqui: só existem quando abertos. -->
+<evo-drawer
+  [(open)]="comandosAberto"
+  heading="Comandos"
+  (closed)="resultado.set('evo-drawer fechou: ' + $event)"
+>
+  <p style="margin: 0">Lista de comandos do veículo.</p>
+  <div slot="footer">
+    <button evoButton variant="ghost" (click)="comandosAberto.set(false)">Fechar</button>
+    <button evoButton (click)="comandosAberto.set(false)">Enviar</button>
+  </div>
+</evo-drawer>
+
+<evo-drawer [(open)]="detalheAberto" ariaLabel="Detalhes do veículo" position="left" size="24rem">
+  <div slot="header" class="row" style="align-items: center">
+    <strong>LD-45-67-AA</strong>
+  </div>
+  <p style="margin: 0">Detalhes do veículo, sem título por omissão — o cabeçalho é próprio.</p>
+</evo-drawer>
+
+<evo-drawer
+  [(open)]="filtrosAberto"
+  heading="Filtrar veículos"
+  position="bottom"
+  [beforeClose]="perguntarSeSai"
+>
+  <form id="f-filtros" class="row" [formGroup]="filtros" (ngSubmit)="aplicarFiltros()">
+    <evo-text-field
+      formControlName="matricula"
+      label="Matrícula"
+      hideLabel
+      placeholder="Matrícula"
+    />
+  </form>
+  <div slot="footer">
+    <button evoButton variant="ghost" (click)="filtrosAberto.set(false)">Cancelar</button>
+    <button evoButton type="submit" form="f-filtros">Aplicar</button>
+  </div>
+</evo-drawer>
+
+<evo-drawer [(open)]="cheioAberto" heading="Ecrã inteiro" size="full">
+  <p style="margin: 0">Ocupa a janela toda. Escape ou × para sair.</p>
+</evo-drawer>
+
+<ng-template #detalheFactura let-factura let-ref="ref">
+  <p style="margin: 0">{{ factura.numero }} — {{ factura.total }} Kz</p>
+  <div class="row" style="justify-content: flex-end; margin-top: 1rem">
+    <button evoButton (click)="ref.close('vista')">Fechar</button>
+  </div>
+</ng-template>

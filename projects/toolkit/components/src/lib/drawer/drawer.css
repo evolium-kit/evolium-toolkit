@@ -1,0 +1,213 @@
+/*
+ * Estilos da caixa do drawer (evo-drawer-panel).
+ *
+ * REGRA 1: nenhuma declaração `--evo-drawer-*` neste ficheiro. O valor por
+ * omissão vive no fallback do var(). Declará-lo aqui ganharia por
+ * proximidade a qualquer :root do projecto e tornaria o override global
+ * impossível — sem erro nenhum a avisar.
+ *
+ * REGRA 2: nunca registar estes tokens com @property { initial-value }.
+ *
+ * O fundo e o posicionamento no ecrã são do overlay do CDK (folha global,
+ * styles/evolium-components.css): não pertencem a nenhum template.
+ */
+
+@layer evo.components {
+  :host {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    max-inline-size: 100vw;
+    max-block-size: 100dvh;
+    background-color: var(--evo-drawer-bg, var(--evo-color-surface-raised));
+    color: var(--evo-drawer-fg, var(--evo-color-on-surface));
+    border: 1px solid var(--evo-drawer-border-color, transparent);
+    box-shadow: var(--evo-drawer-shadow, var(--evo-elevation-2));
+    font-family: var(--evo-font-sans);
+    animation-duration: var(--evo-drawer-duration, var(--evo-duration-fast));
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+  }
+
+  :host([data-evo-position='left']),
+  :host([data-evo-position='right']) {
+    inline-size: var(--evo-drawer-width-md, 28rem);
+    /* Não 100%: o pane do CDK (flex item) não tem altura definida, e uma
+       altura em percentagem sem base resolve como automática (shrink-to-fit). */
+    block-size: 100dvh;
+  }
+
+  :host([data-evo-position='top']),
+  :host([data-evo-position='bottom']) {
+    inline-size: 100vw;
+    block-size: var(--evo-drawer-height-md, 24rem);
+  }
+
+  :host([data-evo-position='left']) {
+    animation-name: evo-drawer-entrar-left;
+  }
+
+  :host([data-evo-position='right']) {
+    animation-name: evo-drawer-entrar-right;
+  }
+
+  :host([data-evo-position='top']) {
+    animation-name: evo-drawer-entrar-top;
+  }
+
+  :host([data-evo-position='bottom']) {
+    animation-name: evo-drawer-entrar-bottom;
+  }
+
+  .evo-drawer-panel__header {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--evo-space-sm);
+    padding: var(--evo-drawer-padding, var(--evo-space-lg));
+    border-block-end: 1px solid var(--evo-drawer-divider-color, var(--evo-color-border));
+  }
+
+  .evo-drawer-panel__header:empty {
+    display: none;
+  }
+
+  .evo-drawer-panel__header-default {
+    min-inline-size: 0;
+    flex: 1 1 auto;
+  }
+
+  .evo-drawer-panel__header-default:empty {
+    display: none;
+  }
+
+  .evo-drawer-panel__title {
+    margin: 0;
+    padding-inline-end: var(--evo-space-xl);
+    font-size: var(--evo-drawer-title-size, var(--evo-font-size-lg));
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .evo-drawer-panel__description {
+    margin: var(--evo-space-xs) 0 0;
+    color: var(--evo-drawer-description-color, var(--evo-color-on-surface-muted));
+    font-size: var(--evo-font-size-sm);
+  }
+
+  .evo-drawer-panel__body {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow-y: auto;
+    padding: var(--evo-drawer-padding, var(--evo-space-lg));
+    /* O anel de foco de um campo no limite do corpo não fica cortado. */
+    margin-inline: calc(-1 * var(--evo-focus-ring-width) - var(--evo-focus-ring-offset));
+    padding-inline: calc(
+      var(--evo-drawer-padding, var(--evo-space-lg)) + var(--evo-focus-ring-width) +
+        var(--evo-focus-ring-offset)
+    );
+  }
+
+  .evo-drawer-panel__footer {
+    padding: var(--evo-space-md) var(--evo-drawer-padding, var(--evo-space-lg));
+    border-block-start: 1px solid var(--evo-drawer-divider-color, var(--evo-color-border));
+  }
+
+  .evo-drawer-panel__footer:empty {
+    display: none;
+  }
+
+  .evo-drawer-panel__close {
+    position: absolute;
+    inset-block-start: var(--evo-space-xs);
+    inset-inline-end: var(--evo-space-xs);
+    display: inline-grid;
+    place-items: center;
+    /* Alvo de toque de 44×44 px. */
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--evo-radius-md);
+    background: none;
+    color: var(--evo-drawer-close-color, var(--evo-color-on-surface-muted));
+    cursor: pointer;
+  }
+
+  .evo-drawer-panel__close:hover {
+    color: var(--evo-drawer-close-color-hover, var(--evo-color-on-surface));
+  }
+
+  .evo-drawer-panel__close:focus-visible {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: calc(-1 * var(--evo-focus-ring-width));
+  }
+
+  .evo-drawer-panel__close svg {
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+  }
+
+  @keyframes evo-drawer-entrar-left {
+    from {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes evo-drawer-entrar-right {
+    from {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes evo-drawer-entrar-top {
+    from {
+      transform: translateY(-100%);
+    }
+  }
+
+  @keyframes evo-drawer-entrar-bottom {
+    from {
+      transform: translateY(100%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :host {
+      animation: none;
+    }
+  }
+}
+
+@layer evo.variants {
+  :host([data-evo-position='left'][data-evo-size~='sm']),
+  :host([data-evo-position='right'][data-evo-size~='sm']) {
+    inline-size: var(--evo-drawer-width-sm, 20rem);
+  }
+
+  :host([data-evo-position='left'][data-evo-size~='lg']),
+  :host([data-evo-position='right'][data-evo-size~='lg']) {
+    inline-size: var(--evo-drawer-width-lg, 40rem);
+  }
+
+  :host([data-evo-position='left'][data-evo-size~='full']),
+  :host([data-evo-position='right'][data-evo-size~='full']) {
+    inline-size: 100vw;
+  }
+
+  :host([data-evo-position='top'][data-evo-size~='sm']),
+  :host([data-evo-position='bottom'][data-evo-size~='sm']) {
+    block-size: var(--evo-drawer-height-sm, 16rem);
+  }
+
+  :host([data-evo-position='top'][data-evo-size~='lg']),
+  :host([data-evo-position='bottom'][data-evo-size~='lg']) {
+    block-size: var(--evo-drawer-height-lg, 36rem);
+  }
+
+  :host([data-evo-position='top'][data-evo-size~='full']),
+  :host([data-evo-position='bottom'][data-evo-size~='full']) {
+    block-size: 100dvh;
+  }
+}

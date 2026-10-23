@@ -19,3 +19,4 @@ export * from './lib/select';
 export * from './lib/modal';
 export * from './lib/pagination';
 export * from './lib/data-table';
+export * from './lib/drawer';

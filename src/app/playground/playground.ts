@@ -5,6 +5,7 @@ import { EvoThemeStore } from '@evolium-kit/toolkit/theme';
 import { BadgeDemo } from './badge/badge-demo';
 import { ButtonDemo } from './button/button-demo';
 import { DataTableDemo } from './data-table/data-table-demo';
+import { DrawerDemo } from './drawer/drawer-demo';
 import { FieldDemo } from './field/field-demo';
 import { ModalDemo } from './modal/modal-demo';
 import { SelectDemo } from './select/select-demo';
@@ -35,6 +36,7 @@ import { ThemeDemo } from './theme/theme-demo';
     TextFieldDemo,
     SelectDemo,
     ModalDemo,
+    DrawerDemo,
     DataTableDemo,
     ServicesDemo,
   ],

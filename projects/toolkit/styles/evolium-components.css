@@ -117,6 +117,41 @@
   }
 
   /*
+   * Drawer. O fundo e o posicionamento no ecrã são do overlay do CDK, fora
+   * de qualquer template; o cabeçalho próprio é conteúdo projectado no
+   * evo-drawer-panel. Nada disto alcançaria um styleUrl encapsulado.
+   */
+  .evo-drawer-backdrop {
+    background-color: var(
+      --evo-drawer-backdrop,
+      color-mix(in srgb, var(--evo-color-on-surface) 40%, transparent)
+    );
+    backdrop-filter: blur(var(--evo-drawer-backdrop-blur, 0));
+  }
+
+  /* O CDK centra o pane por omissão; isto encosta-o à margem da posição. */
+  .evo-drawer-pane[data-evo-position='left'] {
+    margin-inline: 0 auto;
+  }
+
+  .evo-drawer-pane[data-evo-position='right'] {
+    margin-inline: auto 0;
+  }
+
+  .evo-drawer-pane[data-evo-position='top'] {
+    margin-block: 0 auto;
+  }
+
+  .evo-drawer-pane[data-evo-position='bottom'] {
+    margin-block: auto 0;
+  }
+
+  /* Um cabeçalho próprio (slot="header") substitui o título/descrição por omissão. */
+  .evo-drawer-panel__header:has(> [slot='header']) > .evo-drawer-panel__header-default {
+    display: none;
+  }
+
+  /*
    * evo-data-table: regras que dependem do conteúdo projectado (slots), que
    * o styleUrl encapsulado do componente não consegue ler.
    * A barra de cima só aparece se tiver alguma coisa (pesquisa ou slots).

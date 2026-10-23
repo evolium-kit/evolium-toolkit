@@ -37,6 +37,7 @@ a folha dos componentes que são directivas:
 | `EvoTextField`  | `evo-text-field`                                            | —                                              | sm, md, lg           |
 | `EvoSelect`     | `evo-select`                                                | —                                              | sm, md, lg           |
 | `EvoModal`      | `evo-modal` + `EvoModalService`                             | tons: success, danger, warning, info, question | sm, md, lg, xl, full |
+| `EvoDrawer`     | `evo-drawer` + `EvoDrawerService`                           | posições: left, right, top, bottom             | sm, md, lg, full     |
 | `EvoDataTable`  | `evo-data-table`                                            | —                                              | sm, md, lg           |
 | `EvoPagination` | `evo-pagination`                                            | —                                              | sm, md, lg           |
 
@@ -191,6 +192,30 @@ espessura) e `--evo-pagination-*`. Textos por `provideEvoDataTableMessages()`
 e `provideEvoPaginationMessages()`. Documentação completa em
 [`src/lib/data-table/README.md`](src/lib/data-table/README.md) e
 [`src/lib/pagination/README.md`](src/lib/pagination/README.md).
+
+```html
+<evo-drawer [(open)]="aAbrir" heading="Comandos" position="right" size="lg">
+  <p>Lista de comandos…</p>
+  <div slot="footer">
+    <button evoButton variant="ghost" (click)="aAbrir.set(false)">Fechar</button>
+    <button evoButton>Enviar</button>
+  </div>
+</evo-drawer>
+```
+
+```ts
+const drawers = inject(EvoDrawerService);
+
+const ref = drawers.open(FormMotorista, { title: 'Novo motorista', data: { mode: 'create' } });
+const motorista = await ref.closed;
+```
+
+O `EvoDrawer` é um painel sobreposto que entra de um dos lados do ecrã
+(`left`/`right`/`top`/`bottom`), declarativo (`[(open)]`, slots
+`header`/`footer`) ou aberto por código com o `EvoDrawerService` (dados,
+eventos e resultado tipados, como o `EvoModalService`). Assenta no `Dialog`
+do CDK; os tokens próprios são `--evo-drawer-*`. Documentação completa em
+[`src/lib/drawer/README.md`](src/lib/drawer/README.md).
 
 `EvoButton` e `EvoInput` aplicam-se a elementos nativos em vez de os embrulhar:
 mantêm semântica, foco, validação nativa, `formControlName` e o preenchimento

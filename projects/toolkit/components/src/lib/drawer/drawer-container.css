@@ -1,0 +1,27 @@
+/*
+ * Estilos do conteúdo que o EvoDrawerService põe dentro do evo-drawer-panel.
+ * Mesmas regras de drawer.css: nenhuma declaração `--evo-drawer-*` aqui.
+ */
+
+@layer evo.components {
+  .evo-drawer-container__message {
+    margin: 0;
+    font-size: var(--evo-font-size-md);
+    line-height: 1.5;
+    white-space: pre-line;
+  }
+
+  .evo-drawer-container__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--evo-space-sm);
+  }
+
+  .evo-drawer-container__error {
+    flex-basis: 100%;
+    margin: 0;
+    color: var(--evo-color-danger);
+    font-size: var(--evo-font-size-sm);
+  }
+}

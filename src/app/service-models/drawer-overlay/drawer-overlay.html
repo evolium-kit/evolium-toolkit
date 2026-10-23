@@ -1,0 +1,81 @@
+<!--
+  Fica fora do DOM enquanto fechado; `visivel` entra primeiro (painel fora do ecrã)
+  e só depois `deslizado` o traz para dentro, senão não há transição de onde animar.
+-->
+@if (visivel()) {
+  <div class="fixed inset-0 z-50">
+    @if (comBackdrop()) {
+      <!-- Só decorativo: quem fecha com o teclado tem o `Esc` e o botão ✕. -->
+      <div
+        class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300"
+        [class]="deslizado() ? 'opacity-100' : 'opacity-0'"
+        (click)="aoClicarBackdrop()"
+        aria-hidden="true"
+      ></div>
+    }
+
+    <div
+      #painel
+      class="absolute flex max-w-full flex-col overflow-hidden bg-white shadow-2xl transition-transform duration-300 ease-out motion-reduce:transition-none focus-visible:outline-none {{ classesPainel() }}"
+      [style.width]="largura()"
+      [style.height]="altura()"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-labelledby]="titulo() ? idTitulo : null"
+      [attr.aria-label]="titulo() ? null : rotulo() || null"
+      tabindex="-1"
+      (keydown.tab)="aoTeclarTab($event)"
+      (keydown.shift.tab)="aoTeclarTab($event)"
+    >
+      <div class="flex items-start justify-between gap-x-3 border-b border-[#F1E7E4] px-5 py-4">
+        @if (cabecalhoProprio()) {
+          <div class="min-w-0 flex-1">
+            <ng-content select="[drawerCabecalho]" />
+          </div>
+        } @else {
+          <div class="min-w-0 flex-1">
+            @if (titulo()) {
+              <h2 [id]="idTitulo" class="text-lg font-bold text-[#1F1F1F]">{{ titulo() }}</h2>
+            }
+            @if (descricao()) {
+              <p class="mt-0.5 text-xs text-gray-400">{{ descricao() }}</p>
+            }
+          </div>
+        }
+
+        @if (comFechar()) {
+          <button
+            type="button"
+            class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange-500"
+            [attr.aria-label]="rotuloFechar()"
+            (click)="fechar()"
+          >
+            <svg
+              class="h-[18px] w-[18px]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        }
+      </div>
+
+      <div class="min-h-0 flex-1 overflow-y-auto px-5 py-5">
+        <ng-content />
+      </div>
+
+      @if (rodape()) {
+        <div class="mt-auto border-t border-[#F1E7E4] px-5 py-4">
+          <ng-content select="[drawerRodape]" />
+        </div>
+      }
+    </div>
+  </div>
+}
