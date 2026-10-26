@@ -41,31 +41,62 @@ import { EvoTextField } from '@evolium-kit/toolkit/components';
 
 ## API
 
-| Nome            | Tipo                                                                                                | Omissão  | Angular   | Descrição                                                                                        |
-| --------------- | --------------------------------------------------------------------------------------------------- | -------- | --------- | ------------------------------------------------------------------------------------------------ |
-| `value`         | `string`                                                                                            | `''`     | `model()` | Valor. `[(value)]` para usar sem formulários.                                                    |
-| `label`         | `string`                                                                                            | `''`     | `input()` | Etiqueta. Sem ela, não é desenhada (usar então `hideLabel` com texto, para a acessibilidade).    |
-| `hideLabel`     | `boolean`                                                                                           | `false`  | `input()` | Esconde a etiqueta visualmente; continua a ser lida pelos leitores de ecrã.                      |
-| `hint`          | `string`                                                                                            | `''`     | `input()` | Texto de ajuda por baixo. Dá lugar à mensagem de erro, quando há uma.                            |
-| `error`         | `string \| null \| (control) => string \| null`                                                     | `null`   | `input()` | Erro manual, com prioridade sobre o automático. A função recebe o `AbstractControl` (ou `null`). |
-| `errorMessages` | `Record<string, string \| (detalhe) => string>`                                                     | `null`   | `input()` | Mensagens por chave de erro, só para este campo.                                                 |
-| `type`          | `'text' \| 'email' \| 'password' \| 'search' \| 'tel' \| 'url' \| 'number' \| 'textarea' \| string` | `'text'` | `input()` | `textarea` troca o elemento; `password` acrescenta o botão mostrar/ocultar.                      |
-| `placeholder`   | `string`                                                                                            | `''`     | `input()` |                                                                                                  |
-| `size`          | `'sm' \| 'md' \| 'lg'`                                                                              | `'md'`   | `input()` | Os mesmos tamanhos do `evoInput`.                                                                |
-| `required`      | `boolean \| undefined`                                                                              | —        | `input()` | Por omissão lido do controlo (`Validators.required`). `true`/`false` força.                      |
-| `optional`      | `boolean`                                                                                           | `false`  | `input()` | Mostra "(opcional)". Ignorado se o campo for obrigatório.                                        |
-| `disabled`      | `boolean`                                                                                           | `false`  | `input()` | Também desactivado por `control.disable()`.                                                      |
-| `readonly`      | `boolean`                                                                                           | `false`  | `input()` |                                                                                                  |
-| `autocomplete`  | `string`                                                                                            | `''`     | `input()` | Passado ao controlo nativo. Usar sempre em login/registo (`email`, `current-password`, …).       |
-| `inputmode`     | `string`                                                                                            | `''`     | `input()` | Teclado em mobile (`numeric`, `tel`, `email`, …).                                                |
-| `maxlength`     | `number`                                                                                            | —        | `input()` | Limite nativo. Com `formControlName`, o Angular junta também o validador `maxlength`.            |
-| `rows`          | `number`                                                                                            | `4`      | `input()` | Linhas do `textarea`; com `autoResize`, a altura mínima.                                         |
-| `autoResize`    | `boolean`                                                                                           | `false`  | `input()` | `textarea` cresce com o conteúdo (`field-sizing: content`; noutros browsers fica fixo).          |
-| `showCount`     | `boolean`                                                                                           | `false`  | `input()` | Contador de caracteres (`12 / 80` com `maxlength`).                                              |
-| `clearable`     | `boolean`                                                                                           | `false`  | `input()` | Botão × para apagar o valor; só aparece com valor e se o campo for editável.                     |
+| Nome            | Tipo                                                                                                                  | Omissão  | Angular   | Descrição                                                                                                                             |
+| --------------- | --------------------------------------------------------------------------------------------------------------------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`         | `string`                                                                                                              | `''`     | `model()` | Valor. `[(value)]` para usar sem formulários.                                                                                         |
+| `label`         | `string`                                                                                                              | `''`     | `input()` | Etiqueta. Sem ela, não é desenhada (usar então `hideLabel` com texto, para a acessibilidade).                                         |
+| `hideLabel`     | `boolean`                                                                                                             | `false`  | `input()` | Esconde a etiqueta visualmente; continua a ser lida pelos leitores de ecrã.                                                           |
+| `hint`          | `string`                                                                                                              | `''`     | `input()` | Texto de ajuda por baixo. Dá lugar à mensagem de erro, quando há uma.                                                                 |
+| `error`         | `string \| null \| (control) => string \| null`                                                                       | `null`   | `input()` | Erro manual, com prioridade sobre o automático. A função recebe o `AbstractControl` (ou `null`).                                      |
+| `errorMessages` | `Record<string, string \| (detalhe) => string>`                                                                       | `null`   | `input()` | Mensagens por chave de erro, só para este campo.                                                                                      |
+| `type`          | `'text' \| 'email' \| 'password' \| 'search' \| 'tel' \| 'url' \| 'number' \| 'textarea' \| 'autoComplete' \| string` | `'text'` | `input()` | `textarea` troca o elemento; `password` acrescenta o botão mostrar/ocultar; `autoComplete` junta um painel de sugestões (ver abaixo). |
+| `placeholder`   | `string`                                                                                                              | `''`     | `input()` |                                                                                                                                       |
+| `size`          | `'sm' \| 'md' \| 'lg'`                                                                                                | `'md'`   | `input()` | Os mesmos tamanhos do `evoInput`.                                                                                                     |
+| `required`      | `boolean \| undefined`                                                                                                | —        | `input()` | Por omissão lido do controlo (`Validators.required`). `true`/`false` força.                                                           |
+| `optional`      | `boolean`                                                                                                             | `false`  | `input()` | Mostra "(opcional)". Ignorado se o campo for obrigatório.                                                                             |
+| `disabled`      | `boolean`                                                                                                             | `false`  | `input()` | Também desactivado por `control.disable()`.                                                                                           |
+| `readonly`      | `boolean`                                                                                                             | `false`  | `input()` |                                                                                                                                       |
+| `autocomplete`  | `string`                                                                                                              | `''`     | `input()` | Passado ao controlo nativo. Usar sempre em login/registo (`email`, `current-password`, …).                                            |
+| `inputmode`     | `string`                                                                                                              | `''`     | `input()` | Teclado em mobile (`numeric`, `tel`, `email`, …).                                                                                     |
+| `maxlength`     | `number`                                                                                                              | —        | `input()` | Limite nativo. Com `formControlName`, o Angular junta também o validador `maxlength`.                                                 |
+| `rows`          | `number`                                                                                                              | `4`      | `input()` | Linhas do `textarea`; com `autoResize`, a altura mínima.                                                                              |
+| `autoResize`    | `boolean`                                                                                                             | `false`  | `input()` | `textarea` cresce com o conteúdo (`field-sizing: content`; noutros browsers fica fixo).                                               |
+| `showCount`     | `boolean`                                                                                                             | `false`  | `input()` | Contador de caracteres (`12 / 80` com `maxlength`).                                                                                   |
+| `clearable`     | `boolean`                                                                                                             | `false`  | `input()` | Botão × para apagar o valor; só aparece com valor e se o campo for editável.                                                          |
 
 **Slots:** `[slot=prefix]` e `[slot=suffix]`, para ícones ou texto (ex.: `Kz`).
 Um `<svg>` ou `<img>` num destes slots fica com o tamanho `--evo-text-field-icon-size`.
+
+### `type="autoComplete"`
+
+Só contam com `type="autoComplete"` (aceita-se também `autocomplete`, em
+minúsculas). O próprio `<input>` é o combobox; as opções são as do
+`evo-select`, e o painel é o mesmo desenho.
+
+| Nome            | Tipo                                | Omissão          | Angular    | Descrição                                                                                                     |
+| --------------- | ----------------------------------- | ---------------- | ---------- | ------------------------------------------------------------------------------------------------------------- |
+| `options`       | `EvoSelectOption<V, D>[]`           | `[]`             | `input()`  | `value`, `label`, `sublabel`, `icon`, `iconClass`, `group`, `disabled`, `data`. Ver o README do `evo-select`. |
+| `freeSolo`      | `boolean`                           | `false`          | `input()`  | Aceita texto fora da lista: o valor passa a ser o texto escrito, e não há "sem resultados".                   |
+| `loading`       | `boolean`                           | `false`          | `input()`  | Opções a carregar: indicador na caixa, `aria-busy`, e "A carregar…" se não houver opções.                     |
+| `autoHighlight` | `boolean`                           | `false`          | `input()`  | Destaca a primeira opção a cada tecla, para o Enter a escolher.                                               |
+| `openOnFocus`   | `boolean`                           | `false`          | `input()`  | Abre o painel ao receber o foco, e não só ao clicar ou escrever.                                              |
+| `compareWith`   | `(a: V, b: V) => boolean`           | `Object.is`      | `input()`  | Igualdade entre valores. Para objectos, comparar pelo id.                                                     |
+| `searchFn`      | `(opcao, termo) => boolean \| null` | label + sublabel | `input()`  | Filtro do texto, sem acentos. `null` desliga o filtro local (pesquisa no servidor, com `(searchChange)`).     |
+| `searchChange`  | `string`                            | —                | `output()` | O texto, a cada tecla.                                                                                        |
+| `openedChange`  | `boolean`                           | —                | `output()` | `true` ao abrir o painel, `false` ao fechar.                                                                  |
+
+O que o `value` (e o formulário) recebem:
+
+- **Por omissão**, o `value` da opção escolhida, ou `null` — exactamente como o
+  `evo-select`, por isso trocar um pelo outro não toca no formulário. O texto
+  escrito **não** é o valor: enquanto não escolheres, o controlo não muda, e ao
+  sair do campo o texto volta ao nome da escolha (ou a vazio).
+- **Apagar todo o texto** põe o valor a `null` logo, sem esperar pelo blur.
+- **Com `freeSolo`**, o texto escrito, a cada tecla; escolher uma opção dá o seu
+  `value`.
+- Um valor sem opção correspondente mostra-se tal como é (se for texto ou
+  número), e passa a mostrar o nome quando a opção chega — útil com opções que
+  vêm da API depois do valor.
 
 Atributos que o host reflecte, para CSS do projecto ou testes:
 
@@ -76,6 +107,8 @@ Atributos que o host reflecte, para CSS do projecto ou testes:
 | `data-evo-disabled`   | desactivado, pelo input **ou** pelo formulário |
 | `data-evo-readonly`   | só de leitura                                  |
 | `data-evo-hide-label` | `hideLabel`                                    |
+| `data-evo-open`       | `autoComplete` com o painel aberto             |
+| `data-evo-loading`    | `autoComplete` com `loading`                   |
 
 ---
 
@@ -155,6 +188,10 @@ this.form.controls.email.setErrors({ servidor: 'Este email já está registado.'
 
 ### Mensagens para a aplicação inteira
 
+Além dos erros, `provideEvoTextFieldMessages()` afina os textos do
+`autoComplete`: `noResults` ("Nenhuma opção encontrada"), `loading`
+("A carregar…"), `openOptions` e `closeOptions` (a seta).
+
 ```ts
 // app.config.ts
 import { provideEvoTextFieldMessages } from '@evolium-kit/toolkit/components';
@@ -200,6 +237,82 @@ formulário recebe um `number` (ou `null` se vazio), como no accessor nativo.
   optional
 />
 ```
+
+### Autocomplete
+
+```html
+<!-- O formulário recebe o `value` da opção, como no evo-select -->
+<evo-text-field
+  formControlName="provincia"
+  label="Província"
+  type="autoComplete"
+  [options]="provincias"
+  clearable
+/>
+
+<!-- Sugestões, mas aceita qualquer texto -->
+<evo-text-field
+  formControlName="bairro"
+  label="Bairro"
+  type="autoComplete"
+  [options]="bairros"
+  freeSolo
+/>
+
+<!-- Pesquisa no servidor: sem filtro local, e o pai actualiza as opções -->
+<evo-text-field
+  formControlName="cliente"
+  label="Cliente"
+  type="autoComplete"
+  [options]="clientes()"
+  [searchFn]="null"
+  [loading]="aPesquisar()"
+  (searchChange)="pesquisar($event)"
+/>
+```
+
+```ts
+protected readonly provincias: EvoSelectOption<string>[] = [
+  { value: 'lda', label: 'Luanda', sublabel: 'Angola' },
+  { value: 'bgl', label: 'Benguela', sublabel: 'Angola' },
+];
+```
+
+Opções que chegam a meio da escrita (pesquisa no servidor) **não** apagam o
+texto. Um template por opção faz-se como no `evo-select`:
+
+```html
+<evo-text-field type="autoComplete" [options]="gestores" label="Gestor">
+  <ng-template [evoSelectOption]="gestores" let-g>{{ g.label }} — {{ g.data?.cargo }}</ng-template>
+</evo-text-field>
+```
+
+**Teclado** (o foco nunca sai do campo):
+
+| Tecla                 | Faz                                                                                            |
+| --------------------- | ---------------------------------------------------------------------------------------------- |
+| escrever              | abre e filtra; não destaca nada (com `autoHighlight`, destaca a primeira)                      |
+| `↓` / `↑`             | fechado: abre e destaca a escolhida, ou a primeira / a última. Aberto: percorre, dando a volta |
+| `Alt` + `↑`           | fecha                                                                                          |
+| `Enter`               | escolhe a destacada. Sem destaque não faz nada (e não trava o envio do formulário)             |
+| `Esc`                 | fecha. Com o painel fechado, não faz nada                                                      |
+| `Tab`                 | fecha e sai; texto que não era uma escolha volta ao valor                                      |
+| `PageUp` / `PageDown` | saltam várias opções                                                                           |
+
+O rato abre ao clicar no campo e fecha com um segundo clique se estiver vazio;
+a seta (fora da ordem do `Tab`) abre e fecha; passar por cima destaca; clicar
+fora fecha. Reabrir com uma escolha feita mostra **todas** as opções, com a
+escolhida destacada.
+
+**Diferenças em relação ao `searchable` do `evo-select`:** aqui o campo de
+pesquisa é o próprio campo (não há botão-gatilho nem caixa dentro do painel),
+por isso Home/End movem o cursor do texto, e o valor só muda ao escolher.
+
+**Diferenças em relação ao `Autocomplete` do Joy UI** (de onde se mediu o
+comportamento): não há `multiple` com etiquetas, nem a opção "Adicionar «x»",
+nem virtualização, nem a conclusão em linha (`autoComplete` do Joy, que
+preenche o resto do texto seleccionado). Home/End movem o cursor em vez de
+saltar para a primeira/última opção.
 
 ### Sem formulários
 
@@ -248,6 +361,13 @@ Tokens próprios:
 | `--evo-text-field-icon-size`          | tamanho dos ícones                           | — (`1.125rem`, 18px)           |
 | `--evo-text-field-icon-gap`           | espaço entre ícones e texto                  | `--evo-space-sm`               |
 
+**O painel do `autoComplete` não tem tokens próprios:** é o do `evo-select`, e
+lê os seus `--evo-select-panel-*` (fundo, borda, raio, sombra, altura máxima,
+afastamento, espaço interior), `--evo-select-option-*` (fundo da opção activa
+e da escolhida, espaços), `--evo-select-check-fg`, `--evo-select-sublabel-fg` e
+`--evo-select-icon-size`. Afinar o painel do select afina o das sugestões.
+A seta e o indicador de `loading` seguem os `--evo-text-field-icon-*`.
+
 ### Na aplicação inteira (`styles.css`)
 
 ```css
@@ -278,8 +398,9 @@ completa os nomes válidos. Os anéis só aparecem com o campo em foco ou em err
 ### No Theme Studio
 
 Aparece em **Formulário → Text Field**, com os 11 tokens próprios no painel e
-os estados (normal, ícone, senha, erro, desactivado, textarea com contador) na
-pré-visualização. A caixa afina-se no painel **Input**.
+os estados (normal, ícone, senha, `autoComplete`, erro, desactivado, textarea
+com contador) na pré-visualização. A caixa afina-se no painel **Input**. O
+painel de sugestões do `autoComplete` afina-se no painel do **Select**.
 
 ---
 
@@ -296,6 +417,15 @@ pré-visualização. A caixa afina-se no painel **Input**.
   perde o outline, mas o substituto está sempre lá. Em `forced-colors` o
   `outline` mantém-se.
 - `hideLabel` usa o padrão _visually hidden_, nunca `display: none`.
+- **`autoComplete`:** o `<input>` leva `role="combobox"`, `aria-autocomplete="list"`,
+  `aria-expanded`, `aria-controls` (só com o painel aberto) e
+  `aria-activedescendant`; o foco nunca sai dele, e a linha activa é anunciada
+  e marcada com `data-evo-active`. O `autocomplete` nativo fica sempre a `off`,
+  para a lista do browser não tapar o painel. A lista é um `listbox` ligado à
+  etiqueta, com `aria-selected` por opção, `aria-busy` com `loading`, e
+  "sem resultados" numa região `role="status"`. A seta do painel tem nome
+  acessível ("Abrir opções" / "Fechar opções") e fica fora do `Tab`: o teclado
+  abre com `↓` e fecha com `Esc`. Desactivar ou pôr só de leitura fecha o painel.
 - **Contraste:** a borda por omissão (`border-strong`) cumpre 3:1. Quem mudar
   `--evo-input-border-color` tem de manter 3:1 contra o fundo (WCAG 1.4.11).
 

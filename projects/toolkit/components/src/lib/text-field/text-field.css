@@ -174,6 +174,175 @@
     block-size: var(--evo-text-field-icon-size, 1.125rem);
   }
 
+  /* ------------------------------------------------- type="autoComplete" */
+
+  .evo-text-field__caret svg {
+    transition: rotate var(--evo-duration-fast) var(--evo-easing);
+  }
+
+  :host([data-evo-open]) .evo-text-field__caret svg {
+    rotate: 180deg;
+  }
+
+  .evo-text-field__spinner {
+    flex-shrink: 0;
+    box-sizing: border-box;
+    inline-size: calc(var(--evo-text-field-icon-size, 1.125rem) * 0.8);
+    block-size: calc(var(--evo-text-field-icon-size, 1.125rem) * 0.8);
+    border: 2px solid currentColor;
+    border-inline-end-color: transparent;
+    border-radius: var(--evo-radius-full);
+    animation: evo-text-field-girar 0.8s linear infinite;
+  }
+
+  @keyframes evo-text-field-girar {
+    to {
+      rotate: 1turn;
+    }
+  }
+
+  /*
+   * O painel é o do evo-select, de propósito: a lista de sugestões tem de ser
+   * igual à de escolha, e quem afina um afina o outro. Por isso lê os tokens
+   * --evo-select-panel-* e --evo-select-option-*, e não tem os seus.
+   * É desenhado neste template (popover inline do CDK), por isso estes estilos
+   * encapsulados chegam-lhe, e ele herda os tokens do evo-text-field.
+   */
+
+  /* O pane do CDK é flex em linha: sem flex/inline-size, o painel encolhe ao conteúdo. */
+  .evo-text-field__panel {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    max-block-size: var(--evo-select-panel-max-height, 18rem);
+    margin-block: var(--evo-select-panel-offset, var(--evo-space-xs)) 0;
+    padding: var(--evo-select-panel-padding, var(--evo-space-xs));
+    overflow: hidden;
+    border: var(--evo-border-width) solid
+      var(--evo-select-panel-border-color, var(--evo-color-border));
+    border-radius: var(--evo-select-panel-radius, var(--evo-radius-md));
+    background-color: var(--evo-select-panel-bg, var(--evo-color-surface-raised));
+    box-shadow: var(
+      --evo-select-panel-shadow,
+      0 8px 24px color-mix(in srgb, var(--evo-color-on-surface) 16%, transparent)
+    );
+    color: var(--evo-color-on-surface);
+    font-family: var(--evo-font-sans);
+    font-size: var(--evo-font-size-md);
+  }
+
+  .evo-text-field__panel[data-evo-side='top'] {
+    margin-block: 0 var(--evo-select-panel-offset, var(--evo-space-xs));
+  }
+
+  .evo-text-field__panel[data-evo-size~='sm'] {
+    font-size: var(--evo-font-size-sm);
+  }
+
+  .evo-text-field__panel[data-evo-size~='lg'] {
+    font-size: var(--evo-font-size-lg);
+  }
+
+  .evo-text-field__list {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .evo-text-field__group + .evo-text-field__group {
+    margin-block-start: var(--evo-space-xs);
+  }
+
+  .evo-text-field__group-label {
+    padding-block: var(--evo-select-option-padding-block, var(--evo-space-sm)) var(--evo-space-xs);
+    padding-inline: var(--evo-select-option-padding-inline, var(--evo-space-sm));
+    color: var(--evo-select-group-label-fg, var(--evo-color-on-surface-muted));
+    font-size: var(--evo-font-size-sm);
+    font-weight: 600;
+  }
+
+  .evo-text-field__option {
+    display: flex;
+    align-items: center;
+    gap: var(--evo-space-sm);
+    padding-block: var(--evo-select-option-padding-block, var(--evo-space-sm));
+    padding-inline: var(--evo-select-option-padding-inline, var(--evo-space-sm));
+    border-radius: var(--evo-radius-sm);
+    cursor: pointer;
+  }
+
+  .evo-text-field__option[aria-selected='true'] {
+    background-color: var(--evo-select-option-selected-bg, var(--evo-color-primary-soft));
+    color: var(--evo-select-option-selected-fg, var(--evo-color-primary));
+    font-weight: 600;
+  }
+
+  /* Activa (teclado ou rato) ganha à seleccionada no fundo; a cor e o visto ficam. */
+  .evo-text-field__option[data-evo-active] {
+    background-color: var(--evo-select-option-hover-bg, var(--evo-color-surface-sunken));
+  }
+
+  .evo-text-field__option[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .evo-text-field__icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--evo-select-icon-size, var(--evo-text-field-icon-size, 1.125rem));
+    block-size: var(--evo-select-icon-size, var(--evo-text-field-icon-size, 1.125rem));
+    font-size: var(--evo-select-icon-size, var(--evo-text-field-icon-size, 1.125rem));
+    line-height: 1;
+    object-fit: contain;
+  }
+
+  .evo-text-field__text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  .evo-text-field__option-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .evo-text-field__sublabel {
+    overflow: hidden;
+    color: var(--evo-select-sublabel-fg, var(--evo-color-on-surface-muted));
+    font-size: var(--evo-font-size-sm);
+    font-weight: 400;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .evo-text-field__check {
+    flex-shrink: 0;
+    inline-size: var(--evo-select-icon-size, var(--evo-text-field-icon-size, 1.125rem));
+    block-size: var(--evo-select-icon-size, var(--evo-text-field-icon-size, 1.125rem));
+    color: var(--evo-select-check-fg, var(--evo-color-primary));
+    visibility: hidden;
+  }
+
+  .evo-text-field__option[aria-selected='true'] .evo-text-field__check {
+    visibility: visible;
+  }
+
+  .evo-text-field__empty {
+    padding-block: var(--evo-select-option-padding-block, var(--evo-space-sm));
+    padding-inline: var(--evo-select-option-padding-inline, var(--evo-space-sm));
+    color: var(--evo-color-on-surface-muted);
+  }
+
   /* ------------------------------------------------------------------ rodapé */
 
   /*
@@ -196,9 +365,29 @@
     font-variant-numeric: tabular-nums;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .evo-text-field__caret svg {
+      transition: none;
+    }
+
+    .evo-text-field__spinner {
+      animation-duration: 2.4s;
+    }
+  }
+
   @media (forced-colors: active) {
     .evo-text-field__action {
       color: ButtonText;
+    }
+
+    .evo-text-field__option[data-evo-active] {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+
+    .evo-text-field__option[aria-selected='true'] {
+      color: HighlightText;
+      background-color: Highlight;
     }
   }
 }

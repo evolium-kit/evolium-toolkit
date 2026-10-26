@@ -1,7 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import {
+  EvoSelectOption,
+  EvoSelectSearchFn,
+  evoSelectDefaultSearch,
+} from '../select/select-option';
 import { EvoTextField } from './evo-text-field';
 import { provideEvoTextFieldMessages } from './text-field.messages';
 import { evoTextFieldMeta } from './text-field.tokens';
@@ -362,6 +367,593 @@ describe('EvoTextField', () => {
         ...cssDoComponente().matchAll(/(^|[;{\s])(--evo-text-field-[a-z-]+)\s*:/g),
       ].map((m) => m[2]);
       expect(declaracoes).toEqual([]);
+    });
+  });
+});
+
+const PAISES: EvoSelectOption<string>[] = [
+  { value: 'ao', label: 'Angola', sublabel: 'África' },
+  { value: 'pt', label: 'Portugal' },
+  { value: 'br', label: 'Brasil' },
+  { value: 'mz', label: 'Moçambique', disabled: true },
+];
+
+@Component({
+  imports: [EvoTextField],
+  template: `
+    <evo-text-field
+      type="autoComplete"
+      label="País"
+      [(value)]="valor"
+      [options]="opcoes()"
+      [freeSolo]="livre()"
+      [loading]="aCarregar()"
+      [autoHighlight]="destaque()"
+      [openOnFocus]="abrirAoFocar()"
+      [clearable]="limpavel()"
+      [disabled]="desactivado()"
+      [readonly]="soLeitura()"
+      [searchFn]="filtro()"
+      (searchChange)="pesquisas.push($event)"
+      (openedChange)="aberturas.push($event)"
+    />
+  `,
+})
+class AnfitriaoAuto {
+  readonly valor = signal<string | null>(null);
+  readonly opcoes = signal(PAISES);
+  readonly livre = signal(false);
+  readonly aCarregar = signal(false);
+  readonly destaque = signal(false);
+  readonly abrirAoFocar = signal(false);
+  readonly limpavel = signal(false);
+  readonly desactivado = signal(false);
+  readonly soLeitura = signal(false);
+  readonly filtro = signal<EvoSelectSearchFn | null>(evoSelectDefaultSearch);
+  readonly pesquisas: string[] = [];
+  readonly aberturas: boolean[] = [];
+}
+
+@Component({
+  imports: [EvoTextField, ReactiveFormsModule],
+  template: `
+    <form [formGroup]="form">
+      <evo-text-field
+        formControlName="numero"
+        label="Número"
+        type="autoComplete"
+        [options]="numeros()"
+      />
+    </form>
+  `,
+})
+class AnfitriaoFormAuto {
+  readonly numeros = signal<EvoSelectOption<number>[]>([]);
+  readonly form = new FormGroup({
+    numero: new FormControl<number | null>(2, Validators.required),
+  });
+}
+
+describe('EvoTextField · type="autoComplete"', () => {
+  let fixture: ComponentFixture<AnfitriaoAuto>;
+  let a: AnfitriaoAuto;
+  let host: HTMLElement;
+
+  const campo = () => host.querySelector<HTMLInputElement>('.evo-text-field__control')!;
+  const opcoes = () => [...document.querySelectorAll<HTMLElement>('.evo-text-field__option')];
+  const rotulos = () =>
+    opcoes().map((o) => o.querySelector('.evo-text-field__option-label')!.textContent);
+  const lista = () => document.querySelector<HTMLElement>('.evo-text-field__list');
+  const seta = () => host.querySelector<HTMLButtonElement>('.evo-text-field__caret')!;
+  const actualizar = async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+  };
+  /** O ListKeyManager do CDK lê `keyCode`; o componente lê `key`. O browser dá os dois. */
+  const CODIGOS: Record<string, number> = {
+    Enter: 13,
+    Escape: 27,
+    Tab: 9,
+    ArrowUp: 38,
+    ArrowDown: 40,
+  };
+  const tecla = async (key: string) => {
+    const evento = new KeyboardEvent('keydown', {
+      key,
+      keyCode: CODIGOS[key],
+      bubbles: true,
+      cancelable: true,
+    });
+    campo().dispatchEvent(evento);
+    await actualizar();
+    return evento;
+  };
+  const premir = async () => {
+    campo().dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    await actualizar();
+  };
+  const escrever = async (texto: string) => {
+    campo().value = texto;
+    campo().dispatchEvent(new Event('input'));
+    await actualizar();
+  };
+  const sair = async () => {
+    campo().dispatchEvent(new Event('blur'));
+    await actualizar();
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({ imports: [AnfitriaoAuto] }).compileComponents();
+    fixture = TestBed.createComponent(AnfitriaoAuto);
+    a = fixture.componentInstance;
+    await actualizar();
+    host = fixture.nativeElement.querySelector('evo-text-field');
+  });
+
+  afterEach(() => fixture?.destroy());
+
+  it('o próprio <input> é o combobox, com o preenchimento do browser desligado', () => {
+    expect(campo().tagName).toBe('INPUT');
+    expect(campo().type).toBe('text');
+    expect(campo().getAttribute('role')).toBe('combobox');
+    expect(campo().getAttribute('aria-autocomplete')).toBe('list');
+    expect(campo().getAttribute('aria-expanded')).toBe('false');
+    expect(campo().getAttribute('autocomplete')).toBe('off');
+    expect(host.querySelector('label')!.getAttribute('for')).toBe(campo().id);
+    // Sem gatilho: não há nenhum botão de combobox, só o do painel (fora do Tab).
+    expect(host.querySelector('.evo-select__trigger')).toBeNull();
+    expect(seta().getAttribute('tabindex')).toBe('-1');
+  });
+
+  it('fora do autoComplete nada disto aparece', async () => {
+    const f = TestBed.createComponent(Anfitriao);
+    f.detectChanges();
+    const input = f.nativeElement.querySelector('.evo-text-field__control') as HTMLInputElement;
+    expect(input.hasAttribute('role')).toBe(false);
+    expect(input.hasAttribute('aria-expanded')).toBe(false);
+    expect(f.nativeElement.querySelector('.evo-text-field__caret')).toBeNull();
+    f.destroy();
+  });
+
+  it('aceita também "autocomplete" em minúsculas', async () => {
+    const f = TestBed.createComponent(EvoTextField);
+    f.componentRef.setInput('type', 'autocomplete');
+    f.detectChanges();
+    expect(f.nativeElement.querySelector('input').getAttribute('role')).toBe('combobox');
+    f.destroy();
+  });
+
+  it('o rato abre o painel e liga-o ao campo; outro clique, com o campo vazio, fecha', async () => {
+    await premir();
+    expect(campo().getAttribute('aria-expanded')).toBe('true');
+    expect(host.hasAttribute('data-evo-open')).toBe(true);
+    expect(lista()!.getAttribute('role')).toBe('listbox');
+    expect(campo().getAttribute('aria-controls')).toBe(lista()!.id);
+    expect(rotulos()).toEqual(['Angola', 'Portugal', 'Brasil', 'Moçambique']);
+    expect(opcoes().every((o) => o.getAttribute('role') === 'option')).toBe(true);
+    expect(a.aberturas).toEqual([true]);
+
+    await premir();
+    expect(campo().getAttribute('aria-expanded')).toBe('false');
+    expect(campo().hasAttribute('aria-controls')).toBe(false);
+    expect(lista()).toBeNull();
+    expect(a.aberturas).toEqual([true, false]);
+  });
+
+  it('escrever abre, filtra sem distinguir acentos, e não destaca nada', async () => {
+    await escrever('mocamb');
+    expect(campo().getAttribute('aria-expanded')).toBe('true');
+    expect(rotulos()).toEqual(['Moçambique']);
+    expect(campo().hasAttribute('aria-activedescendant')).toBe(false);
+    expect(opcoes().some((o) => o.hasAttribute('data-evo-active'))).toBe(false);
+    expect(a.pesquisas).toEqual(['mocamb']);
+
+    await escrever('POR');
+    expect(rotulos()).toEqual(['Portugal']);
+  });
+
+  it('o sublabel também conta para o filtro', async () => {
+    await escrever('áfric');
+    expect(rotulos()).toEqual(['Angola']);
+  });
+
+  it('autoHighlight destaca a primeira opção a cada tecla', async () => {
+    a.destaque.set(true);
+    await actualizar();
+    await escrever('br');
+    expect(campo().getAttribute('aria-activedescendant')).toBe(opcoes()[0].id);
+    expect(opcoes()[0].hasAttribute('data-evo-active')).toBe(true);
+  });
+
+  it('↓ com o painel fechado abre-o e destaca a primeira; as setas percorrem e dão a volta', async () => {
+    await tecla('ArrowDown');
+    expect(campo().getAttribute('aria-expanded')).toBe('true');
+    expect(campo().getAttribute('aria-activedescendant')).toBe(opcoes()[0].id);
+
+    await tecla('ArrowDown');
+    expect(campo().getAttribute('aria-activedescendant')).toBe(opcoes()[1].id);
+    await tecla('ArrowDown');
+    // A quarta (Moçambique) está desactivada: salta-se, e dá a volta à primeira.
+    await tecla('ArrowDown');
+    expect(campo().getAttribute('aria-activedescendant')).toBe(opcoes()[0].id);
+    await tecla('ArrowUp');
+    expect(campo().getAttribute('aria-activedescendant')).toBe(opcoes()[2].id);
+  });
+
+  it('↑ com o painel fechado abre-o e destaca a última opção escolhível', async () => {
+    await tecla('ArrowUp');
+    expect(campo().getAttribute('aria-activedescendant')).toBe(opcoes()[2].id);
+  });
+
+  it('Enter escolhe a opção destacada: actualiza [(value)], mostra o nome e fecha', async () => {
+    await tecla('ArrowDown');
+    await tecla('ArrowDown');
+    const enter = await tecla('Enter');
+    expect(enter.defaultPrevented).toBe(true);
+    expect(a.valor()).toBe('pt');
+    expect(campo().value).toBe('Portugal');
+    expect(campo().getAttribute('aria-expanded')).toBe('false');
+    expect(lista()).toBeNull();
+  });
+
+  it('Enter sem opção destacada não escolhe nem trava o envio do formulário', async () => {
+    await escrever('por');
+    const enter = await tecla('Enter');
+    expect(enter.defaultPrevented).toBe(false);
+    expect(a.valor()).toBeNull();
+    expect(campo().getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('um clique numa opção escolhe-a; uma desactivada não', async () => {
+    await premir();
+    opcoes()[3].click();
+    await actualizar();
+    expect(a.valor()).toBeNull();
+    expect(campo().getAttribute('aria-expanded')).toBe('true');
+
+    opcoes()[2].click();
+    await actualizar();
+    expect(a.valor()).toBe('br');
+    expect(campo().value).toBe('Brasil');
+  });
+
+  it('o rato destaca ao passar por cima, e a lista não rouba o foco ao campo', async () => {
+    await premir();
+    opcoes()[1].dispatchEvent(new Event('pointerenter'));
+    await actualizar();
+    expect(campo().getAttribute('aria-activedescendant')).toBe(opcoes()[1].id);
+
+    const mousedown = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+    lista()!.dispatchEvent(mousedown);
+    expect(mousedown.defaultPrevented).toBe(true);
+  });
+
+  it('reabrir com uma escolha mostra todas as opções e destaca a escolhida', async () => {
+    await escrever('port');
+    opcoes()[0].click();
+    await actualizar();
+    expect(campo().value).toBe('Portugal');
+
+    await tecla('ArrowDown');
+    expect(rotulos()).toEqual(['Angola', 'Portugal', 'Brasil', 'Moçambique']);
+    const escolhida = opcoes().find((o) => o.getAttribute('aria-selected') === 'true')!;
+    expect(escolhida.textContent).toContain('Portugal');
+    expect(campo().getAttribute('aria-activedescendant')).toBe(escolhida.id);
+  });
+
+  it('mudar o texto de uma escolha volta a filtrar', async () => {
+    await tecla('ArrowDown');
+    await tecla('Enter');
+    await escrever('bra');
+    expect(rotulos()).toEqual(['Brasil']);
+  });
+
+  it('texto que não chegou a ser escolha volta ao valor ao sair do campo', async () => {
+    await tecla('ArrowDown');
+    await tecla('ArrowDown');
+    await tecla('Enter');
+    await escrever('xx');
+    expect(campo().value).toBe('xx');
+    expect(a.valor()).toBe('pt');
+
+    await sair();
+    expect(campo().value).toBe('Portugal');
+    expect(campo().getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('sem valor, texto solto fica vazio ao sair', async () => {
+    await escrever('xx');
+    await sair();
+    expect(campo().value).toBe('');
+    expect(a.valor()).toBeNull();
+  });
+
+  it('apagar todo o texto limpa o valor logo, sem esperar pelo blur, e não abre o painel', async () => {
+    await tecla('ArrowDown');
+    await tecla('Enter');
+    expect(a.valor()).toBe('ao');
+
+    await escrever('');
+    expect(a.valor()).toBeNull();
+    expect(campo().getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('Escape fecha o painel; com ele fechado, não faz nada; Tab também fecha', async () => {
+    await premir();
+    const primeiro = await tecla('Escape');
+    expect(primeiro.defaultPrevented).toBe(true);
+    expect(campo().getAttribute('aria-expanded')).toBe('false');
+
+    const segundo = await tecla('Escape');
+    expect(segundo.defaultPrevented).toBe(false);
+
+    await premir();
+    await tecla('Tab');
+    expect(campo().getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('sem correspondência mostra "Nenhuma opção encontrada"', async () => {
+    await escrever('zzzz');
+    expect(opcoes().length).toBe(0);
+    expect(document.querySelector('.evo-text-field__empty')!.textContent).toContain(
+      'Nenhuma opção encontrada',
+    );
+  });
+
+  it('com loading e sem opções mostra "A carregar…" e marca o aria-busy', async () => {
+    a.opcoes.set([]);
+    a.aCarregar.set(true);
+    await actualizar();
+    await premir();
+    expect(document.querySelector('.evo-text-field__empty')!.textContent).toContain('A carregar…');
+    expect(campo().getAttribute('aria-busy')).toBe('true');
+    expect(lista()!.getAttribute('aria-busy')).toBe('true');
+    expect(host.hasAttribute('data-evo-loading')).toBe(true);
+    expect(host.querySelector('.evo-text-field__spinner')).not.toBeNull();
+  });
+
+  it('openOnFocus abre ao receber o foco', async () => {
+    a.abrirAoFocar.set(true);
+    await actualizar();
+    campo().dispatchEvent(new Event('focus'));
+    await actualizar();
+    expect(campo().getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('desactivado ou só de leitura nunca abre', async () => {
+    a.desactivado.set(true);
+    await actualizar();
+    await premir();
+    await tecla('ArrowDown');
+    expect(campo().getAttribute('aria-expanded')).toBe('false');
+    expect(seta().disabled).toBe(true);
+
+    a.desactivado.set(false);
+    a.soLeitura.set(true);
+    await actualizar();
+    await premir();
+    await tecla('ArrowDown');
+    expect(campo().getAttribute('aria-expanded')).toBe('false');
+    expect(seta().disabled).toBe(true);
+  });
+
+  it('desactivar com o painel aberto fecha-o', async () => {
+    await premir();
+    expect(lista()).not.toBeNull();
+    a.desactivado.set(true);
+    await actualizar();
+    expect(lista()).toBeNull();
+    expect(campo().getAttribute('aria-expanded')).toBe('false');
+    expect(a.aberturas).toEqual([true, false]);
+  });
+
+  it('a seta abre e fecha o painel, com o nome acessível certo', async () => {
+    expect(seta().getAttribute('aria-label')).toBe('Abrir opções');
+    seta().click();
+    await actualizar();
+    expect(campo().getAttribute('aria-expanded')).toBe('true');
+    expect(seta().getAttribute('aria-label')).toBe('Fechar opções');
+    expect(seta().getAttribute('aria-expanded')).toBe('true');
+
+    const mousedown = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+    seta().dispatchEvent(mousedown);
+    // Sem isto, o clique na seta tirava o foco ao campo e o painel fechava logo.
+    expect(mousedown.defaultPrevented).toBe(true);
+
+    seta().click();
+    await actualizar();
+    expect(campo().getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('clearable: o × apaga o texto e o valor (null), e fecha o painel', async () => {
+    a.limpavel.set(true);
+    await actualizar();
+    expect(host.querySelector('.evo-text-field__clear')).toBeNull();
+
+    await tecla('ArrowDown');
+    await tecla('Enter');
+    expect(a.valor()).toBe('ao');
+
+    host.querySelector<HTMLButtonElement>('.evo-text-field__clear')!.click();
+    await actualizar();
+    expect(a.valor()).toBeNull();
+    expect(campo().value).toBe('');
+    expect(host.querySelector('.evo-text-field__clear')).toBeNull();
+    expect(campo().getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('opções que chegam a meio da escrita (pesquisa no servidor) não apagam o texto', async () => {
+    a.filtro.set(null);
+    await actualizar();
+    await escrever('an');
+    expect(a.pesquisas).toEqual(['an']);
+
+    a.opcoes.set([PAISES[0]]);
+    await actualizar();
+    expect(campo().value).toBe('an');
+    // E com `searchFn` nulo o filtro local está desligado: ficam as que o pai deu.
+    expect(rotulos()).toEqual(['Angola']);
+  });
+
+  it('um valor sem opção correspondente mostra-se tal como é, e passa a nome quando a opção chega', async () => {
+    a.opcoes.set([]);
+    a.valor.set('pt');
+    await actualizar();
+    expect(campo().value).toBe('pt');
+
+    a.opcoes.set(PAISES);
+    await actualizar();
+    expect(campo().value).toBe('Portugal');
+  });
+
+  it('o pai muda o valor e o texto acompanha', async () => {
+    a.valor.set('br');
+    await actualizar();
+    expect(campo().value).toBe('Brasil');
+    a.valor.set(null);
+    await actualizar();
+    expect(campo().value).toBe('');
+  });
+
+  describe('freeSolo', () => {
+    beforeEach(async () => {
+      a.livre.set(true);
+      await actualizar();
+    });
+
+    it('o valor é o texto escrito, a cada tecla', async () => {
+      await escrever('Cabinda');
+      expect(a.valor()).toBe('Cabinda');
+      expect(campo().value).toBe('Cabinda');
+    });
+
+    it('sem sugestões não há painel nem "sem resultados"', async () => {
+      await escrever('zzzz');
+      expect(lista()).toBeNull();
+      expect(campo().getAttribute('aria-expanded')).toBe('false');
+      expect(a.aberturas).toEqual([true]);
+
+      // Reaparece quando o texto volta a ter sugestões.
+      await escrever('ang');
+      expect(rotulos()).toEqual(['Angola']);
+      expect(campo().getAttribute('aria-expanded')).toBe('true');
+    });
+
+    it('Enter fecha e fica com o texto, sem enviar o formulário', async () => {
+      await escrever('ang');
+      const enter = await tecla('Enter');
+      expect(enter.defaultPrevented).toBe(true);
+      expect(a.valor()).toBe('ang');
+      expect(campo().getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('sair do campo mantém o texto', async () => {
+      await escrever('Cabinda');
+      await sair();
+      expect(campo().value).toBe('Cabinda');
+      expect(a.valor()).toBe('Cabinda');
+    });
+
+    it('escolher uma opção dá o seu value, e o × limpa para texto vazio', async () => {
+      a.limpavel.set(true);
+      await actualizar();
+      await escrever('ang');
+      opcoes()[0].click();
+      await actualizar();
+      expect(a.valor()).toBe('ao');
+      expect(campo().value).toBe('Angola');
+
+      host.querySelector<HTMLButtonElement>('.evo-text-field__clear')!.click();
+      await actualizar();
+      expect(a.valor()).toBe('');
+    });
+  });
+
+  describe('com Reactive Forms', () => {
+    let ff: ComponentFixture<AnfitriaoFormAuto>;
+    let form: AnfitriaoFormAuto['form'];
+    const input = () =>
+      ff.nativeElement.querySelector('.evo-text-field__control') as HTMLInputElement;
+    const refrescar = async () => {
+      ff.detectChanges();
+      await ff.whenStable();
+    };
+
+    beforeEach(async () => {
+      ff = TestBed.createComponent(AnfitriaoFormAuto);
+      form = ff.componentInstance.form;
+      await refrescar();
+    });
+
+    afterEach(() => ff?.destroy());
+
+    it('o formulário recebe o value da opção (um número), e não o texto', async () => {
+      ff.componentInstance.numeros.set([
+        { value: 1, label: 'Um' },
+        { value: 2, label: 'Dois' },
+      ]);
+      await refrescar();
+      input().dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      await refrescar();
+      const opcoes = [...document.querySelectorAll<HTMLElement>('.evo-text-field__option')];
+      opcoes[0].click();
+      await refrescar();
+      expect(form.controls.numero.value).toBe(1);
+      expect(input().value).toBe('Um');
+    });
+
+    it('o valor inicial vira nome quando as opções chegam depois', async () => {
+      expect(input().value).toBe('2');
+      ff.componentInstance.numeros.set([{ value: 2, label: 'Dois' }]);
+      await refrescar();
+      expect(input().value).toBe('Dois');
+    });
+
+    it('escrever não mexe no controlo; apagar o texto põe-no a null', async () => {
+      ff.componentInstance.numeros.set([{ value: 2, label: 'Dois' }]);
+      await refrescar();
+      input().value = 'Do';
+      input().dispatchEvent(new Event('input'));
+      await refrescar();
+      expect(form.controls.numero.value).toBe(2);
+
+      input().value = '';
+      input().dispatchEvent(new Event('input'));
+      await refrescar();
+      expect(form.controls.numero.value).toBeNull();
+    });
+
+    it('setValue para o mesmo valor apaga o texto escrito', async () => {
+      ff.componentInstance.numeros.set([{ value: 2, label: 'Dois' }]);
+      await refrescar();
+      input().value = 'zz';
+      input().dispatchEvent(new Event('input'));
+      await refrescar();
+      expect(input().value).toBe('zz');
+
+      form.controls.numero.setValue(2);
+      await refrescar();
+      expect(input().value).toBe('Dois');
+    });
+
+    it('touched ao sair do campo, e o erro automático aparece', async () => {
+      form.controls.numero.setValue(null);
+      await refrescar();
+      expect(form.controls.numero.touched).toBe(false);
+
+      input().dispatchEvent(new Event('blur'));
+      await refrescar();
+      expect(form.controls.numero.touched).toBe(true);
+      expect(ff.nativeElement.querySelector('.evo-text-field__message').textContent).toContain(
+        'Campo obrigatório.',
+      );
+    });
+
+    it('control.disable() desactiva o campo e a seta', async () => {
+      form.controls.numero.disable();
+      await refrescar();
+      expect(input().disabled).toBe(true);
+      expect(ff.nativeElement.querySelector('.evo-text-field__caret').disabled).toBe(true);
     });
   });
 });

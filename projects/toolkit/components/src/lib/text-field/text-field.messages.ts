@@ -16,6 +16,14 @@ export interface EvoTextFieldMessages {
   readonly showPassword: string;
   readonly hidePassword: string;
   readonly clear: string;
+  /** `type="autoComplete"`: botão da seta quando o painel está fechado. */
+  readonly openOptions: string;
+  /** `type="autoComplete"`: botão da seta quando o painel está aberto. */
+  readonly closeOptions: string;
+  /** `type="autoComplete"`: o texto não corresponde a nenhuma opção. */
+  readonly noResults: string;
+  /** `type="autoComplete"`: opções a carregar. */
+  readonly loading: string;
 }
 
 /** As mensagens por omissão, em português. */
@@ -34,6 +42,10 @@ export const EVO_TEXT_FIELD_DEFAULT_MESSAGES: EvoTextFieldMessages = {
   showPassword: 'Mostrar senha',
   hidePassword: 'Ocultar senha',
   clear: 'Limpar',
+  openOptions: 'Abrir opções',
+  closeOptions: 'Fechar opções',
+  noResults: 'Nenhuma opção encontrada',
+  loading: 'A carregar…',
 };
 
 export const EVO_TEXT_FIELD_MESSAGES = new InjectionToken<EvoTextFieldMessages>(

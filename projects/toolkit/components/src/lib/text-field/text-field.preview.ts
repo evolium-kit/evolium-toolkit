@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
+import { EvoSelectOption } from '../select/select-option';
 import { EvoTextField } from './evo-text-field';
 
 /**
@@ -44,6 +45,16 @@ import { EvoTextField } from './evo-text-field';
       <evo-text-field label="Senha" type="password" value="segredo123" [size]="size() ?? 'md'" />
 
       <evo-text-field
+        label="Província"
+        type="autoComplete"
+        placeholder="Escreve para filtrar…"
+        [options]="provincias"
+        [size]="size() ?? 'md'"
+        clearable
+        [(value)]="provincia"
+      />
+
+      <evo-text-field
         label="Email"
         type="email"
         value="nome@"
@@ -75,4 +86,10 @@ import { EvoTextField } from './evo-text-field';
 export class EvoTextFieldPreview {
   readonly size = input<string | null>(null);
   protected readonly nome = signal('Ana Domingos');
+  protected readonly provincia = signal<string | null>('lda');
+  protected readonly provincias: EvoSelectOption<string>[] = [
+    { value: 'lda', label: 'Luanda', sublabel: 'Angola' },
+    { value: 'bgl', label: 'Benguela', sublabel: 'Angola' },
+    { value: 'hbo', label: 'Huambo', sublabel: 'Angola' },
+  ];
 }

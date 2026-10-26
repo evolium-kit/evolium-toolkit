@@ -66,3 +66,36 @@
     <pre class="muted">{{ registo.value | json }}</pre>
   </form>
 </evo-card>
+
+<evo-card>
+  <h2 slot="title">Text field — autoComplete</h2>
+  <p class="muted">
+    O próprio campo é o combobox: escreve para filtrar, ↓ abre, Enter escolhe, Esc fecha. O
+    formulário recebe o código da opção; com <code>freeSolo</code>, o texto.
+  </p>
+
+  <form class="form-demo" [formGroup]="morada" (ngSubmit)="submeterMorada()">
+    <evo-text-field
+      formControlName="provincia"
+      label="Província"
+      type="autoComplete"
+      [options]="provincias"
+      placeholder="Escreve para filtrar…"
+      hint="Só as da lista."
+      clearable
+    />
+    <evo-text-field
+      formControlName="bairro"
+      label="Bairro"
+      type="autoComplete"
+      [options]="provincias"
+      freeSolo
+      optional
+      hint="Sugestões, mas aceita qualquer texto (freeSolo)."
+    />
+    <div class="row">
+      <button evoButton>Submeter</button>
+    </div>
+    <pre class="muted">{{ morada.value | json }}</pre>
+  </form>
+</evo-card>
