@@ -1,0 +1,263 @@
+<evo-card>
+  <h2 slot="title">Menu</h2>
+  <p class="muted">
+    Último item escolhido: <strong id="menu-ultimo">{{ ultimo() }}</strong
+    >. Teclado: ↓/↑/Enter/Espaço no botão abrem; setas, Home/End e letras percorrem; → abre um
+    submenu; Esc fecha e devolve o foco.
+  </p>
+
+  <h3>Básico, tamanhos, seleccionado</h3>
+  <div class="row">
+    <button evoButton variant="outline" [evoMenuTriggerFor]="basico">Dashboard</button>
+    <ng-template #basico>
+      <evo-menu>
+        <button evoMenuItem (activated)="escolheu('Perfil')">Perfil</button>
+        <button evoMenuItem (activated)="escolheu('A minha conta')">A minha conta</button>
+        <button evoMenuItem disabled (activated)="escolheu('nunca')">Desactivado</button>
+        <button evoMenuItem (activated)="escolheu('Terminar sessão')">Terminar sessão</button>
+      </evo-menu>
+    </ng-template>
+
+    @for (t of ['sm', 'md', 'lg']; track t) {
+      <button evoButton variant="ghost" [size]="t" [evoMenuTriggerFor]="tamanhos">
+        Tamanho {{ t }}
+      </button>
+      <ng-template #tamanhos>
+        <evo-menu [size]="t">
+          <button evoMenuItem>Perfil</button>
+          <button evoMenuItem>A minha conta</button>
+          <button evoMenuItem [evoMenuTriggerFor]="sub">Mais…</button>
+        </evo-menu>
+      </ng-template>
+    }
+    <ng-template #sub>
+      <evo-menu>
+        <button evoMenuItem>Filho A</button>
+        <button evoMenuItem>Filho B</button>
+      </evo-menu>
+    </ng-template>
+
+    <button evoButton variant="outline" [evoMenuTriggerFor]="seleccionado">{{ projecto() }}</button>
+    <ng-template #seleccionado>
+      <evo-menu>
+        @for (p of projectos; track p) {
+          <button evoMenuItem [selected]="p === projecto()" (activated)="projecto.set(p)">
+            {{ p }}
+          </button>
+        }
+      </evo-menu>
+    </ng-template>
+  </div>
+
+  <h3>Botão de ícone, posição</h3>
+  <div class="row">
+    <button
+      evoButton
+      variant="ghost"
+      aria-label="Mais opções"
+      [evoMenuTriggerFor]="icone"
+      evoMenuPlacement="bottom-end"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+        <circle cx="12" cy="5" r="2" />
+        <circle cx="12" cy="12" r="2" />
+        <circle cx="12" cy="19" r="2" />
+      </svg>
+    </button>
+    <ng-template #icone>
+      <evo-menu>
+        <button evoMenuItem (activated)="escolheu('Editar')">Editar</button>
+        <button evoMenuItem (activated)="escolheu('Rascunho')">Rascunho</button>
+        <hr evoMenuSeparator />
+        <button evoMenuItem (activated)="escolheu('Eliminar')">Eliminar</button>
+      </evo-menu>
+    </ng-template>
+
+    @for (p of ['top-start', 'right-start', 'left', 'bottom']; track p) {
+      <button
+        evoButton
+        variant="outline"
+        size="sm"
+        [evoMenuTriggerFor]="posicoes"
+        [evoMenuPlacement]="$any(p)"
+      >
+        {{ p }}
+      </button>
+    }
+    <ng-template #posicoes>
+      <evo-menu>
+        <button evoMenuItem>Um</button>
+        <button evoMenuItem>Dois</button>
+        <button evoMenuItem>Três</button>
+      </evo-menu>
+    </ng-template>
+  </div>
+
+  <h3>Grupos, caixas de verificação, ícones e atalhos</h3>
+  <div class="row">
+    <button evoButton variant="outline" [evoMenuTriggerFor]="grupos">Ver</button>
+    <ng-template #grupos>
+      <evo-menu>
+        <button evoMenuItem (activated)="escolheu('Menor')">
+          <svg
+            slot="prefix"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M5 12h14" />
+          </svg>
+          Menor
+          <kbd slot="suffix">⌘ −</kbd>
+        </button>
+        <button evoMenuItem (activated)="escolheu('Maior')">
+          <svg
+            slot="prefix"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+          Maior
+          <kbd slot="suffix">⌘ +</kbd>
+        </button>
+        <hr evoMenuSeparator />
+        <button evoMenuCheckbox [(checked)]="grelha" [closeOnSelect]="false">Grelha</button>
+        <button evoMenuCheckbox [(checked)]="regua">Régua (fecha ao escolher)</button>
+        <hr evoMenuSeparator />
+        <evo-menu-group label="Tamanho" [(value)]="tamanho">
+          <button evoMenuRadio value="sm">Pequeno</button>
+          <button evoMenuRadio value="md">Médio</button>
+          <button evoMenuRadio value="lg">Grande</button>
+        </evo-menu-group>
+      </evo-menu>
+    </ng-template>
+    <span class="muted" id="menu-estado">
+      grelha={{ grelha() }} · régua={{ regua() }} · tamanho={{ tamanho() }}
+    </span>
+  </div>
+
+  <h3>Estado controlado e eventos</h3>
+  <div class="row">
+    <button evoButton variant="outline" [evoMenuTriggerFor]="basico" [(evoMenuOpen)]="aberto">
+      Controlado
+    </button>
+    <button evoButton variant="ghost" (click)="aberto.set(!aberto())">
+      {{ aberto() ? 'Fechar' : 'Abrir' }} por código
+    </button>
+    <span class="muted" id="menu-aberto">aberto = {{ aberto() }}</span>
+  </div>
+
+  <h3>Submenus, por dados e ligações</h3>
+  <div class="row">
+    <button evoButton [evoMenuTriggerFor]="entradas()">Ficheiro (por dados)</button>
+    <button evoButton variant="outline" [evoMenuTriggerFor]="subs">Com submenus</button>
+    <ng-template #subs>
+      <evo-menu>
+        <button evoMenuItem>Simples</button>
+        <button evoMenuItem [evoMenuTriggerFor]="nivel2">Partilhar</button>
+        <a evoMenuItem href="#documentacao" (activated)="escolheu('ligação')">Uma ligação</a>
+      </evo-menu>
+    </ng-template>
+    <ng-template #nivel2>
+      <evo-menu>
+        <button evoMenuItem>Email</button>
+        <button evoMenuItem [evoMenuTriggerFor]="nivel3">Rede social</button>
+      </evo-menu>
+    </ng-template>
+    <ng-template #nivel3>
+      <evo-menu>
+        <button evoMenuItem>Uma</button>
+        <button evoMenuItem>Outra</button>
+      </evo-menu>
+    </ng-template>
+  </div>
+
+  <h3>Barra de menus</h3>
+  <evo-menu-bar aria-label="Menu da aplicação">
+    <button evoMenuItem [evoMenuTriggerFor]="ficheiro">Ficheiro</button>
+    <button evoMenuItem [evoMenuTriggerFor]="editar">Editar</button>
+    <button evoMenuItem [evoMenuTriggerFor]="selecao">Selecção</button>
+  </evo-menu-bar>
+  <ng-template #ficheiro>
+    <evo-menu>
+      <button evoMenuItem (activated)="escolheu('Novo ficheiro')">Novo ficheiro</button>
+      <button evoMenuItem (activated)="escolheu('Abrir…')">Abrir…</button>
+    </evo-menu>
+  </ng-template>
+  <ng-template #editar>
+    <evo-menu>
+      <button evoMenuItem (activated)="escolheu('Desfazer')">
+        Desfazer <kbd slot="suffix">⌘ Z</kbd>
+      </button>
+      <button evoMenuItem (activated)="escolheu('Refazer')">
+        Refazer <kbd slot="suffix">⇧ ⌘ Z</kbd>
+      </button>
+    </evo-menu>
+  </ng-template>
+  <ng-template #selecao>
+    <evo-menu>
+      <button evoMenuItem (activated)="escolheu('Seleccionar tudo')">Seleccionar tudo</button>
+    </evo-menu>
+  </ng-template>
+
+  <h3>Menu de contexto e menu embutido</h3>
+  <div class="row row--fields">
+    <div
+      id="menu-contexto"
+      tabindex="0"
+      [evoContextMenuTriggerFor]="contexto"
+      style="
+        padding: 2rem;
+        border: 1px dashed var(--evo-color-border-strong);
+        border-radius: var(--evo-radius-md);
+      "
+    >
+      Clica aqui com o botão direito
+    </div>
+    <ng-template #contexto>
+      <evo-menu>
+        <button evoMenuItem (activated)="escolheu('Copiar')">Copiar</button>
+        <button evoMenuItem (activated)="escolheu('Colar')">Colar</button>
+        <hr evoMenuSeparator />
+        <button evoMenuItem [evoMenuTriggerFor]="nivel3">Mais</button>
+      </evo-menu>
+    </ng-template>
+
+    <evo-menu id="menu-embutido" aria-label="Navegação">
+      <button evoMenuItem selected>Início</button>
+      <button evoMenuItem>Facturas</button>
+      <button evoMenuItem>Clientes</button>
+    </evo-menu>
+  </div>
+
+  <h3>Tokens e modal</h3>
+  <div class="row">
+    <section
+      [evoTokens]="{ 'menu-bg': '#fff7ed', 'menu-radius': '2px', 'menu-item-hover-bg': '#fed7aa' }"
+    >
+      <button evoButton variant="outline" [evoMenuTriggerFor]="basico">Tokens por subárvore</button>
+    </section>
+    <button
+      evoButton
+      variant="outline"
+      [evoMenuTriggerFor]="basico"
+      [evoTokens]="{ 'menu-item-selected-bg': '#bbf7d0', 'menu-item-padding-block': '14px' }"
+    >
+      Tokens por instância
+    </button>
+    <button evoButton variant="outline" (click)="modal.set(true)">Menu dentro de um modal</button>
+  </div>
+</evo-card>
+
+<evo-modal [(open)]="modal" heading="Menu dentro de um modal">
+  <p>O Escape fecha o menu primeiro; o segundo Escape fecha o modal.</p>
+  <button evoButton variant="outline" id="menu-no-modal" [evoMenuTriggerFor]="basico">
+    Abrir menu
+  </button>
+</evo-modal>

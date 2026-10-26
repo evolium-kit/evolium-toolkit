@@ -7,6 +7,7 @@ import { ButtonDemo } from './button/button-demo';
 import { DataTableDemo } from './data-table/data-table-demo';
 import { DrawerDemo } from './drawer/drawer-demo';
 import { FieldDemo } from './field/field-demo';
+import { MenuDemo } from './menu/menu-demo';
 import { ModalDemo } from './modal/modal-demo';
 import { SelectDemo } from './select/select-demo';
 import { ServicesDemo } from './services/services-demo';
@@ -37,6 +38,7 @@ import { ThemeDemo } from './theme/theme-demo';
     SelectDemo,
     ModalDemo,
     DrawerDemo,
+    MenuDemo,
     DataTableDemo,
     ServicesDemo,
   ],

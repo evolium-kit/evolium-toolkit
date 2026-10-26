@@ -1,0 +1,239 @@
+/*
+ * REGRA 1: nenhuma declaração `--evo-menu-*` fora de `@layer evo.variants`.
+ * O valor por omissão vive no fallback do var(). Declará-lo aqui ganharia por
+ * proximidade a qualquer :root do projecto e tornaria o override global
+ * impossível — sem erro nenhum a avisar.
+ *
+ * REGRA 2: nunca registar estes tokens com @property { initial-value }.
+ *
+ * Este ficheiro é o `styleUrl` de várias peças (painel, item, grupo, separador,
+ * barra): cada uma aplica só as regras do seu `:host(.evo-menu-…)`. O texto
+ * projectado nos itens (ícones, atalhos) estiliza-se na folha global.
+ */
+
+@layer evo.components {
+  /* ---------------------------------------------------------------- painel */
+
+  :host(.evo-menu) {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-inline-size: var(--evo-menu-min-width, 9rem);
+    max-block-size: calc(100dvh - 2 * var(--evo-space-lg));
+    padding: var(--evo-menu-padding, var(--evo-space-xs));
+    overflow-y: auto;
+    border: var(--evo-border-width) solid var(--evo-menu-border-color, var(--evo-color-border));
+    border-radius: var(--evo-menu-radius, var(--evo-radius-md));
+    background-color: var(--evo-menu-bg, var(--evo-color-surface-raised));
+    box-shadow: var(--evo-menu-shadow, var(--evo-elevation-2));
+    color: var(--evo-menu-item-fg, var(--evo-color-on-surface));
+    font-family: var(--evo-font-sans);
+    font-size: var(--evo-font-size-md);
+    animation: evo-menu-in var(--evo-menu-duration, var(--evo-duration-fast)) var(--evo-easing);
+  }
+
+  :host(.evo-menu:focus-visible) {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: var(--evo-focus-ring-offset);
+  }
+
+  /* ------------------------------------------------------------------ barra */
+
+  :host(.evo-menu-bar) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--evo-space-xs);
+    box-sizing: border-box;
+    padding: var(--evo-menu-padding, var(--evo-space-xs));
+    border: var(--evo-border-width) solid var(--evo-menu-border-color, var(--evo-color-border));
+    border-radius: var(--evo-menu-radius, var(--evo-radius-md));
+    background-color: var(--evo-menu-bar-bg, var(--evo-color-surface));
+    font-family: var(--evo-font-sans);
+    font-size: var(--evo-font-size-md);
+  }
+
+  /* ------------------------------------------------------------------- item */
+
+  :host(.evo-menu-item) {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--evo-space-sm);
+    box-sizing: border-box;
+    inline-size: 100%;
+    padding-block: var(--evo-menu-item-padding-block, var(--evo-space-sm));
+    padding-inline: var(--evo-menu-item-padding-inline, var(--evo-space-md));
+    border: 0;
+    border-radius: var(--evo-radius-sm);
+    background-color: transparent;
+    color: var(--evo-menu-item-fg, var(--evo-color-on-surface));
+    font: inherit;
+    line-height: 1.25;
+    text-align: start;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color var(--evo-duration-fast) var(--evo-easing);
+  }
+
+  /* No menu, o item "destacado" é o que tem o foco: o rato também o move. */
+  :host(.evo-menu-item:hover),
+  :host(.evo-menu-item:focus) {
+    background-color: var(--evo-menu-item-hover-bg, var(--evo-color-surface-sunken));
+  }
+
+  :host(.evo-menu-item:focus-visible) {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: calc(var(--evo-focus-ring-width) * -1);
+  }
+
+  /* O item cujo submenu está aberto continua destacado. */
+  :host(.evo-menu-item[aria-expanded='true']) {
+    background-color: var(--evo-menu-item-hover-bg, var(--evo-color-surface-sunken));
+  }
+
+  :host(.evo-menu-item[aria-current='true']),
+  :host(.evo-menu-item[aria-current='true']:hover),
+  :host(.evo-menu-item[aria-current='true']:focus) {
+    background-color: var(--evo-menu-item-selected-bg, var(--evo-color-primary-soft));
+    color: var(--evo-menu-item-selected-fg, var(--evo-color-primary));
+  }
+
+  :host(.evo-menu-item[aria-disabled='true']) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  :host(.evo-menu-item[aria-disabled='true']:hover),
+  :host(.evo-menu-item[aria-disabled='true']:focus) {
+    background-color: transparent;
+  }
+
+  .evo-menu-item__label {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Seta do submenu. */
+  :host(.evo-menu-item[aria-haspopup='menu'])::after {
+    content: '';
+    flex: none;
+    inline-size: 0.4em;
+    block-size: 0.4em;
+    margin-inline-start: var(--evo-space-sm);
+    border-inline-end: 2px solid currentColor;
+    border-block-end: 2px solid currentColor;
+    transform: rotate(-45deg);
+  }
+
+  :host(.evo-menu-item[aria-haspopup='menu']:dir(rtl))::after {
+    transform: rotate(135deg);
+  }
+
+  /* Um item de menu "para baixo" na barra: o submenu abre por baixo, a seta aponta para baixo. */
+  :host(.evo-menu-item[data-evo-in-bar]) {
+    inline-size: auto;
+  }
+
+  :host(.evo-menu-item[data-evo-in-bar][aria-haspopup='menu'])::after {
+    transform: rotate(45deg);
+    margin-inline-start: 0;
+  }
+
+  :host(.evo-menu-item[data-evo-in-bar][aria-expanded='true']) {
+    background-color: var(--evo-menu-bar-item-active-bg, var(--evo-color-surface-sunken));
+  }
+
+  /* Caixa de verificação e escolha única: um indicador à esquerda, sempre com o mesmo espaço. */
+  :host(.evo-menu-item[role='menuitemcheckbox'])::before,
+  :host(.evo-menu-item[role='menuitemradio'])::before {
+    content: '';
+    flex: none;
+    box-sizing: border-box;
+    inline-size: 1em;
+    block-size: 1em;
+  }
+
+  :host(.evo-menu-item[role='menuitemcheckbox'][aria-checked='true'])::before {
+    inline-size: 0.45em;
+    block-size: 0.8em;
+    margin-inline: 0.275em;
+    border-inline-end: 2px solid currentColor;
+    border-block-end: 2px solid currentColor;
+    transform: rotate(45deg) translate(-0.05em, -0.1em);
+  }
+
+  :host(.evo-menu-item[role='menuitemradio'][aria-checked='true'])::before {
+    background-color: currentColor;
+    border-radius: var(--evo-radius-full);
+    transform: scale(0.5);
+  }
+
+  /* ------------------------------------------------------- grupo e separador */
+
+  :host(.evo-menu-group) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .evo-menu-group__label {
+    padding-block: var(--evo-space-xs);
+    padding-inline: var(--evo-menu-item-padding-inline, var(--evo-space-md));
+    color: var(--evo-menu-group-label-fg, var(--evo-color-on-surface-muted));
+    font-size: var(--evo-font-size-sm);
+    font-weight: 600;
+  }
+
+  :host(.evo-menu-separator) {
+    display: block;
+    flex: none;
+    block-size: 0;
+    margin-block: var(--evo-space-xs);
+    padding: 0;
+    border: 0;
+    border-block-start: var(--evo-border-width) solid
+      var(--evo-menu-separator-color, var(--evo-color-border));
+  }
+
+  /* Alvos de toque de pelo menos 44px, sem mexer no tamanho com rato. */
+  @media (pointer: coarse) {
+    :host(.evo-menu-item) {
+      min-block-size: 2.75rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :host(.evo-menu) {
+      animation: none;
+    }
+  }
+}
+
+/*
+ * Tamanhos. Declaram tokens no próprio elemento, pelo que ganham ao valor
+ * herdado de :root mas perdem para um [evoTokens] de instância. Os itens herdam
+ * estes valores do painel.
+ */
+@layer evo.variants {
+  :host(.evo-menu[data-evo-size~='sm']) {
+    --evo-menu-item-padding-block: var(--evo-space-xs);
+    --evo-menu-item-padding-inline: var(--evo-space-sm);
+    font-size: var(--evo-font-size-sm);
+  }
+
+  :host(.evo-menu[data-evo-size~='lg']) {
+    --evo-menu-item-padding-block: var(--evo-space-md);
+    --evo-menu-item-padding-inline: var(--evo-space-lg);
+    font-size: var(--evo-font-size-lg);
+  }
+}
+
+@keyframes evo-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+}

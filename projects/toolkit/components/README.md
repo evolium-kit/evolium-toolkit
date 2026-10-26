@@ -38,6 +38,7 @@ a folha dos componentes que são directivas:
 | `EvoSelect`     | `evo-select`                                                | —                                              | sm, md, lg           |
 | `EvoModal`      | `evo-modal` + `EvoModalService`                             | tons: success, danger, warning, info, question | sm, md, lg, xl, full |
 | `EvoDrawer`     | `evo-drawer` + `EvoDrawerService`                           | posições: left, right, top, bottom             | sm, md, lg, full     |
+| `EvoMenu`       | `evo-menu` + `[evoMenuTriggerFor]`                          | —                                              | sm, md, lg           |
 | `EvoDataTable`  | `evo-data-table`                                            | —                                              | sm, md, lg           |
 | `EvoPagination` | `evo-pagination`                                            | —                                              | sm, md, lg           |
 
@@ -82,8 +83,20 @@ O `EvoTextField` junta etiqueta, campo, ícones, ajuda, erro e contador numa só
 tag, e mostra o erro do controlo sozinho (depois de `touched`), com mensagens
 em português sobreponíveis por `provideEvoTextFieldMessages()`. É composto por
 `EvoField` + o aspecto do `EvoInput`, por isso herda os `--evo-input-*`; os
-tokens próprios são `--evo-text-field-*`. Documentação completa em
+tokens próprios são `--evo-text-field-*`. Com `type="autoComplete"` o próprio
+campo é o combobox, com as `options` do `evo-select` num painel por baixo
+(a alternativa ao `searchable`, sem botão-gatilho). Documentação completa em
 [`src/lib/text-field/README.md`](src/lib/text-field/README.md).
+
+```html
+<evo-text-field
+  formControlName="provincia"
+  label="Província"
+  type="autoComplete"
+  [options]="provincias"
+  clearable
+/>
+```
 
 ```html
 <evo-select
@@ -216,6 +229,32 @@ O `EvoDrawer` é um painel sobreposto que entra de um dos lados do ecrã
 eventos e resultado tipados, como o `EvoModalService`). Assenta no `Dialog`
 do CDK; os tokens próprios são `--evo-drawer-*`. Documentação completa em
 [`src/lib/drawer/README.md`](src/lib/drawer/README.md).
+
+```html
+<button evoButton variant="outline" [evoMenuTriggerFor]="conta">Conta</button>
+<ng-template #conta>
+  <evo-menu>
+    <button evoMenuItem (activated)="perfil()">Perfil</button>
+    <button evoMenuCheckbox [(checked)]="grelha" [closeOnSelect]="false">Grelha</button>
+    <button evoMenuItem [evoMenuTriggerFor]="mais">Mais</button>
+    <hr evoMenuSeparator />
+    <button evoMenuItem (activated)="sair()">Terminar sessão</button>
+  </evo-menu>
+</ng-template>
+
+<!-- Ou por dados: -->
+<button evoButton [evoMenuTriggerFor]="entradas()">Ficheiro</button>
+```
+
+O `EvoMenu` é um menu de acções sobre o `CdkMenu`: o gatilho
+(`[evoMenuTriggerFor]`, em qualquer elemento) abre um painel de itens com
+teclado completo. Tem submenus, caixas de verificação, escolha única com
+grupos, ícones e atalhos, ligações, `evo-menu-bar` (barra de menus), menu de
+contexto (`[evoContextMenuTriggerFor]`) e desenho por dados. O painel vive num
+overlay, mas copia os `[evoTokens]` do gatilho; o Escape do menu não fecha o
+modal ou drawer onde esteja. Os tokens próprios são `--evo-menu-*`. Os itens
+são filhos directos do `<evo-menu>`, que vai dentro de um `<ng-template>`.
+Documentação completa em [`src/lib/menu/README.md`](src/lib/menu/README.md).
 
 `EvoButton` e `EvoInput` aplicam-se a elementos nativos em vez de os embrulhar:
 mantêm semântica, foco, validação nativa, `formControlName` e o preenchimento

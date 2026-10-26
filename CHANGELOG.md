@@ -5,6 +5,51 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+### Adicionado
+
+- **`EvoMenu`** (`evo-menu`), em `@evolium-kit/toolkit/components`: menu de acções
+  sobre o `CdkMenu` — um gatilho (`[evoMenuTriggerFor]`) abre um painel de itens
+  com teclado completo (setas, Home/End, escrita rápida, Escape e Tab devolvem o
+  foco). Itens `evoMenuItem` (botão ou ligação, `disabled`, `selected` com
+  `aria-current`), `evoMenuCheckbox`, `evoMenuRadio` com `evo-menu-group`,
+  `evoMenuSeparator`, ícone e atalho por `slot="prefix"`/`"suffix"`, submenus a
+  qualquer profundidade, `evo-menu-bar` (barra de menus), menu de contexto
+  (`[evoContextMenuTriggerFor]`), menu embutido (`<evo-menu>` sem gatilho) e
+  desenho por dados (`[evoMenuTriggerFor]="entradas"`). `evoMenuPlacement`/
+  `evoMenuOffset` (vira sozinho junto à borda), `[(evoMenuOpen)]`,
+  `evoMenuOpened`/`evoMenuClosed`, `size` sm/md/lg (o submenu herda) e
+  `closeOnSelect` por item. 17 tokens `--evo-menu-*`; os `[evoTokens]` do gatilho
+  e dos ancestrais são copiados para o painel (que vive no overlay). O painel é
+  nomeado pelo gatilho, o Escape do menu não fecha o `evo-modal`/`evo-drawer`
+  onde esteja, o painel acompanha o gatilho no scroll e os itens têm 44 px com
+  ponteiro táctil. Medido no `Menu` do Joy UI: mantém o que lá funciona e
+  corrige o painel sem nome e o Tab a perder o foco.
+
+- **`EvoTextField` com `type="autoComplete"`**: o próprio `<input>` passa a ser
+  o combobox, com um painel de sugestões por baixo — a alternativa ao
+  `searchable` do `evo-select`, sem botão-gatilho nem caixa de pesquisa dentro
+  do painel. Usa as `options` do `evo-select` (`EvoSelectOption`: `sublabel`,
+  `icon`, `group`, `disabled`, template por opção com `evoSelectOption`) e o
+  mesmo desenho de painel, por isso lê os `--evo-select-panel-*` e
+  `--evo-select-option-*`: não acrescenta tokens. Inputs novos: `options`,
+  `freeSolo`, `loading`, `autoHighlight`, `openOnFocus`, `compareWith`,
+  `searchFn`; outputs `searchChange` e `openedChange`. Por omissão o
+  formulário recebe o `value` da opção (como o `evo-select`); com `freeSolo`,
+  o texto. Apagar o texto limpa o valor logo; sair do campo com texto que não
+  era uma escolha repõe o nome da escolha. Teclado completo (`↓`/`↑`, `Enter`,
+  `Esc`, `Alt`+`↑`), `aria-activedescendant` com o foco sempre no campo, e
+  `autocomplete="off"` forçado. Comportamento medido no `Autocomplete` do Joy
+  UI; fica de fora o `multiple` com etiquetas, "Adicionar «x»", a virtualização
+  e a conclusão em linha. Mensagens novas em `EvoTextFieldMessages`:
+  `noResults`, `loading`, `openOptions`, `closeOptions`.
+
+### Alterado
+
+- **`EvoTextField` é agora genérico** (`EvoTextField<V = string, D = unknown>`).
+  Os valores por omissão mantêm tudo como estava: quem escreve `EvoTextField`,
+  `[(value)]` com um `signal<string>` ou `viewChild(EvoTextField)` não muda nada.
+- Um `EvoTextField` desactivado (ou só de leitura) com o painel aberto fecha-o.
+
 ## [0.3.3] - 2026-10-23
 
 ### Adicionado

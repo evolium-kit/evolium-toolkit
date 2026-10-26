@@ -57,7 +57,7 @@ Em falta, por ordem provável de necessidade:
 - `EvoSelect`, `EvoCheckbox`, `EvoRadio` — para formulários completos
 - `EvoDialog` (sobre `CdkDialog`) — o `components/README.md` já documenta o
   padrão a seguir para usar o CDK aqui
-- `EvoMenu` (sobre `CdkMenu`), `EvoTable` (sobre `CdkTable`)
+- `EvoTable` (sobre `CdkTable`); o `EvoMenu` (sobre `CdkMenu`) já existe
 - `EvoTabs`, `EvoTooltip`
 
 Cada um usa `npm run new:component -- <nome>` como ponto de partida (o

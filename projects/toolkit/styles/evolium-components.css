@@ -58,6 +58,31 @@
   }
 
   /*
+   * Menu. O ícone (`slot="prefix"`) e o atalho (`slot="suffix"`) de um item são
+   * conteúdo projectado no `evo-menu-item`: o `styleUrl` encapsulado não os alcança.
+   */
+  .evo-menu-item > [slot='prefix'] {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.25em;
+    block-size: 1.25em;
+  }
+
+  .evo-menu-item > :is(svg, img)[slot='prefix'] {
+    inline-size: 1.25em;
+    block-size: 1.25em;
+  }
+
+  .evo-menu-item > [slot='suffix'] {
+    flex: none;
+    margin-inline-start: auto;
+    color: var(--evo-color-on-surface-muted);
+    font-size: var(--evo-font-size-sm);
+  }
+
+  /*
    * Modal. O fundo e o painel são elementos do overlay do CDK, fora de
    * qualquer template; o ícone e o título são conteúdo projectado no
    * evo-modal-panel. Nada disto alcançaria um styleUrl encapsulado.
