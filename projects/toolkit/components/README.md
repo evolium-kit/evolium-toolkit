@@ -24,6 +24,27 @@ a folha dos componentes que são directivas:
 @import '@evolium-kit/toolkit/styles/evolium-components.css';
 ```
 
+### Índice dos componentes
+
+Um link por componente: o README da pasta quando existe, senão a própria pasta.
+**Ao criar um componente novo, acrescentar aqui a linha dele** (ordem alfabética).
+
+| Componente      | Documentação                                                   |
+| --------------- | -------------------------------------------------------------- |
+| `EvoBadge`      | [`src/lib/badge/`](src/lib/badge/)                             |
+| `EvoButton`     | [`src/lib/button/`](src/lib/button/)                           |
+| `EvoCard`       | [`src/lib/card/`](src/lib/card/)                               |
+| `EvoDataTable`  | [`src/lib/data-table/README.md`](src/lib/data-table/README.md) |
+| `EvoDrawer`     | [`src/lib/drawer/README.md`](src/lib/drawer/README.md)         |
+| `EvoField`      | [`src/lib/form-field/`](src/lib/form-field/)                   |
+| `EvoInput`      | [`src/lib/input/`](src/lib/input/)                             |
+| `EvoMenu`       | [`src/lib/menu/README.md`](src/lib/menu/README.md)             |
+| `EvoModal`      | [`src/lib/modal/README.md`](src/lib/modal/README.md)           |
+| `EvoPagination` | [`src/lib/pagination/README.md`](src/lib/pagination/README.md) |
+| `EvoSelect`     | [`src/lib/select/README.md`](src/lib/select/README.md)         |
+| `EvoSwitch`     | [`src/lib/switch/README.md`](src/lib/switch/README.md)         |
+| `EvoTextField`  | [`src/lib/text-field/README.md`](src/lib/text-field/README.md) |
+
 ### Componentes disponíveis
 
 | Componente      | Selector                                                    | Variantes                                      | Tamanhos             |
@@ -562,5 +583,7 @@ npm run test:lib
 npx prettier --write projects/toolkit/components
 ```
 
-E acrescentar o componente à secção "Usar" deste README, com um exemplo
-copiável. **Um componente sem entrada no README não está pronto.**
+E acrescentar o componente a este README: uma linha no "Índice dos
+componentes", uma linha na tabela "Componentes disponíveis" e um exemplo
+copiável na secção "Usar". **Um componente sem entrada no índice e no README
+não está pronto.**
