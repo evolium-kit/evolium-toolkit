@@ -5,6 +5,8 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+## [0.3.4] - 2026-10-27
+
 ### Adicionado
 
 - **`EvoMenu`** (`evo-menu`), em `@evolium-kit/toolkit/components`: menu de acções
