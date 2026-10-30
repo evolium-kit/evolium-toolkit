@@ -5,6 +5,8 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+## [0.3.5] - 2026-10-30
+
 ### Adicionado
 
 - **`EvoTabs`** (`evo-tabs` + `evo-tab-list` + `evoTab` + `evo-tab-panel`), em
