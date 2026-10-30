@@ -1,5 +1,9 @@
 import { ChangeDetectionStrategy, Component, booleanAttribute, input } from '@angular/core';
 
+/**
+ * @deprecated Sobrepõe-se a `EvoField` (`<evo-field>` + `input[evoInput]`) e ao
+ * `EvoTextField`, e não tem consumidores na toolkit. Usar um destes.
+ */
 @Component({
   selector: 'evo-form-field',
   template: `<ng-content />`,

@@ -22,7 +22,8 @@ import {
  * inputs, tokens, descrições) vem do código-fonte.
  *
  * Também copia para o pacote a documentação conceptual que o guia referencia
- * (`docs/getting-started.md`, `docs/theming.md`, `docs/plugins.md`) e o
+ * (`docs/getting-started.md`, `docs/theming.md`, `docs/variable-tokens.md`,
+ * `docs/plugins.md`) e o
  * `CHANGELOG.md`.
  *
  * A parte escrita à mão (como ler, regras para quem consome) está em
@@ -49,6 +50,8 @@ const ENTRY_POINTS = [
 const DOCS = [
   ['docs/getting-started.md', 'docs/getting-started.md'],
   ['docs/theming.md', 'docs/theming.md'],
+  ['docs/variable-tokens.md', 'docs/variable-tokens.md'],
+  ['docs/index-componentes.md', 'docs/index-componentes.md'],
   ['docs/plugins.md', 'docs/plugins.md'],
   ['CHANGELOG.md', 'CHANGELOG.md'],
 ];

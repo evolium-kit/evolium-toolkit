@@ -5,6 +5,24 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+### Adicionado
+
+- **`EvoTabs`** (`evo-tabs` + `evo-tab-list` + `evoTab` + `evo-tab-panel`), em
+  `@evolium-kit/toolkit/components`: alterna vistas persistentes sem overlay,
+  construído do zero (sem modelo), medido ao vivo no `Tabs` do Joy UI
+  (`mui.com/joy-ui/react-tabs/`). Selecção manual por omissão — as setas só
+  movem o foco (roving tabindex por `FocusKeyManager` do CDK, com wrap),
+  Enter/Espaço selecciona — ou automática com `selectionFollowsFocus`. Home/End
+  vão às extremidades; só o eixo da `orientation` (`horizontal`/`vertical`)
+  responde; uma tab `disabled` é saltada pelas setas (correcção face à
+  referência, que a deixa focável). `size` sm/md/lg, `[tabs]` por dados (gera
+  só os botões), `scrollable`, `sticky`, `disableUnderline` no `evo-tab-list`,
+  `keepMounted` por `evo-tab-panel` (preserva estado ao trocar de tab). O
+  painel tem sempre `tabindex="0"` (recomendação da APG; a Joy não o põe).
+  `aria-controls`/`aria-labelledby` cruzados entre tab e painel sem registo
+  central (derivados do `value` de cada um). 13 tokens `--evo-tabs-*`.
+  Documentação em `components/src/lib/tabs/README.md`.
+
 ## [0.3.4] - 2026-10-27
 
 ### Adicionado

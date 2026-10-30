@@ -19,6 +19,8 @@ páginas pela ordem em que aparecem abaixo.
 | Perceber o que a toolkit oferece e como se usa no dia a dia             | [`getting-started.md`](getting-started.md) |
 | Perceber **porquê** está organizada assim, antes de a alterar           | [`architecture.md`](architecture.md)       |
 | Personalizar cores, espaçamento e o resto do tema                       | [`theming.md`](theming.md)                 |
+| Saber que variáveis CSS um projecto consumidor tem de ter               | [`variable-tokens.md`](variable-tokens.md) |
+| Ver todos os componentes, numa linha cada                               | [`index-componentes.md`](index-componentes.md) |
 | Criar um recurso novo (facturas, clientes...) que fale com a tua API    | [`plugins.md`](plugins.md)                 |
 | Contribuir código para a toolkit — componentes, páginas, plugins        | [`contributing.md`](contributing.md)       |
 | Pôr o Claude Code (ou outro agente) de um projecto a conhecer a toolkit | [`ai-context.md`](ai-context.md)           |

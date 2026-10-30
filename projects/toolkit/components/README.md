@@ -36,13 +36,14 @@ Um link por componente: o README da pasta quando existe, senão a própria pasta
 | `EvoCard`       | [`src/lib/card/`](src/lib/card/)                               |
 | `EvoDataTable`  | [`src/lib/data-table/README.md`](src/lib/data-table/README.md) |
 | `EvoDrawer`     | [`src/lib/drawer/README.md`](src/lib/drawer/README.md)         |
-| `EvoField`      | [`src/lib/form-field/`](src/lib/form-field/)                   |
+| `EvoField`      | [`src/lib/input/`](src/lib/input/)                             |
 | `EvoInput`      | [`src/lib/input/`](src/lib/input/)                             |
 | `EvoMenu`       | [`src/lib/menu/README.md`](src/lib/menu/README.md)             |
 | `EvoModal`      | [`src/lib/modal/README.md`](src/lib/modal/README.md)           |
 | `EvoPagination` | [`src/lib/pagination/README.md`](src/lib/pagination/README.md) |
 | `EvoSelect`     | [`src/lib/select/README.md`](src/lib/select/README.md)         |
 | `EvoSwitch`     | [`src/lib/switch/README.md`](src/lib/switch/README.md)         |
+| `EvoTabs`       | [`src/lib/tabs/README.md`](src/lib/tabs/README.md)             |
 | `EvoTextField`  | [`src/lib/text-field/README.md`](src/lib/text-field/README.md) |
 
 ### Componentes disponíveis
@@ -62,6 +63,7 @@ Um link por componente: o README da pasta quando existe, senão a própria pasta
 | `EvoMenu`       | `evo-menu` + `[evoMenuTriggerFor]`                          | —                                              | sm, md, lg           |
 | `EvoDataTable`  | `evo-data-table`                                            | —                                              | sm, md, lg           |
 | `EvoPagination` | `evo-pagination`                                            | —                                              | sm, md, lg           |
+| `EvoTabs`       | `evo-tabs` + `evo-tab-list` + `evoTab` + `evo-tab-panel`    | —                                              | sm, md, lg           |
 
 ```html
 <button evoButton variant="danger" size="sm" [loading]="aApagar()">Eliminar</button>
@@ -276,6 +278,27 @@ overlay, mas copia os `[evoTokens]` do gatilho; o Escape do menu não fecha o
 modal ou drawer onde esteja. Os tokens próprios são `--evo-menu-*`. Os itens
 são filhos directos do `<evo-menu>`, que vai dentro de um `<ng-template>`.
 Documentação completa em [`src/lib/menu/README.md`](src/lib/menu/README.md).
+
+```html
+<evo-tabs [(value)]="separador" ariaLabel="Definições">
+  <evo-tab-list>
+    <button evoTab value="geral">Geral</button>
+    <button evoTab value="facturacao">Facturação</button>
+    <button evoTab value="avancado" disabled>Avançado</button>
+  </evo-tab-list>
+  <evo-tab-panel value="geral">…</evo-tab-panel>
+  <evo-tab-panel value="facturacao">…</evo-tab-panel>
+  <evo-tab-panel value="avancado">…</evo-tab-panel>
+</evo-tabs>
+```
+
+O `EvoTabs` alterna vistas persistentes sem overlay (`evo-tab-list` +
+`evoTab` + `evo-tab-panel`, ligados por `aria-controls`/`aria-labelledby`).
+Selecção manual por omissão (setas só movem o foco — roving tabindex por
+`FocusKeyManager` do CDK —, Enter/Espaço selecciona); `selectionFollowsFocus`
+activa ao focar. `orientation="vertical"`, `[tabs]` por dados, `scrollable`,
+`sticky`, `keepMounted` por painel. Os tokens próprios são `--evo-tabs-*`.
+Documentação completa em [`src/lib/tabs/README.md`](src/lib/tabs/README.md).
 
 `EvoButton` e `EvoInput` aplicam-se a elementos nativos em vez de os embrulhar:
 mantêm semântica, foco, validação nativa, `formControlName` e o preenchimento

@@ -11,6 +11,7 @@ import { MenuDemo } from './menu/menu-demo';
 import { ModalDemo } from './modal/modal-demo';
 import { SelectDemo } from './select/select-demo';
 import { ServicesDemo } from './services/services-demo';
+import { TabsDemo } from './tabs/tabs-demo';
 import { TextFieldDemo } from './text-field/text-field-demo';
 import { ThemeDemo } from './theme/theme-demo';
 
@@ -39,6 +40,7 @@ import { ThemeDemo } from './theme/theme-demo';
     ModalDemo,
     DrawerDemo,
     MenuDemo,
+    TabsDemo,
     DataTableDemo,
     ServicesDemo,
   ],

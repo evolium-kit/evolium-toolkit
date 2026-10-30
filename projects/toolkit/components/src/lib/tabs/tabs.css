@@ -1,0 +1,170 @@
+/*
+ * Partilhado por <evo-tabs>, <evo-tab-list>, o `evoTab` e <evo-tab-panel> —
+ * cada um com o seu :host(.evo-tabs-<parte>), como no menu.css.
+ *
+ * REGRA 1: nenhuma declaração `--evo-tabs-*` fora de @layer evo.variants.
+ * O valor por omissão vive no fallback do var(). Declará-lo aqui ganharia por
+ * proximidade a qualquer :root do projecto e tornaria o override global
+ * impossível — sem erro nenhum a avisar.
+ *
+ * REGRA 2: nunca registar estes tokens com @property { initial-value }.
+ */
+
+@layer evo.components {
+  /* ---------------------------------------------------------------- evo-tabs */
+  :host(.evo-tabs) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--evo-space-md);
+  }
+
+  :host(.evo-tabs[data-evo-orientation='vertical']) {
+    flex-direction: row;
+  }
+
+  /* ----------------------------------------------------------- evo-tab-list */
+  :host(.evo-tab-list) {
+    display: flex;
+    align-items: stretch;
+    gap: var(--evo-tabs-gap, var(--evo-space-sm));
+    border-block-end: 1px solid var(--evo-tabs-list-border-color, var(--evo-color-border));
+  }
+
+  :host(.evo-tab-list[data-evo-orientation='vertical']) {
+    flex-direction: column;
+    border-block-end: none;
+    border-inline-end: 1px solid var(--evo-tabs-list-border-color, var(--evo-color-border));
+  }
+
+  :host(.evo-tab-list[data-evo-disable-underline]) {
+    border-color: transparent;
+  }
+
+  :host(.evo-tab-list[data-evo-scrollable]) {
+    overflow: auto;
+    scrollbar-width: none;
+  }
+
+  :host(.evo-tab-list[data-evo-scrollable])::-webkit-scrollbar {
+    display: none;
+  }
+
+  :host(.evo-tab-list[data-evo-sticky='top']) {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 1;
+    background-color: var(--evo-color-surface);
+  }
+
+  :host(.evo-tab-list[data-evo-sticky='bottom']) {
+    position: sticky;
+    inset-block-end: 0;
+    z-index: 1;
+    background-color: var(--evo-color-surface);
+  }
+
+  /* ----------------------------------------------------------------- evoTab */
+  :host(.evo-tab) {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--evo-space-xs);
+    flex: none;
+    min-block-size: 44px;
+    padding-inline: var(--evo-tabs-tab-padding-x, var(--evo-space-md));
+    padding-block: var(--evo-tabs-tab-padding-y, var(--evo-space-sm));
+    border: none;
+    background: none;
+    color: var(--evo-tabs-tab-fg, var(--evo-color-on-surface-muted));
+    font: inherit;
+    font-family: var(--evo-font-sans);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color var(--evo-duration-fast) var(--evo-easing);
+  }
+
+  :host(.evo-tab:hover:not(:disabled)) {
+    background-color: var(--evo-tabs-tab-bg-hover, var(--evo-color-primary-soft));
+  }
+
+  :host(.evo-tab:focus-visible) {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: var(--evo-focus-ring-offset);
+  }
+
+  :host(.evo-tab:disabled) {
+    opacity: var(--evo-tabs-tab-disabled-opacity, 0.5);
+    cursor: not-allowed;
+  }
+
+  :host(.evo-tab[data-evo-selected]) {
+    color: var(--evo-tabs-tab-fg-selected, var(--evo-color-primary));
+  }
+
+  /* Indicador: tracinho sob a tab seleccionada, à borda da lista (ou à direita, vertical). */
+  :host(.evo-tab[data-evo-selected])::after {
+    content: '';
+    position: absolute;
+    inset-inline: var(--evo-space-sm);
+    inset-block-end: 0;
+    block-size: var(--evo-tabs-indicator-thickness, 2px);
+    border-radius: var(--evo-tabs-indicator-radius, var(--evo-radius-full));
+    background-color: var(--evo-tabs-indicator-color, var(--evo-color-primary));
+    transition: background-color var(--evo-tabs-indicator-duration, var(--evo-duration-fast))
+      var(--evo-easing);
+  }
+
+  :host(.evo-tab[data-evo-orientation='vertical'][data-evo-selected])::after {
+    inset-inline: auto;
+    inset-inline-end: 0;
+    inset-block: var(--evo-space-sm);
+    inline-size: var(--evo-tabs-indicator-thickness, 2px);
+    block-size: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :host(.evo-tab)::after {
+      transition: none;
+    }
+  }
+
+  /* ------------------------------------------------------------ evo-tab-panel */
+  :host(.evo-tab-panel) {
+    display: block;
+    padding: var(--evo-tabs-panel-padding, var(--evo-space-md));
+  }
+
+  :host(.evo-tab-panel[hidden]) {
+    /* O `hidden` nativo já tira do layout; redeclarado para nunca perder contra
+       o `display: block` acima — as camadas (`@layer`) ganham sempre à folha do
+       user-agent, mesmo sem `!important`. */
+    display: none;
+  }
+
+  :host(.evo-tab-panel:focus-visible) {
+    outline: var(--evo-focus-ring-width) solid var(--evo-focus-ring-color);
+    outline-offset: var(--evo-focus-ring-offset);
+  }
+}
+
+/*
+ * Tamanhos: declaram os tokens no próprio elemento (ganham ao valor herdado de
+ * :root, perdem para um [evoTokens] de instância). Vivem em <evo-tab-list>, e
+ * as tabs/painel herdam-nos por cascata normal de CSS custom properties — os
+ * componentes são classes Angular diferentes, mas a herança de `--evo-*` não
+ * pára na fronteira de um componente.
+ */
+@layer evo.variants {
+  :host(.evo-tab-list[data-evo-size='sm']) {
+    --evo-tabs-gap: var(--evo-space-xs);
+    --evo-tabs-tab-padding-x: var(--evo-space-sm);
+    --evo-tabs-tab-padding-y: var(--evo-space-xs);
+  }
+
+  :host(.evo-tab-list[data-evo-size='lg']) {
+    --evo-tabs-gap: var(--evo-space-md);
+    --evo-tabs-tab-padding-x: var(--evo-space-lg);
+    --evo-tabs-tab-padding-y: var(--evo-space-md);
+  }
+}

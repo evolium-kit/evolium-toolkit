@@ -58,7 +58,8 @@ de se aplicar, um interceptor que não corre, um erro de hidratação.
 7. Cores e espaços vêm dos **tokens semânticos** (`--evo-color-primary`,
    `--evo-space-md`, `--evo-radius-md`…), nunca dos primitivos
    (`--evo-palette-*`, `--evo-scale-*`) nem de literais. Texto com contraste
-   ≥ 4.5:1; limites de controlos ≥ 3:1.
+   ≥ 4.5:1; limites de controlos ≥ 3:1. A lista das variáveis que o projecto
+   tem de ter definidas (e os seus valores) está em `docs/variable-tokens.md`.
 8. Num componente **do projecto** que siga o padrão da toolkit: o valor por
    omissão vive no fallback do `var()` — o componente **nunca declara** o seu
    próprio token (`.x { --evo-x-bg: red }` torna o override global impossível),
@@ -104,6 +105,8 @@ withPlugin(xPlugin()))`. Gerar com `ng g @evolium-kit/toolkit:resource-plugin`.
 | Visão geral e entry points                 | `README.md`               |
 | Primeiros passos                           | `docs/getting-started.md` |
 | Tema: camadas de tokens, overrides, Studio | `docs/theming.md`         |
+| Variáveis CSS que o projecto tem de ter    | `docs/variable-tokens.md` |
+| Mapa rápido de todos os componentes        | `docs/index-componentes.md` |
 | Kernel de serviços e plugins               | `docs/plugins.md`         |
 | Alterações por versão                      | `CHANGELOG.md`            |
 

@@ -1,0 +1,128 @@
+<evo-card>
+  <h2 slot="title">Tabs</h2>
+  <p class="muted">
+    Setas só movem o foco (Enter/Espaço selecciona) por omissão; <code>selectionFollowsFocus</code>
+    selecciona ao focar. Home/End vão às pontas; tabs desactivadas são saltadas.
+  </p>
+
+  <h3>Básico</h3>
+  <div class="row row--fields">
+    <evo-tabs [(value)]="basico" ariaLabel="Definições">
+      <evo-tab-list>
+        <button evoTab value="geral">Geral</button>
+        <button evoTab value="facturacao">Facturação</button>
+        <button evoTab value="avancado">Avançado</button>
+      </evo-tab-list>
+      <evo-tab-panel value="geral">
+        <p>Conteúdo de "Geral".</p>
+      </evo-tab-panel>
+      <evo-tab-panel value="facturacao">
+        <p>Conteúdo de "Facturação".</p>
+      </evo-tab-panel>
+      <evo-tab-panel value="avancado">
+        <p>Conteúdo de "Avançado".</p>
+      </evo-tab-panel>
+    </evo-tabs>
+    <span class="muted" id="tabs-basico-estado">value = {{ basico() }}</span>
+  </div>
+
+  <h3>Tamanhos</h3>
+  <div class="row row--fields">
+    @for (t of ['sm', 'md', 'lg']; track t) {
+      <evo-tabs value="a" [size]="t" ariaLabel="Tamanho {{ t }}">
+        <evo-tab-list>
+          <button evoTab value="a">Tab A</button>
+          <button evoTab value="b">Tab B</button>
+        </evo-tab-list>
+        <evo-tab-panel value="a">{{ t }}</evo-tab-panel>
+        <evo-tab-panel value="b">{{ t }}</evo-tab-panel>
+      </evo-tabs>
+    }
+  </div>
+
+  <h3>Vertical</h3>
+  <div class="row row--fields">
+    <evo-tabs [(value)]="vertical" orientation="vertical" ariaLabel="Conta">
+      <evo-tab-list>
+        <button evoTab value="perfil">Perfil</button>
+        <button evoTab value="seguranca">Segurança</button>
+        <button evoTab value="notificacoes">Notificações</button>
+      </evo-tab-list>
+      <evo-tab-panel value="perfil">Dados do perfil.</evo-tab-panel>
+      <evo-tab-panel value="seguranca">Palavra-passe, 2FA.</evo-tab-panel>
+      <evo-tab-panel value="notificacoes">Preferências de email.</evo-tab-panel>
+    </evo-tabs>
+  </div>
+
+  <h3>Desactivada e activação automática</h3>
+  <div class="row row--fields">
+    <evo-tabs [(value)]="comDesactivada" ariaLabel="Com desactivada">
+      <evo-tab-list>
+        <button evoTab value="a">Tab A</button>
+        <button evoTab value="b">Tab B</button>
+        <button evoTab value="c" disabled>Tab C</button>
+      </evo-tab-list>
+      <evo-tab-panel value="a">A</evo-tab-panel>
+      <evo-tab-panel value="b">B</evo-tab-panel>
+      <evo-tab-panel value="c">C</evo-tab-panel>
+    </evo-tabs>
+
+    <evo-tabs [(value)]="automatica" selectionFollowsFocus ariaLabel="Activação automática">
+      <evo-tab-list>
+        <button evoTab value="a">Tab A</button>
+        <button evoTab value="b">Tab B</button>
+      </evo-tab-list>
+      <evo-tab-panel value="a">A (o foco já selecciona)</evo-tab-panel>
+      <evo-tab-panel value="b">B (o foco já selecciona)</evo-tab-panel>
+    </evo-tabs>
+    <span class="muted" id="tabs-automatica-estado">value = {{ automatica() }}</span>
+  </div>
+
+  <h3>Por dados, com uma desactivada</h3>
+  <div class="row row--fields">
+    <evo-tabs [(value)]="porDados" ariaLabel="Por dados">
+      <evo-tab-list [tabs]="secoes" />
+      @for (s of secoes; track s.value) {
+        <evo-tab-panel [value]="s.value">{{ s.label }} — conteúdo gerado por dados.</evo-tab-panel>
+      }
+    </evo-tabs>
+  </div>
+
+  <h3>Lista com scroll</h3>
+  <div class="row row--fields">
+    <evo-tabs
+      [(value)]="comScroll"
+      ariaLabel="Com scroll"
+      [evoTokens]="{ 'tabs-indicator-color': '#f59e0b' }"
+    >
+      <evo-tab-list scrollable style="max-inline-size: 320px">
+        @for (t of scrollTabs; track t) {
+          <button evoTab [value]="t">Tab {{ t }}</button>
+        }
+      </evo-tab-list>
+      @for (t of scrollTabs; track t) {
+        <evo-tab-panel [value]="t">Conteúdo da {{ t }}.</evo-tab-panel>
+      }
+    </evo-tabs>
+  </div>
+
+  <h3>keepMounted (preserva estado ao trocar)</h3>
+  <div class="row row--fields">
+    <evo-tabs [(value)]="preservaEstado" ariaLabel="Preserva estado">
+      <evo-tab-list>
+        <button evoTab value="info">Informação</button>
+        <button evoTab value="escrever">Escrever</button>
+      </evo-tab-list>
+      <evo-tab-panel value="info"
+        >Troca para "Escrever", escreve algo, volta aqui e lá — o texto fica.</evo-tab-panel
+      >
+      <evo-tab-panel value="escrever" keepMounted>
+        <input
+          [value]="rascunho()"
+          (input)="rascunho.set($any($event.target).value)"
+          placeholder="Escreve algo e troca de tab…"
+        />
+      </evo-tab-panel>
+    </evo-tabs>
+  </div>
+</evo-card>
