@@ -5,6 +5,8 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+## [0.3.6] - 2026-11-03
+
 ### Adicionado
 
 - **`EvoProgressBar`** (`evo-progress-bar`), em `@evolium-kit/toolkit/components`: barra de
