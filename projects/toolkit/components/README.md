@@ -29,41 +29,43 @@ a folha dos componentes que são directivas:
 Um link por componente: o README da pasta quando existe, senão a própria pasta.
 **Ao criar um componente novo, acrescentar aqui a linha dele** (ordem alfabética).
 
-| Componente      | Documentação                                                   |
-| --------------- | -------------------------------------------------------------- |
-| `EvoBadge`      | [`src/lib/badge/`](src/lib/badge/)                             |
-| `EvoButton`     | [`src/lib/button/`](src/lib/button/)                           |
-| `EvoCard`       | [`src/lib/card/`](src/lib/card/)                               |
-| `EvoDataTable`  | [`src/lib/data-table/README.md`](src/lib/data-table/README.md) |
-| `EvoDrawer`     | [`src/lib/drawer/README.md`](src/lib/drawer/README.md)         |
-| `EvoField`      | [`src/lib/input/`](src/lib/input/)                             |
-| `EvoInput`      | [`src/lib/input/`](src/lib/input/)                             |
-| `EvoMenu`       | [`src/lib/menu/README.md`](src/lib/menu/README.md)             |
-| `EvoModal`      | [`src/lib/modal/README.md`](src/lib/modal/README.md)           |
-| `EvoPagination` | [`src/lib/pagination/README.md`](src/lib/pagination/README.md) |
-| `EvoSelect`     | [`src/lib/select/README.md`](src/lib/select/README.md)         |
-| `EvoSwitch`     | [`src/lib/switch/README.md`](src/lib/switch/README.md)         |
-| `EvoTabs`       | [`src/lib/tabs/README.md`](src/lib/tabs/README.md)             |
-| `EvoTextField`  | [`src/lib/text-field/README.md`](src/lib/text-field/README.md) |
+| Componente       | Documentação                                                       |
+| ---------------- | ------------------------------------------------------------------ |
+| `EvoBadge`       | [`src/lib/badge/`](src/lib/badge/)                                 |
+| `EvoButton`      | [`src/lib/button/`](src/lib/button/)                               |
+| `EvoCard`        | [`src/lib/card/`](src/lib/card/)                                   |
+| `EvoDataTable`   | [`src/lib/data-table/README.md`](src/lib/data-table/README.md)     |
+| `EvoDrawer`      | [`src/lib/drawer/README.md`](src/lib/drawer/README.md)             |
+| `EvoField`       | [`src/lib/input/`](src/lib/input/)                                 |
+| `EvoInput`       | [`src/lib/input/`](src/lib/input/)                                 |
+| `EvoMenu`        | [`src/lib/menu/README.md`](src/lib/menu/README.md)                 |
+| `EvoModal`       | [`src/lib/modal/README.md`](src/lib/modal/README.md)               |
+| `EvoPagination`  | [`src/lib/pagination/README.md`](src/lib/pagination/README.md)     |
+| `EvoProgressBar` | [`src/lib/progress-bar/README.md`](src/lib/progress-bar/README.md) |
+| `EvoSelect`      | [`src/lib/select/README.md`](src/lib/select/README.md)             |
+| `EvoSwitch`      | [`src/lib/switch/README.md`](src/lib/switch/README.md)             |
+| `EvoTabs`        | [`src/lib/tabs/README.md`](src/lib/tabs/README.md)                 |
+| `EvoTextField`   | [`src/lib/text-field/README.md`](src/lib/text-field/README.md)     |
 
 ### Componentes disponíveis
 
-| Componente      | Selector                                                    | Variantes                                      | Tamanhos             |
-| --------------- | ----------------------------------------------------------- | ---------------------------------------------- | -------------------- |
-| `EvoButton`     | `button[evoButton]`, `a[evoButton]`                         | solid, ghost, outline, danger                  | sm, md, lg           |
-| `EvoInput`      | `input[evoInput]`, `textarea[evoInput]`, `select[evoInput]` | —                                              | sm, md, lg           |
-| `EvoField`      | `evo-field`                                                 | —                                              | —                    |
-| `EvoCard`       | `evo-card`                                                  | plain, sunken, outlined                        | —                    |
-| `EvoBadge`      | `evo-badge`                                                 | neutral, primary, success, warning, danger     | —                    |
-| `EvoSwitch`     | `evo-switch`                                                | —                                              | —                    |
-| `EvoTextField`  | `evo-text-field`                                            | —                                              | sm, md, lg           |
-| `EvoSelect`     | `evo-select`                                                | —                                              | sm, md, lg           |
-| `EvoModal`      | `evo-modal` + `EvoModalService`                             | tons: success, danger, warning, info, question | sm, md, lg, xl, full |
-| `EvoDrawer`     | `evo-drawer` + `EvoDrawerService`                           | posições: left, right, top, bottom             | sm, md, lg, full     |
-| `EvoMenu`       | `evo-menu` + `[evoMenuTriggerFor]`                          | —                                              | sm, md, lg           |
-| `EvoDataTable`  | `evo-data-table`                                            | —                                              | sm, md, lg           |
-| `EvoPagination` | `evo-pagination`                                            | —                                              | sm, md, lg           |
-| `EvoTabs`       | `evo-tabs` + `evo-tab-list` + `evoTab` + `evo-tab-panel`    | —                                              | sm, md, lg           |
+| Componente       | Selector                                                    | Variantes                                      | Tamanhos             |
+| ---------------- | ----------------------------------------------------------- | ---------------------------------------------- | -------------------- |
+| `EvoButton`      | `button[evoButton]`, `a[evoButton]`                         | solid, ghost, outline, danger                  | sm, md, lg           |
+| `EvoInput`       | `input[evoInput]`, `textarea[evoInput]`, `select[evoInput]` | —                                              | sm, md, lg           |
+| `EvoField`       | `evo-field`                                                 | —                                              | —                    |
+| `EvoCard`        | `evo-card`                                                  | plain, sunken, outlined                        | —                    |
+| `EvoBadge`       | `evo-badge`                                                 | neutral, primary, success, warning, danger     | —                    |
+| `EvoSwitch`      | `evo-switch`                                                | —                                              | —                    |
+| `EvoTextField`   | `evo-text-field`                                            | —                                              | sm, md, lg           |
+| `EvoSelect`      | `evo-select`                                                | —                                              | sm, md, lg           |
+| `EvoModal`       | `evo-modal` + `EvoModalService`                             | tons: success, danger, warning, info, question | sm, md, lg, xl, full |
+| `EvoDrawer`      | `evo-drawer` + `EvoDrawerService`                           | posições: left, right, top, bottom             | sm, md, lg, full     |
+| `EvoMenu`        | `evo-menu` + `[evoMenuTriggerFor]`                          | —                                              | sm, md, lg           |
+| `EvoDataTable`   | `evo-data-table`                                            | —                                              | sm, md, lg           |
+| `EvoPagination`  | `evo-pagination`                                            | —                                              | sm, md, lg           |
+| `EvoProgressBar` | `evo-progress-bar`                                          | modos: manual, router                          | —                    |
+| `EvoTabs`        | `evo-tabs` + `evo-tab-list` + `evoTab` + `evo-tab-panel`    | —                                              | sm, md, lg           |
 
 ```html
 <button evoButton variant="danger" size="sm" [loading]="aApagar()">Eliminar</button>
@@ -299,6 +301,23 @@ Selecção manual por omissão (setas só movem o foco — roving tabindex por
 activa ao focar. `orientation="vertical"`, `[tabs]` por dados, `scrollable`,
 `sticky`, `keepMounted` por painel. Os tokens próprios são `--evo-tabs-*`.
 Documentação completa em [`src/lib/tabs/README.md`](src/lib/tabs/README.md).
+
+```html
+<!-- Uma instância no layout raiz, e nunca mais se mexe nela -->
+<evo-progress-bar mode="router" ariaLabel="A mudar de página" />
+
+<!-- Ou manual, com percentagem conhecida (ex. upload) -->
+<evo-progress-bar [value]="progressoUpload()" ariaLabel="A enviar ficheiro" />
+```
+
+O `EvoProgressBar` é uma barra fina fixa no topo da página, ao estilo do
+NProgress. Em `mode="router"` ouve o `Router` sozinho — entra ao arrancar
+uma navegação, "treme" enquanto está pendente e salta a 100% + desvanece ao
+terminar (sucesso, cancelada, com erro ou ignorada); uma navegação nova
+reinicia a barra, mesmo a meio de outra. Em `mode="manual"` o progresso vem
+de `[value]` (0–100, `null` oculta) ou `indeterminate` (sem percentagem
+conhecida). Os tokens próprios são `--evo-progress-bar-*`. Documentação
+completa em [`src/lib/progress-bar/README.md`](src/lib/progress-bar/README.md).
 
 `EvoButton` e `EvoInput` aplicam-se a elementos nativos em vez de os embrulhar:
 mantêm semântica, foco, validação nativa, `formControlName` e o preenchimento

@@ -1,0 +1,109 @@
+/*
+ * REGRA 1: nenhuma declaração `--evo-progress-bar-*` no bloco abaixo.
+ * O valor por omissão vive no fallback do var(). Declará-lo aqui ganharia por
+ * proximidade a qualquer :root do projecto e tornaria o override global
+ * impossível — sem erro nenhum a avisar.
+ *
+ * REGRA 2: nunca registar estes tokens com @property { initial-value }.
+ * Isso desliga a cascata de fallback, também em silêncio.
+ */
+
+/*
+ * Sem @media (prefers-reduced-motion: reduce): decisão deliberada (pedido do
+ * utilizador) — o "trickle" e o desvanecer mantêm-se sempre animados, ao
+ * contrário dos outros componentes da toolkit.
+ */
+@layer evo.components {
+  :host {
+    display: block;
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    block-size: var(--evo-progress-bar-height, 8px);
+    z-index: var(--evo-progress-bar-z-index, 2147483000);
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity var(--evo-progress-bar-duration, var(--evo-duration-fast)) var(--evo-easing);
+  }
+
+  /*
+   * "a-concluir": a barra já saltou a 100% (ver evo-progress-bar.ts) e
+   * desvanece devagar — o dobro da duração normal, como no NProgress.
+   */
+  :host([data-evo-estado='a-concluir']) {
+    transition-duration: calc(var(--evo-progress-bar-duration, var(--evo-duration-fast)) * 2);
+    opacity: 0;
+  }
+
+  /* "oculto": já desvaneceu (ou nunca chegou a aparecer) — sem transição, para não piscar na próxima vez. */
+  :host([data-evo-estado='oculto']) {
+    transition: none;
+    opacity: 0;
+  }
+
+  .evo-progress-bar__track {
+    position: relative;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: hidden;
+  }
+
+  /*
+   * Largura sempre 100%; o avanço vem do transform, não do width/margin — só
+   * desenha (compositing), nunca refaz o layout. Com progresso=0%,
+   * translateX(-100%) deixa a barra toda fora de vista à esquerda; com
+   * progresso=100%, translateX(0%) mostra-a inteira. O limite direito da
+   * barra é por isso sempre a posição exacta do progresso — onde fica o
+   * "peg" (o brilho da ponta, a seguir).
+   */
+  .evo-progress-bar__bar {
+    position: absolute;
+    inset-block: 0;
+    inline-size: 100%;
+    background-color: var(--evo-progress-bar-color, var(--evo-color-primary));
+    transform: translateX(calc(-100% + var(--pb-progresso, 0%)));
+    transition: transform var(--evo-progress-bar-duration, var(--evo-duration-fast)) linear;
+  }
+
+  /* O "peg": o brilho luminoso na ponta, assinatura visual do NProgress. */
+  .evo-progress-bar__bar::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    inline-size: 100px;
+    box-shadow:
+      0 0 10px
+        var(--evo-progress-bar-glow-color, var(--evo-progress-bar-color, var(--evo-color-primary))),
+      0 0 5px
+        var(--evo-progress-bar-glow-color, var(--evo-progress-bar-color, var(--evo-color-primary)));
+  }
+
+  /* Indeterminate: sem progresso conhecido — um segmento a varrer em loop. */
+  .evo-progress-bar__bar--sweep {
+    inline-size: 40%;
+    transform: none;
+    transition: none;
+    animation: evo-progress-bar-sweep var(--evo-progress-bar-indeterminate-duration, 1500ms) linear
+      infinite;
+  }
+
+  @keyframes evo-progress-bar-sweep {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(250%);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .evo-progress-bar__bar {
+      background-color: CanvasText;
+    }
+
+    .evo-progress-bar__bar::after {
+      display: none;
+    }
+  }
+}

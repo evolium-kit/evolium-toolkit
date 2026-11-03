@@ -22,3 +22,4 @@ export * from './lib/data-table';
 export * from './lib/drawer';
 export * from './lib/menu';
 export * from './lib/tabs';
+export * from './lib/progress-bar';

@@ -5,6 +5,20 @@ Versionamento: [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Não publicado]
 
+### Adicionado
+
+- **`EvoProgressBar`** (`evo-progress-bar`), em `@evolium-kit/toolkit/components`: barra de
+  progresso fina, fixa no topo da página, construída do zero (sem modelo), inspirada no
+  [NProgress](https://ricostacruz.com/nprogress/) (medido no código-fonte real). Dois modos:
+  `router` — ouve o `Router` sozinha (`NavigationStart/End/Cancel/Error/Skipped`), simula o
+  avanço ("trickle") e salta a 100% + desvanece ao concluir, ao estilo do NProgress; uma
+  navegação nova reinicia a barra, mesmo a meio de outra — e `manual`, controlado por `[value]`
+  (0–100, `null` oculta) ou `indeterminate` (sem percentagem conhecida, segmento a varrer). Ao
+  contrário do NProgress: `role="progressbar"` completo (`aria-valuenow/min/max`, `aria-label`),
+  SSR-safe (`Router`/temporizadores só no browser), e anima sempre por `transform` (sem
+  *layout thrash*). Mantém a animação mesmo com `prefers-reduced-motion` (decisão explícita). 6
+  tokens `--evo-progress-bar-*`. Documentação em `components/src/lib/progress-bar/README.md`.
+
 ## [0.3.5] - 2026-10-30
 
 ### Adicionado

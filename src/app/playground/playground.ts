@@ -9,6 +9,7 @@ import { DrawerDemo } from './drawer/drawer-demo';
 import { FieldDemo } from './field/field-demo';
 import { MenuDemo } from './menu/menu-demo';
 import { ModalDemo } from './modal/modal-demo';
+import { ProgressBarDemo } from './progress-bar/progress-bar-demo';
 import { SelectDemo } from './select/select-demo';
 import { ServicesDemo } from './services/services-demo';
 import { TabsDemo } from './tabs/tabs-demo';
@@ -41,6 +42,7 @@ import { ThemeDemo } from './theme/theme-demo';
     DrawerDemo,
     MenuDemo,
     TabsDemo,
+    ProgressBarDemo,
     DataTableDemo,
     ServicesDemo,
   ],

@@ -1,0 +1,77 @@
+<evo-card>
+  <h2 slot="title">Progress Bar</h2>
+  <p class="muted">
+    Barra fina no topo da página, ao estilo do NProgress. O modo <code>router</code> está montado
+    uma vez em <code>app.ts</code> (não aqui dentro) — repara na barra a aparecer no topo real da
+    janela quando clicares em "Navegar".
+  </p>
+
+  <h3>Manual</h3>
+  <p class="muted">
+    Aqui dentro a barra fica presa ao topo desta caixa (não da janela), só para a demo — num caso
+    real é fixa à janela, como no modo router. Ver <code>progress-bar-demo.html</code>.
+  </p>
+  <div class="row row--fields">
+    <div
+      style="
+        position: relative;
+        transform: translateZ(0);
+        block-size: 24px;
+        overflow: hidden;
+        inline-size: 100%;
+      "
+    >
+      <evo-progress-bar
+        [value]="manual()"
+        [indeterminate]="indeterminado()"
+        ariaLabel="Demo manual"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <button evoButton variant="outline" (click)="manual.set(0); indeterminado.set(false)">
+      0%
+    </button>
+    <button evoButton variant="outline" (click)="manual.set(25); indeterminado.set(false)">
+      25%
+    </button>
+    <button evoButton variant="outline" (click)="manual.set(60); indeterminado.set(false)">
+      60%
+    </button>
+    <button evoButton variant="outline" (click)="manual.set(95); indeterminado.set(false)">
+      95%
+    </button>
+    <button evoButton variant="outline" (click)="indeterminado.set(true)">indeterminate</button>
+    <button evoButton variant="ghost" (click)="manual.set(null); indeterminado.set(false)">
+      ocultar (null)
+    </button>
+  </div>
+  <span class="muted" id="progress-bar-manual-estado">
+    value = {{ manual() }}, indeterminate = {{ indeterminado() }}
+  </span>
+
+  <h3>Router</h3>
+  <p class="muted">Navega mesmo — o <code>**</code> cai na página "não encontrado".</p>
+  <div class="row">
+    <a evoButton variant="outline" routerLink="/isto-nao-existe-demo-progress">
+      Navegar para uma rota inexistente
+    </a>
+    <a evoButton variant="ghost" routerLink="/">Voltar ao playground</a>
+  </div>
+
+  <h3>Tokens</h3>
+  <div class="row row--fields">
+    <div
+      style="
+        position: relative;
+        transform: translateZ(0);
+        block-size: 24px;
+        overflow: hidden;
+        inline-size: 100%;
+      "
+      [evoTokens]="{ 'progress-bar-color': '#f59e0b', 'progress-bar-height': '4px' }"
+    >
+      <evo-progress-bar [value]="60" ariaLabel="Demo com tokens" />
+    </div>
+  </div>
+</evo-card>
